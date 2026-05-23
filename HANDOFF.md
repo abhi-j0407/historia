@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 14 — Heatmap Primitive (pending merge; see open PR).
+- **Last completed phase:** Phase 14 — Heatmap Primitive (merged in `c9784e5`, [PR #14](https://github.com/abhi-j0407/historia/pull/14)).
 - **Next phase:** Phase 15 — Three Views & Toolbar.
-- **Active branch:** `phase/14-heatmap` (open PR).
-- **Open PRs:** [#14](https://github.com/abhi-j0407/historia/pull/14) — Phase 14 Heatmap Primitive.
+- **Active branch:** none (`main` is the current tip; Phase 15 will create its own branch).
+- **Open PRs:** none.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10–14 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
 
 ---
@@ -34,7 +34,7 @@
 
 **Branch:** `phase/14-heatmap`
 **PR:** [#14](https://github.com/abhi-j0407/historia/pull/14)
-**Status:** completed (automated gates; CI pending on PR head; Phase 14 Step 9 manual Chrome smoke deferred to owner)
+**Status:** completed (automated gates + CI; Phase 14 Step 9 manual Chrome smoke and Chrome Profiler P-002 check deferred to owner)
 
 **Objective recap:** Ship single SVG `Heatmap.tsx` primitive (intensity + categorical modes), pure geometry/color modules, tests, and temporary `ViewPlaceholder` mount with horizontal scroll wrapper per HM-007.
 
