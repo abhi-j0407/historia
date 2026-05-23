@@ -70,7 +70,7 @@ describe('App', () => {
     expect(screen.getByText(/nothing to show yet/i)).toBeInTheDocument();
   });
 
-  it('renders ViewPlaceholder with active view when aggregate has data', () => {
+  it('renders ViewPlaceholder with heatmap when aggregate has data', () => {
     const agg = sampleAggregate();
     mockHooks({ aggregate: agg, isInitialLoad: false, lastView: 'winners' });
     render(<App />);
@@ -78,6 +78,7 @@ describe('App', () => {
     expect(
       screen.getByText(new RegExp(`${agg.topSites.length} sites tracked`)),
     ).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /activity heatmap/i })).toBeInTheDocument();
   });
 
   it('invokes sendForceRefresh when Refresh is clicked', async () => {

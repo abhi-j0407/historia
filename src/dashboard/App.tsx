@@ -1,11 +1,13 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import type { UIPrefs } from '@/background/cache';
+import { resolveRange } from '@/core/dates';
 import type { Aggregate, BackfillProgress } from '@/core/types';
 import { BackfillProgressBar } from '@/dashboard/components/BackfillProgressBar';
 import { ErrorBanner } from '@/dashboard/components/ErrorBanner';
 import { ErrorBoundary } from '@/dashboard/components/ErrorBoundary';
 import { Header } from '@/dashboard/components/Header';
+import { Heatmap } from '@/dashboard/components/Heatmap';
 import { Toolbar } from '@/dashboard/components/Toolbar';
 import { useAggregate } from '@/dashboard/hooks/useAggregate';
 import { useBackfillProgress } from '@/dashboard/hooks/useBackfillProgress';
@@ -51,6 +53,7 @@ function AppInner(): JSX.Element {
           isInitialLoad={isInitialLoad}
           progress={progress}
           view={prefs.lastView}
+          dateRangeSelector={prefs.lastDateRange}
         />
       </section>
     </main>
@@ -62,8 +65,9 @@ function ShellBody(props: {
   isInitialLoad: boolean;
   progress: BackfillProgress;
   view: UIPrefs['lastView'];
+  dateRangeSelector: UIPrefs['lastDateRange'];
 }): JSX.Element {
-  const { aggregate, isInitialLoad, progress, view } = props;
+  const { aggregate, isInitialLoad, progress, view, dateRangeSelector } = props;
 
   if (progress.phase === 'error') {
     return <ErrorBanner onRetry={() => void sendForceRefresh()} />;
@@ -77,7 +81,9 @@ function ShellBody(props: {
   if (aggregate.topSites.length === 0) {
     return <ShellEmpty />;
   }
-  return <ViewPlaceholder view={view} aggregate={aggregate} />;
+  return (
+    <ViewPlaceholder view={view} aggregate={aggregate} dateRangeSelector={dateRangeSelector} />
+  );
 }
 
 function ShellLoading({ message }: { message: string }): JSX.Element {
@@ -96,10 +102,28 @@ function ShellEmpty(): JSX.Element {
   );
 }
 
-function ViewPlaceholder(props: { view: UIPrefs['lastView']; aggregate: Aggregate }): JSX.Element {
+function ViewPlaceholder(props: {
+  view: UIPrefs['lastView'];
+  aggregate: Aggregate;
+  dateRangeSelector: UIPrefs['lastDateRange'];
+}): JSX.Element {
+  const range = useMemo(
+    () => resolveRange(props.dateRangeSelector, props.aggregate.dateRange.earliest),
+    [props.aggregate.dateRange.earliest, props.dateRangeSelector],
+  );
+
   return (
-    <div className="rounded-md border border-dashed p-6 text-sm">
-      Active view: <strong>{props.view}</strong> · {props.aggregate.topSites.length} sites tracked
+    <div className="space-y-3 rounded-md border border-dashed p-6 text-sm">
+      <p>
+        Active view: <strong>{props.view}</strong> · {props.aggregate.topSites.length} sites tracked
+        · {range.start} → {range.end}
+      </p>
+      <div className="overflow-x-auto">
+        <Heatmap
+          mode={{ kind: 'intensity', data: props.aggregate.totalVisitsPerDay }}
+          range={range}
+        />
+      </div>
     </div>
   );
 }
