@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 4 — Lint, Format, Test Infrastructure (open PR on branch `phase/04-quality-tooling`).
+- **Last completed phase:** Phase 4 — Lint, Format, Test Infrastructure (merged in `0e2a46f`, [PR #4](https://github.com/abhi-j0407/historia/pull/4)).
 - **Next phase:** Phase 5 — CI Pipeline.
-- **Active branch:** `phase/04-quality-tooling`.
-- **Open PRs:** [#4](https://github.com/abhi-j0407/historia/pull/4) — Phase 4 quality tooling (awaiting coordinator review).
+- **Active branch:** none (`main` is the current tip; Phase 5 will create its own branch).
+- **Open PRs:** none.
 - **Open follow-ups:** none.
 
 ---
@@ -34,7 +34,7 @@
 
 **Branch:** `phase/04-quality-tooling`
 **PR:** [#4](https://github.com/abhi-j0407/historia/pull/4)
-**Status:** completed (awaiting merge)
+**Status:** completed
 
 **Objective recap:** Install ESLint 9 flat config, Prettier with Tailwind plugin, Vitest with WxtVitest, and Testing Library; verify smoke tests pass; enforce FR-S-01 module boundary in `src/core/`.
 
