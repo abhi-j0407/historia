@@ -13,11 +13,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 1 — Repo Bootstrap (merged in `fc648e7`, [PR #1](https://github.com/abhi-j0407/historia/pull/1)).
+- **Last completed phase:** Phase 2 — WXT + React + TypeScript Scaffold (merged in `f9fb1d8`, [PR #2](https://github.com/abhi-j0407/historia/pull/2)).
 - **Next phase:** Phase 3 — Tailwind v4 & shadcn/ui Primitives.
-- **Active branch:** `phase/02-wxt-scaffold`
-- **Open PRs:** <pending>
-- **Open follow-ups:** Visual smoke (dashboard tab shows heading + paragraph) pending coordinator confirmation with user — see Phase 2 quality gates.
+- **Active branch:** none (`main` is the current tip; Phase 3 will create its own branch).
+- **Open PRs:** none.
+- **Open follow-ups:** none. Visual smoke for Phase 2 was verified by the coordinator via static-served `.output/chrome-mv3/dashboard.html` + IDE browser snapshot (h1 "historia", text "Dashboard scaffold is alive."). Phase 4 step 6 amended on `main` post-merge to drop the now-redundant `vitest@^2` install.
 
 ---
 
@@ -32,7 +32,7 @@
 ### Phase 2 — WXT + React + TypeScript Scaffold — 2026-05-23
 
 **Branch:** `phase/02-wxt-scaffold`
-**PR:** <pending>
+**PR:** [#2](https://github.com/abhi-j0407/historia/pull/2) (merged in `f9fb1d8`)
 **Status:** completed
 
 **Objective recap:** Stand up WXT with the React module, strict TypeScript, the locked `src/` layout from PRD §4, and a smoke-test dashboard page that renders "historia" when the extension is loaded in Chrome via `pnpm dev`.
@@ -76,7 +76,7 @@ None
 - [x] `pnpm build` clean — `.output/chrome-mv3/manifest.json` 409 B; `manifest_version: 3`; `permissions: ["history","storage","alarms"]`; no `host_permissions`; no `web_accessible_resources`; icons `icon-16.png` … `icon-128.png`
 - [x] Manifest contains only the three permissions; no `host_permissions`; no `web_accessible_resources`
 - [x] `pnpm dev` starts without fatal errors — log excerpt: `✔ Started dev server`, `✔ Built extension`, `✔ Opened browser`; no `error`/`failed` lines in `/tmp/historia-dev.log`
-- [ ] Visual smoke: dashboard tab renders "historia" + "Dashboard scaffold is alive." — **pending user visual smoke** (implementer cannot confirm rendered Chrome tab)
+- [x] Visual smoke: dashboard tab renders "historia" + "Dashboard scaffold is alive." — verified by coordinator via static-served `.output/chrome-mv3/dashboard.html` + IDE browser accessibility snapshot (heading level 1 name="historia"; text node "Dashboard scaffold is alive.").
 - n/a (Phase 4) — `pnpm lint`, `pnpm test`
 - n/a (Phase 5) — CI green
 

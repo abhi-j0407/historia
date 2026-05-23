@@ -995,9 +995,9 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
    public
    ```
 
-6. **Install Vitest + WxtVitest + Testing Library.**
+6. **Install Vitest companions + Testing Library.** (`vitest@^2` itself is already installed in Phase 2 — see Phase 2 deviation note in HANDOFF.md and the [Status Tracker](#status-tracker) — because Phase 2's `tsconfig.json` references `vitest/globals` and typecheck would fail without the package present. The `pnpm.overrides.vite: "8.0.14"` pin in `package.json` already resolves the vite peer-dep conflict between vitest@2 and WXT@0.20; do not remove it.)
    ```bash
-   pnpm add -D vitest@^2 @vitest/coverage-v8@^2 \
+   pnpm add -D @vitest/coverage-v8@^2 \
      @testing-library/react@^16 @testing-library/jest-dom@^6 @testing-library/user-event@^14 \
      jsdom@^25
    ```
@@ -2876,7 +2876,7 @@ Update this table as phases land. The phase is "Done" only when CI is green for 
 |---|---|---|---|---|---|
 | 0 | Preflight & Environment | — | n/a | n/a | [x] |
 | 1 | Repo Bootstrap | Foundation | `phase/01-repo-bootstrap` | [#1](https://github.com/abhi-j0407/historia/pull/1) | [x] |
-| 2 | WXT + React + TypeScript Scaffold | Foundation | `phase/02-wxt-scaffold` | | [ ] |
+| 2 | WXT + React + TypeScript Scaffold | Foundation | `phase/02-wxt-scaffold` | [#2](https://github.com/abhi-j0407/historia/pull/2) | [x] |
 | 3 | Tailwind v4 & shadcn/ui Primitives | Foundation | `phase/03-tailwind-shadcn` | | [ ] |
 | 4 | Lint, Format, Test Infrastructure | Foundation | `phase/04-quality-tooling` | | [ ] |
 | 5 | CI Pipeline | Foundation | `phase/05-ci-pipeline` | | [ ] |
