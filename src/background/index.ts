@@ -1,15 +1,6 @@
-import type { BackfillProgress } from '@/core/types';
-
 import { callChrome } from './chrome-promise';
 import { handleRecomputeAlarm, scheduleRecompute } from './debounce';
-import { requestBackfill } from './ingest';
-
-const lastProgress: BackfillProgress = {
-  phase: 'idle',
-  processed: 0,
-  total: 0,
-  startedAt: 0,
-};
+import { getLastProgress, requestBackfill } from './ingest';
 
 /** SW-001 — Register every service-worker listener synchronously at call time. */
 export function registerBackgroundListeners(): void {
@@ -47,7 +38,7 @@ export function registerBackgroundListeners(): void {
       return false;
     }
     if (type === 'get-backfill-progress') {
-      sendResponse(lastProgress);
+      sendResponse(getLastProgress());
       return false;
     }
     return false;

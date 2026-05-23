@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 10 — Service Worker Foundation (merged in `a9723ee`, [PR #10](https://github.com/abhi-j0407/historia/pull/10)).
-- **Next phase:** Phase 11 — Backfill Orchestrator.
-- **Active branch:** none (`main` is the current tip; Phase 11 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10 Step 7 Chrome manual smoke** — owner deferred; verify toolbar → dashboard and `force-refresh` stub log when convenient, then check the box in the Phase 10 HANDOFF entry.
+- **Last completed phase:** Phase 11 — Backfill Orchestrator (open PR on `phase/11-backfill`, [PR #11](https://github.com/abhi-j0407/historia/pull/11); merge pending coordinator review).
+- **Next phase:** Phase 12 — Incremental Updates & Manual Refresh.
+- **Active branch:** `phase/11-backfill` (tracks `origin/phase/11-backfill`).
+- **Open PRs:** [#11](https://github.com/abhi-j0407/historia/pull/11) — Phase 11 — Backfill Orchestrator.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10 Step 7 Chrome manual smoke** — owner deferred. **Phase 11 Step 5 Chrome manual smoke** — owner deferred; fresh install → `pnpm dev` → dashboard → confirm `aggregate.v1` populates in worker/storage.
 
 ---
 
@@ -29,6 +29,58 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 11 — Backfill Orchestrator — 2026-05-23
+
+**Branch:** `phase/11-backfill`
+**PR:** [#11](https://github.com/abhi-j0407/historia/pull/11)
+**Status:** completed (automated gates + CI; Phase 11 Step 5 Chrome manual smoke deferred to owner)
+
+**Objective recap:** Replace `requestBackfill` stub with SW-003 streaming pipeline: history enumeration + pagination fallback, `pLimit(32)` getVisits fetch, partial `writeAggregate` throttling (P-003), and throttled `BackfillProgress` runtime broadcasts (SW-003a / D-006).
+
+**Files created:**
+
+- `src/background/concurrency.ts`
+- `src/background/concurrency.test.ts`
+- `src/background/ingest.test.ts`
+
+**Files modified:**
+
+- `src/background/ingest.ts` (full backfill orchestrator)
+- `src/background/index.ts` (`getLastProgress()` from ingest; removed duplicate `lastProgress`)
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- `@webext-core/fake-browser` does not implement `history.search` / `getVisits`; `ingest.test.ts` mocks both via `vi.spyOn`.
+- Progress `sendMessage` is not wrapped in `callChrome` so “no receiver” errors are not logged (E-004 vs PHASE-PLAN Step 3); also swallows fake-browser `"No listeners available"`.
+- Partial write cap uses 99 partial writes + 1 final (≤ 100 `storage.set` calls per test assertion).
+- Broadcast throttle uses a serialized promise chain + shared `broadcastState` to avoid concurrent URL completions racing past the 5% / 500 ms gate.
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings on `log.ts`, shadcn `button.tsx`)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 95 tests passed (8 new: 2 concurrency + 6 ingest)
+- [x] `pnpm build` — exit 0 (~338 kB; `background.js` ~138 kB)
+- [ ] Manual smoke (PHASE-PLAN Step 5) — **deferred.** Owner: uninstall dev extension, `pnpm dev`, click icon, confirm `aggregate.v1` in `chrome.storage.local` during/after backfill. Not run in implementer session.
+- [x] CI green on PR head — [CI run](https://github.com/abhi-j0407/historia/actions/runs/26333695952) success on `e81355c` (docs commit `3cc5a58` re-runs CI)
+
+**Coverage (where applicable):** N/A (background orchestrator; no new T-004 core files)
+
+**Open follow-ups raised in this phase:**
+
+- **Manual smoke (Step 5):** Owner to run Chrome backfill check when convenient; update this entry and check the box.
+
+**Next phase entry point:** Phase 12 — open PHASE-PLAN.md → "Phase 12 — Incremental Updates & Manual Refresh" → replace `src/background/debounce.ts` stub.
 
 ### Phase 10 — Service Worker Foundation — 2026-05-23
 
