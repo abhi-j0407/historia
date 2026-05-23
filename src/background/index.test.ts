@@ -8,14 +8,16 @@ type OnVisitedListener = Parameters<typeof chrome.history.onVisited.addListener>
 /** @webext-core/fake-browser does not implement history.onVisited yet. */
 function installHistoryOnVisitedMock(): void {
   const listeners = new Set<OnVisitedListener>();
-  fakeBrowser.history.onVisited.addListener = vi.fn((listener) => {
+  fakeBrowser.history.onVisited.addListener = vi.fn((listener: OnVisitedListener) => {
     listeners.add(listener);
   });
-  fakeBrowser.history.onVisited.removeListener = vi.fn((listener) => {
+  fakeBrowser.history.onVisited.removeListener = vi.fn((listener: OnVisitedListener) => {
     listeners.delete(listener);
   });
   fakeBrowser.history.onVisited.hasListeners = vi.fn(() => listeners.size > 0);
-  fakeBrowser.history.onVisited.hasListener = vi.fn((listener) => listeners.has(listener));
+  fakeBrowser.history.onVisited.hasListener = vi.fn((listener: OnVisitedListener) =>
+    listeners.has(listener),
+  );
 }
 
 describe('background entry', () => {
