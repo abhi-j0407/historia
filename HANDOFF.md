@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 7 — Domain & Date Helpers ([PR #7](https://github.com/abhi-j0407/historia/pull/7), branch `phase/07-domain-dates`).
+- **Last completed phase:** Phase 7 — Domain & Date Helpers (merged in `6a1bca5`, [PR #7](https://github.com/abhi-j0407/historia/pull/7)).
 - **Next phase:** Phase 8 — Aggregation Engine, Intensity & Palette.
-- **Active branch:** `phase/07-domain-dates` (awaiting coordinator review / merge).
-- **Open PRs:** [#7](https://github.com/abhi-j0407/historia/pull/7).
+- **Active branch:** none (`main` is the current tip; Phase 8 will create its own branch).
+- **Open PRs:** none.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
 
 ---

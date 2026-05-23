@@ -3115,7 +3115,7 @@ Update this table as phases land. The phase is "Done" only when CI is green for 
 | 4   | Lint, Format, Test Infrastructure       | Foundation               | `phase/04-quality-tooling`     | [#4](https://github.com/abhi-j0407/historia/pull/4) | [x]    |
 | 5   | CI Pipeline                             | Foundation               | `phase/05-ci-pipeline`         | [#5](https://github.com/abhi-j0407/historia/pull/5) | [x]    |
 | 6   | Core Types & URL Filters                | Data plumbing            | `phase/06-core-types-filters`  | [#6](https://github.com/abhi-j0407/historia/pull/6) | [x]    |
-| 7   | Domain & Date Helpers                   | Data plumbing            | `phase/07-domain-dates`        |                                                     | [ ]    |
+| 7   | Domain & Date Helpers                   | Data plumbing            | `phase/07-domain-dates`        | [#7](https://github.com/abhi-j0407/historia/pull/7) | [x]    |
 | 8   | Aggregation Engine, Intensity & Palette | Data plumbing            | `phase/08-aggregate-intensity` |                                                     | [ ]    |
 | 9   | Storage Facade                          | Service worker + storage | `phase/09-storage-facade`      |                                                     | [ ]    |
 | 10  | Service Worker Foundation               | Service worker + storage | `phase/10-sw-foundation`       |                                                     | [ ]    |
