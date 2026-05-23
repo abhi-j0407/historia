@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 11 — Backfill Orchestrator (open PR on `phase/11-backfill`, [PR #11](https://github.com/abhi-j0407/historia/pull/11); merge pending coordinator review).
+- **Last completed phase:** Phase 11 — Backfill Orchestrator (merged in `c2e20a1`, [PR #11](https://github.com/abhi-j0407/historia/pull/11)).
 - **Next phase:** Phase 12 — Incremental Updates & Manual Refresh.
-- **Active branch:** `phase/11-backfill` (tracks `origin/phase/11-backfill`).
-- **Open PRs:** [#11](https://github.com/abhi-j0407/historia/pull/11) — Phase 11 — Backfill Orchestrator.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10 Step 7 Chrome manual smoke** — owner deferred. **Phase 11 Step 5 Chrome manual smoke** — owner deferred; fresh install → `pnpm dev` → dashboard → confirm `aggregate.v1` populates in worker/storage.
+- **Active branch:** none (`main` is the current tip; Phase 12 will create its own branch).
+- **Open PRs:** none.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10 Step 7** and **Phase 11 Step 5** Chrome manual smoke — owner deferred; see Phase 10/11 HANDOFF entries.
 
 ---
 
