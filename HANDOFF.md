@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 15 — Three Views & Toolbar (PR open on `phase/15-views`; merge pending coordinator review).
+- **Last completed phase:** Phase 15 — Three Views & Toolbar (merged in `5f38467`, [PR #15](https://github.com/abhi-j0407/historia/pull/15)).
 - **Next phase:** Phase 16 — Design Pass (impeccable).
-- **Active branch:** `phase/15-views`.
-- **Open PRs:** [#15](https://github.com/abhi-j0407/historia/pull/15) (`phase/15-views`).
+- **Active branch:** none (`main` is the current tip; Phase 16 will create its own branch).
+- **Open PRs:** none.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10–15 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
 
 ---
@@ -34,7 +34,7 @@
 
 **Branch:** `phase/15-views`
 **PR:** [#15](https://github.com/abhi-j0407/historia/pull/15)
-**Status:** completed (automated gates; Phase 15 Step 11 manual Chrome smoke deferred to owner)
+**Status:** completed (automated gates + CI; Phase 15 Step 11 manual Chrome smoke deferred to owner)
 
 **Objective recap:** Ship PerSiteView, OverallView, WinnersView with range-filter helpers, SiteSwitcher, StatsCard, Favicon (SEC-002); wire App view selection, UX-PS-02 apex fallback, HM-007 horizontal scroll; replace ViewPlaceholder.
 
@@ -72,7 +72,7 @@ None
 - [x] `pnpm test` — 144 tests passed (17 new dashboard tests)
 - [x] `pnpm build` — exit 0 (~467 kB; `dashboard` chunk ~293 kB)
 - [ ] Manual smoke (PHASE-PLAN Step 11) — **deferred.** Owner: `pnpm dev`, three tabs, date range, per-site chips + Show more sheet, heatmap tooltips, Refresh.
-- [x] CI green on PR head — Lint, typecheck, test, build success on `58a824a`
+- [x] CI green on PR head — Lint, typecheck, test, build success on `74b1394`
 
 **Coverage (where applicable):** N/A (dashboard views; no new T-004 core gates)
 
