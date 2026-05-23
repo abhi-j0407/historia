@@ -1,8 +1,8 @@
-import { handleActionClick } from '@/background';
+import { registerBackgroundListeners } from '@/background';
 
 export default defineBackground({
   type: 'module',
   main() {
-    handleActionClick();
+    registerBackgroundListeners();
   },
 });
