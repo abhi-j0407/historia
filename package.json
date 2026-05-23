@@ -1,0 +1,28 @@
+{
+  "name": "historia",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Browser History Wrapped — turn local Chrome history into activity heatmaps and per-site stats.",
+  "license": "MIT",
+  "author": "Abhishek <abhishek.j0407@gmail.com>",
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20.10.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "postinstall": "wxt prepare"
+  }
+}
