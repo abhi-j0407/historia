@@ -15,24 +15,25 @@ This document is the implementation source of truth. It expands the six locked P
 **Reading order.** Read this document linearly the first time. After that, jump to the current phase and consult [§A. Conventions & Standards](#a-conventions--standards) whenever a code-style or behavioral question arises.
 
 **Rules of engagement.**
+
 1. **Do not skip phases.** Each phase has prerequisites from the previous. Skipping causes silent breakage.
 2. **Do not invent decisions.** Everything you need has been decided. If something seems missing, search the PRD by ID first (e.g. `B-005`, `SW-003a`). If it is still missing, stop and surface the question — do not assume.
 3. **Do not introduce dependencies** beyond the locked stack (PRD §3) without an explicit user amendment.
 4. **Verification gates are non-negotiable.** A phase is not complete until every "Success criteria" item passes. CI must also be green where applicable.
 5. **No placeholders, no TODO comments, no hacks.** If a sub-task cannot be finished cleanly within the phase, stop and surface it.
-6. **Why-comments only.** Default to zero comments. Add a one-line comment only when the *why* is non-obvious (a workaround, a subtle invariant, a constraint from the PRD). Never add what-comments.
+6. **Why-comments only.** Default to zero comments. Add a one-line comment only when the _why_ is non-obvious (a workaround, a subtle invariant, a constraint from the PRD). Never add what-comments.
 7. **Tests live next to source** (e.g. `filters.ts` + `filters.test.ts`). Shared fixtures live in `tests/fixtures/`.
 
 **PRD ↔ phase mapping.**
 
-| PRD phase (§19.1) | This plan |
-|---|---|
-| 1. Foundation | Phases 1–5 |
-| 2. Data plumbing | Phases 6–8 |
-| 3. Service worker + storage | Phases 9–12 |
-| 4. Dashboard skeleton | Phases 13–15 |
-| 5. Design pass | Phase 16 |
-| 6. Polish + release prep | Phase 17 |
+| PRD phase (§19.1)           | This plan    |
+| --------------------------- | ------------ |
+| 1. Foundation               | Phases 1–5   |
+| 2. Data plumbing            | Phases 6–8   |
+| 3. Service worker + storage | Phases 9–12  |
+| 4. Dashboard skeleton       | Phases 13–15 |
+| 5. Design pass              | Phase 16     |
+| 6. Polish + release prep    | Phase 17     |
 
 ---
 
@@ -69,13 +70,13 @@ These rules are **global** — they apply to every phase. Re-read this section b
 
 ### A.1 File & directory naming
 
-| Kind | Convention | Example |
-|---|---|---|
-| TS source modules | `kebab-case.ts` for utilities, `camelCase.ts` for hooks (`useFoo.ts`) | `domain.ts`, `useAggregate.ts` |
-| React components | `PascalCase.tsx` | `Heatmap.tsx` |
-| Tests | sibling `<file>.test.ts` or `<file>.test.tsx` | `filters.test.ts` |
-| Type-only files | `types.ts` (per directory) | `src/core/types.ts` |
-| Fixtures | `tests/fixtures/<topic>.ts` | `tests/fixtures/synthetic-history.ts` |
+| Kind              | Convention                                                            | Example                               |
+| ----------------- | --------------------------------------------------------------------- | ------------------------------------- |
+| TS source modules | `kebab-case.ts` for utilities, `camelCase.ts` for hooks (`useFoo.ts`) | `domain.ts`, `useAggregate.ts`        |
+| React components  | `PascalCase.tsx`                                                      | `Heatmap.tsx`                         |
+| Tests             | sibling `<file>.test.ts` or `<file>.test.tsx`                         | `filters.test.ts`                     |
+| Type-only files   | `types.ts` (per directory)                                            | `src/core/types.ts`                   |
+| Fixtures          | `tests/fixtures/<topic>.ts`                                           | `tests/fixtures/synthetic-history.ts` |
 
 ### A.2 Import order (ESLint enforced via `eslint-plugin-simple-import-sort`)
 
@@ -168,9 +169,11 @@ A phase is not complete until all four pass locally **and** CI is green on the p
 **Estimated effort:** 15 minutes.
 
 ### Objective
+
 Verify the local machine can run the locked toolchain before writing a single line of code. Catching a Node version mismatch now prevents a confusing failure mid-Phase-2.
 
 ### Prerequisites
+
 - None.
 
 ### Steps
@@ -196,15 +199,18 @@ Verify the local machine can run the locked toolchain before writing a single li
    - Should contain `PRD.md` and this `PHASE-PLAN.md`. Should not yet contain `package.json` (Phase 1 creates it).
 
 ### Outputs
+
 - A printed confirmation that all four checks pass. No files created.
 
 ### Success criteria
+
 - [ ] `node --version` prints v20.10.0 or later.
 - [ ] `pnpm --version` prints 9.0.0 or later.
 - [ ] At least one Chromium browser is installed and launchable.
 - [ ] Git identity is configured globally.
 
 ### Common pitfalls
+
 - Running `node --version` shows v18: install Node 20 LTS, then re-shim via `corepack enable`.
 - pnpm command missing: do **not** install via `npm i -g pnpm`; use `corepack` to keep the version controllable.
 
@@ -216,9 +222,11 @@ Verify the local machine can run the locked toolchain before writing a single li
 **Estimated effort:** 30 minutes.
 
 ### Objective
+
 Initialize the repo with deterministic tooling baseline: git, pnpm, `package.json`, license, ignore files, editorconfig. No application code yet.
 
 ### Prerequisites
+
 - Phase 0 complete.
 
 ### Steps
@@ -228,6 +236,7 @@ Initialize the repo with deterministic tooling baseline: git, pnpm, `package.jso
    - Confirm: `git status` returns "On branch main".
 
 2. **Create `.gitignore`** at repo root with the contents below.
+
    ```gitignore
    # dependencies
    node_modules/
@@ -259,6 +268,7 @@ Initialize the repo with deterministic tooling baseline: git, pnpm, `package.jso
    ```
 
 3. **Create `.editorconfig`** at repo root.
+
    ```ini
    root = true
 
@@ -313,6 +323,7 @@ Initialize the repo with deterministic tooling baseline: git, pnpm, `package.jso
    - Scripts referencing tools not yet installed (`wxt`, `tsc`, `eslint`, etc.) are fine — they fail until later phases install them.
 
 6. **Create `.npmrc`** at repo root to pin pnpm behavior.
+
    ```ini
    engine-strict=true
    strict-peer-dependencies=false
@@ -320,6 +331,7 @@ Initialize the repo with deterministic tooling baseline: git, pnpm, `package.jso
    ```
 
 7. **Create `.nvmrc`** at repo root for editor / CI auto-switching.
+
    ```
    20
    ```
@@ -329,24 +341,29 @@ Initialize the repo with deterministic tooling baseline: git, pnpm, `package.jso
    - `git commit -m "chore: bootstrap repo with package.json, license, and ignore files"`
 
 ### Files created
+
 - `.gitignore`, `.editorconfig`, `.nvmrc`, `.npmrc`, `LICENSE`, `package.json`
 
 ### Outputs
+
 - Git repo on `main`, one bootstrap commit, no installed dependencies yet.
 
 ### Success criteria
+
 - [ ] `git log --oneline` shows the bootstrap commit.
 - [ ] `cat package.json` shows the fields exactly as specified.
 - [ ] `LICENSE` is the standard MIT text with year 2026 and author "Abhishek Jain".
 - [ ] No `node_modules/` exists yet.
 
 ### Review checklist
+
 - [ ] `package.json#type` is `"module"` (we are ESM-first; WXT requires this).
 - [ ] `engines.node` matches `.nvmrc`.
 - [ ] No extra fields like `main`/`module`/`exports` in `package.json` (this is a private app, not a library).
 - [ ] License year is 2026, author email matches user memory.
 
 ### References
+
 - pnpm `engine-strict`: https://pnpm.io/npmrc#engine-strict
 - MIT license text: https://opensource.org/license/mit/
 
@@ -358,22 +375,27 @@ Initialize the repo with deterministic tooling baseline: git, pnpm, `package.jso
 **Estimated effort:** 60–90 minutes.
 
 ### Objective
+
 Stand up WXT with the React module, strict TypeScript, the locked `src/` layout from PRD §4, and a smoke-test dashboard page that renders "historia" when the extension is loaded in Chrome via `pnpm dev`. Zero styling beyond browser defaults.
 
 ### Prerequisites
+
 - Phase 1 complete.
 
 ### Steps
 
 1. **Install WXT and the React module.**
+
    ```bash
    pnpm add -D wxt@^0.20 @wxt-dev/module-react
    pnpm add react@^18 react-dom@^18
    pnpm add -D @types/react@^18 @types/react-dom@^18 typescript@^5.4
    ```
+
    - `react` and `react-dom` are runtime deps; types are dev.
 
 2. **Create `tsconfig.json`** at repo root.
+
    ```json
    {
      "extends": "./.wxt/tsconfig.json",
@@ -398,17 +420,20 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
      "include": ["src", "tests", "*.config.*", "*.d.ts"]
    }
    ```
+
    - `.wxt/tsconfig.json` is generated by `wxt prepare`. The extends keeps WXT's path aliases and entrypoint typings.
    - `noUncheckedIndexedAccess` catches missing days in sparse maps (D-005 invariant).
    - `exactOptionalPropertyTypes` forces clean optional handling.
    - `verbatimModuleSyntax` + `isolatedModules` keep bundler-friendly type imports.
 
 3. **Install Chrome ambient types.**
+
    ```bash
    pnpm add -D @types/chrome
    ```
 
 4. **Create `wxt.config.ts`** at repo root.
+
    ```ts
    import { defineConfig } from 'wxt';
 
@@ -432,11 +457,13 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
      },
    });
    ```
+
    - Manifest version is implicit (MV3) per WXT default ([FR-M-01](./PRD.md#5-manifest--permissions)).
    - No `host_permissions`, no `web_accessible_resources` ([FR-M-02](./PRD.md#5-manifest--permissions), [FR-M-05](./PRD.md#5-manifest--permissions)).
    - Icons referenced here must exist in `public/` — placeholder PNGs are produced in step 6.
 
 5. **Create the `src/` directory structure** exactly as PRD §4 specifies. Use empty `.gitkeep` files where directories must exist but have no source yet — git won't track empty directories.
+
    ```bash
    mkdir -p src/core src/background src/dashboard/{views,components,components/ui,hooks} src/entrypoints public tests/fixtures
    touch src/core/.gitkeep src/dashboard/views/.gitkeep src/dashboard/components/.gitkeep src/dashboard/components/ui/.gitkeep src/dashboard/hooks/.gitkeep tests/fixtures/.gitkeep
@@ -449,6 +476,7 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
    - Verify: `file public/icon-128.png` reports `PNG image data, 128 x 128`.
 
 7. **Create the background entrypoint** at `src/entrypoints/background.ts`.
+
    ```ts
    import { handleActionClick } from '@/background';
 
@@ -459,11 +487,13 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
      },
    });
    ```
+
    - `defineBackground` is globally provided by WXT (no import needed; it's auto-imported via `.wxt/`).
    - `type: 'module'` enables ES modules in the service worker.
    - The implementation file `src/background/index.ts` is created in this phase as a thin stub; the real backfill logic ships in Phase 11.
 
 8. **Create the background stub** at `src/background/index.ts`.
+
    ```ts
    /**
     * Service-worker stub for Phase 2 smoke test. Registers the action-click handler
@@ -480,6 +510,7 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
    ```
 
 9. **Create the dashboard HTML entrypoint** at `src/entrypoints/dashboard.html`.
+
    ```html
    <!doctype html>
    <html lang="en">
@@ -496,6 +527,7 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
    ```
 
 10. **Create the dashboard React entry** at `src/entrypoints/dashboard/main.tsx`.
+
     ```tsx
     import { StrictMode } from 'react';
     import { createRoot } from 'react-dom/client';
@@ -515,6 +547,7 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
     ```
 
 11. **Create the App shell** at `src/dashboard/App.tsx` (deliberately minimal for Phase 2 smoke test).
+
     ```tsx
     export function App(): JSX.Element {
       return (
@@ -527,30 +560,38 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
     ```
 
 12. **Run `wxt prepare`** to generate `.wxt/`.
+
     ```bash
     pnpm exec wxt prepare
     ```
+
     - This populates `.wxt/tsconfig.json`, `.wxt/types/`, and the entrypoint type augmentations.
     - Verify: `ls .wxt/` contains `tsconfig.json` and `types/`.
 
 13. **Smoke-test typecheck.**
+
     ```bash
     pnpm typecheck
     ```
+
     - Expect zero errors. If errors reference `JSX`, ensure `jsx: "react-jsx"` is in `tsconfig.json`.
 
 14. **Smoke-test the extension in Chrome.**
+
     ```bash
     pnpm dev
     ```
+
     - WXT starts a watcher and launches Chrome with the extension auto-loaded.
     - In the launched Chrome, click the historia toolbar icon. A new tab opens to the dashboard with the text **historia** and **Dashboard scaffold is alive.**
     - Close `pnpm dev` with Ctrl+C when verified.
 
 15. **Smoke-test the production build.**
+
     ```bash
     pnpm build
     ```
+
     - Output appears in `.output/chrome-mv3/`. Confirm `manifest.json` is generated with `manifest_version: 3` and the three permissions only.
 
 16. **Commit.**
@@ -558,6 +599,7 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
     - `git commit -m "feat: scaffold WXT + React + TypeScript with smoke-test dashboard"`
 
 ### Files created
+
 - `tsconfig.json`, `wxt.config.ts`
 - `src/entrypoints/background.ts`
 - `src/entrypoints/dashboard.html`
@@ -569,9 +611,11 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
 - `.wxt/` (generated, gitignored)
 
 ### Outputs
+
 - A loadable Chrome extension that opens a single-page dashboard from the toolbar icon, rendering plain text. Production build succeeds.
 
 ### Success criteria
+
 - [ ] `pnpm typecheck` passes with zero errors.
 - [ ] `pnpm build` produces a valid `.output/chrome-mv3/manifest.json`.
 - [ ] `pnpm dev` loads the extension in Chrome and the toolbar icon opens the dashboard tab.
@@ -579,19 +623,22 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
 - [ ] Manifest contains only `history`, `storage`, `alarms` permissions and no `host_permissions`.
 
 ### Review checklist
+
 - [ ] `srcDir: 'src'` is set in `wxt.config.ts` (otherwise WXT searches for entrypoints in the wrong place).
 - [ ] Path alias `@/` resolves: try importing `import { handleActionClick } from '@/background'` — typecheck passes.
 - [ ] `src/core/`, `src/dashboard/components/`, `src/dashboard/views/`, `src/dashboard/hooks/` exist (with `.gitkeep` if empty).
-- [ ] `src/core/` contains no chrome.* references (we have not written any source there yet — keep it that way per [FR-S-01](./PRD.md#4-project-structure)).
+- [ ] `src/core/` contains no chrome.\* references (we have not written any source there yet — keep it that way per [FR-S-01](./PRD.md#4-project-structure)).
 - [ ] Background entrypoint registers `chrome.action.onClicked` at top level synchronously (calling `handleActionClick()` from `main()` is OK — `defineBackground.main` runs at top level on worker boot).
 
 ### Common pitfalls
+
 - **JSX errors.** Make sure `tsconfig.json` extends `.wxt/tsconfig.json` AND sets `jsx: "react-jsx"`.
 - **`defineBackground` undefined.** This is a WXT auto-import; if your editor flags it, restart the TS server after `wxt prepare`.
 - **Path alias not resolving in tests.** Tests aren't running yet — this is OK. Phase 4 wires Vitest to honor the alias.
 - **`pnpm dev` cannot find Chrome.** Set `WXT_BROWSER_BINARY` env var if Chrome lives outside the default path.
 
 ### References
+
 - WXT entrypoints: https://wxt.dev/guide/essentials/entrypoints.html
 - WXT React module: https://wxt.dev/guide/essentials/frameworks.html#react
 - Chrome MV3 service worker lifecycle: https://developer.chrome.com/docs/extensions/develop/concepts/service-workers/lifecycle
@@ -605,21 +652,26 @@ Stand up WXT with the React module, strict TypeScript, the locked `src/` layout 
 **Estimated effort:** 60 minutes.
 
 ### Objective
+
 Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui primitives into `src/dashboard/components/ui/`, and verify the smoke-test dashboard renders Tailwind utilities. Visual identity stays **deliberately neutral grayscale** through Phase 15 — Phase 16 owns the design pass.
 
 ### Prerequisites
+
 - Phase 2 complete (WXT scaffold runs in Chrome).
 
 ### Steps
 
 1. **Install Tailwind v4 and the Vite plugin.**
+
    ```bash
    pnpm add -D tailwindcss@^4 @tailwindcss/vite@^4
    pnpm add clsx tailwind-merge
    ```
+
    - `clsx` + `tailwind-merge` are runtime deps used by shadcn's `cn` helper.
 
 2. **Add Tailwind to the WXT Vite config.** Edit `wxt.config.ts` to add a `vite` factory that returns `plugins: [tailwindcss()]`.
+
    ```ts
    import { defineConfig } from 'wxt';
    import tailwindcss from '@tailwindcss/vite';
@@ -637,6 +689,7 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
    ```
 
 3. **Create the dashboard CSS entry** at `src/dashboard/styles.css`.
+
    ```css
    @import 'tailwindcss';
 
@@ -647,8 +700,8 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
     */
    @theme {
      --font-sans:
-       ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-       'Helvetica Neue', Arial, sans-serif;
+       ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+       sans-serif;
    }
 
    @layer base {
@@ -663,12 +716,15 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
    ```
 
 4. **Import the stylesheet from the dashboard entry.** Edit `src/entrypoints/dashboard/main.tsx` to add at the top:
+
    ```ts
    import '@/dashboard/styles.css';
    ```
+
    - Place this import **above** the React imports so the CSS is bundled with the dashboard chunk.
 
 5. **Add the `cn` helper** at `src/dashboard/lib/cn.ts`.
+
    ```ts
    import { clsx, type ClassValue } from 'clsx';
    import { twMerge } from 'tailwind-merge';
@@ -678,9 +734,11 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
      return twMerge(clsx(inputs));
    }
    ```
+
    - Create the `src/dashboard/lib/` directory if it does not exist.
 
 6. **Add the shadcn config** at `components.json` in the repo root.
+
    ```json
    {
      "$schema": "https://ui.shadcn.com/schema.json",
@@ -704,16 +762,20 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
      "iconLibrary": "lucide"
    }
    ```
+
    - `"config": ""` is correct for Tailwind v4 — there is no `tailwind.config.js`.
    - The aliases route shadcn's generated components into the locked project structure.
 
 7. **Install `lucide-react` and Radix peers shadcn needs.**
+
    ```bash
    pnpm add lucide-react
    ```
+
    - Radix peers are installed on demand by `shadcn add` (next step).
 
 8. **Add shadcn theme tokens to `styles.css`.** Append below the existing `@theme` block:
+
    ```css
    /*
     * shadcn token surface (CSS variables). Values are placeholder neutrals for Phases 3–15.
@@ -771,19 +833,23 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
    ```
 
 9. **Install the locked shadcn primitives.** Run the shadcn CLI for each component listed below. The CLI auto-installs Radix peer deps.
+
    ```bash
    pnpm dlx shadcn@latest add button tabs select popover tooltip
    ```
+
    - Components land in `src/dashboard/components/ui/` per the alias config.
    - If the CLI asks about React Server Components, choose "No" (we are not RSC).
    - If the CLI asks to overwrite `src/dashboard/lib/cn.ts`, choose **No** — keep the file written in step 5.
 
 10. **Add `Card` and `Sheet` primitives** for use in later phases.
+
     ```bash
     pnpm dlx shadcn@latest add card sheet
     ```
 
 11. **Verify the smoke-test dashboard uses Tailwind.** Update `src/dashboard/App.tsx` to:
+
     ```tsx
     import { Button } from '@/dashboard/components/ui/button';
 
@@ -805,17 +871,21 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
     ```
 
 12. **Re-run typecheck and dev.**
+
     ```bash
     pnpm typecheck
     pnpm dev
     ```
+
     - Click the icon in the launched Chrome. The dashboard tab shows the styled heading and a shadcn button.
     - Hovering the button shows the focus ring (don't remove it).
 
 13. **Verify production build.**
+
     ```bash
     pnpm build
     ```
+
     - Confirm `.output/chrome-mv3/assets/` contains a CSS chunk and the page loads it.
 
 14. **Commit.**
@@ -823,17 +893,20 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
     - `git commit -m "feat: integrate Tailwind v4 and shadcn primitives with neutral token set"`
 
 ### Files created
+
 - `src/dashboard/styles.css`
 - `src/dashboard/lib/cn.ts`
 - `components.json`
 - `src/dashboard/components/ui/button.tsx`, `tabs.tsx`, `select.tsx`, `popover.tsx`, `tooltip.tsx`, `card.tsx`, `sheet.tsx`
 
 ### Files modified
+
 - `wxt.config.ts` (added `vite` factory)
 - `src/dashboard/App.tsx` (uses Button + Tailwind classes)
 - `src/entrypoints/dashboard/main.tsx` (imports `styles.css`)
 
 ### Success criteria
+
 - [ ] `pnpm typecheck` passes.
 - [ ] `pnpm build` succeeds and emits a CSS chunk.
 - [ ] Loading the extension shows a styled dashboard: max-width centered, gray text muted, primary button with focus ring.
@@ -841,6 +914,7 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
 - [ ] `src/dashboard/components/ui/` contains exactly the 7 primitives listed.
 
 ### Review checklist
+
 - [ ] Tailwind v4 — no `tailwind.config.js` file exists.
 - [ ] `@import 'tailwindcss';` appears once in `styles.css`.
 - [ ] The CSS file is imported from the React entry, not the HTML entry (lets WXT bundle it correctly).
@@ -848,12 +922,14 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
 - [ ] No design tokens were invented beyond the neutral shadcn defaults.
 
 ### Common pitfalls
+
 - **`@apply` errors** at build time → ensure `@import 'tailwindcss';` is the **first** line of `styles.css`. Tailwind v4 needs the import before `@layer`/`@theme`.
 - **shadcn CLI installs `tw-animate-css` or other extras.** Decline anything outside the locked stack; if installed, remove via `pnpm remove` and delete generated config.
 - **Components using `@/lib/utils`** (default shadcn import path): the `aliases.utils` config in step 6 redirects this to `@/dashboard/lib/cn`. If a primitive still references `@/lib/utils`, fix the import after install.
 - **CSS not loading in production.** WXT chunks CSS per entrypoint — confirm the `import '@/dashboard/styles.css'` lives in `main.tsx` (the entrypoint file), not in a deeper component.
 
 ### References
+
 - Tailwind v4 + Vite: https://tailwindcss.com/docs/installation/using-vite
 - Tailwind v4 `@theme`: https://tailwindcss.com/docs/theme
 - shadcn/ui Tailwind v4 setup: https://ui.shadcn.com/docs/tailwind-v4
@@ -867,14 +943,17 @@ Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui p
 **Estimated effort:** 60–90 minutes.
 
 ### Objective
+
 Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the WxtVitest plugin, and Testing Library. Verify a placeholder test passes in both Node and `fakeBrowser` environments. Lock the module-boundary rule from [FR-S-01](./PRD.md#4-project-structure).
 
 ### Prerequisites
+
 - Phase 3 complete.
 
 ### Steps
 
 1. **Install ESLint 9 + plugins.**
+
    ```bash
    pnpm add -D eslint@^9 typescript-eslint@^8 \
      eslint-plugin-react@^7 eslint-plugin-react-hooks@^5 \
@@ -883,6 +962,7 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
    ```
 
 2. **Create `eslint.config.js`** at repo root.
+
    ```js
    import js from '@eslint/js';
    import tseslint from 'typescript-eslint';
@@ -944,8 +1024,15 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
            'error',
            {
              patterns: [
-               { group: ['@/background/*', '@/dashboard/*'], message: 'src/core/ must not import from background or dashboard layers (FR-S-01).' },
-               { group: ['webextension-polyfill'], message: 'src/core/ must remain extension-agnostic (FR-S-01).' },
+               {
+                 group: ['@/background/*', '@/dashboard/*'],
+                 message:
+                   'src/core/ must not import from background or dashboard layers (FR-S-01).',
+               },
+               {
+                 group: ['webextension-polyfill'],
+                 message: 'src/core/ must remain extension-agnostic (FR-S-01).',
+               },
              ],
            },
          ],
@@ -968,11 +1055,13 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
    ```
 
 3. **Install Prettier + Tailwind plugin.**
+
    ```bash
    pnpm add -D prettier@^3 prettier-plugin-tailwindcss@^0.6
    ```
 
 4. **Create `.prettierrc.json`** at repo root.
+
    ```json
    {
      "singleQuote": true,
@@ -986,6 +1075,7 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
    ```
 
 5. **Create `.prettierignore`** at repo root.
+
    ```
    .wxt
    .output
@@ -996,15 +1086,18 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
    ```
 
 6. **Install Vitest companions + Testing Library.** (`vitest@^2` itself is already installed in Phase 2 — see Phase 2 deviation note in HANDOFF.md and the [Status Tracker](#status-tracker) — because Phase 2's `tsconfig.json` references `vitest/globals` and typecheck would fail without the package present. The `pnpm.overrides.vite: "8.0.14"` pin in `package.json` already resolves the vite peer-dep conflict between vitest@2 and WXT@0.20; do not remove it.)
+
    ```bash
    pnpm add -D @vitest/coverage-v8@^2 \
      @testing-library/react@^16 @testing-library/jest-dom@^6 @testing-library/user-event@^14 \
      jsdom@^25
    ```
+
    - WXT ships the Vitest plugin from `wxt/testing` (no separate install needed; comes with the `wxt` package).
    - `@webext-core/fake-browser` is a transitive dep brought in by the WXT plugin.
 
 7. **Create `vitest.config.ts`** at repo root.
+
    ```ts
    import { defineConfig } from 'vitest/config';
    import { WxtVitest } from 'wxt/testing';
@@ -1037,6 +1130,7 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
    ```
 
 8. **Create the test setup file** at `tests/setup.ts`.
+
    ```ts
    import '@testing-library/jest-dom/vitest';
    import { afterEach, beforeEach } from 'vitest';
@@ -1053,6 +1147,7 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
    ```
 
 9. **Add a smoke test** at `tests/smoke.test.ts`.
+
    ```ts
    import { describe, it, expect } from 'vitest';
    import { fakeBrowser } from 'wxt/testing';
@@ -1072,6 +1167,7 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
    ```
 
 10. **Add a VS Code settings hint** at `.vscode/settings.json` (committed).
+
     ```json
     {
       "editor.formatOnSave": true,
@@ -1083,9 +1179,11 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
       "typescript.tsdk": "node_modules/typescript/lib"
     }
     ```
+
     - Optional for non-VS-Code users; harmless to commit.
 
 11. **Add a VS Code recommended extensions file** at `.vscode/extensions.json`.
+
     ```json
     {
       "recommendations": [
@@ -1097,12 +1195,14 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
     ```
 
 12. **Run the full local quality gate.**
+
     ```bash
     pnpm format        # writes Prettier formatting
     pnpm lint          # zero errors
     pnpm typecheck     # zero errors
     pnpm test          # smoke.test.ts passes
     ```
+
     - If lint reports issues in shadcn-generated files, run `pnpm lint:fix` once and verify the result.
 
 13. **Commit.**
@@ -1110,14 +1210,17 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
     - `git commit -m "feat: wire ESLint flat config, Prettier, Vitest + WxtVitest, smoke tests"`
 
 ### Files created
+
 - `eslint.config.js`, `.prettierrc.json`, `.prettierignore`
 - `vitest.config.ts`, `tests/setup.ts`, `tests/smoke.test.ts`
 - `.vscode/settings.json`, `.vscode/extensions.json`
 
 ### Outputs
+
 - Lint, format, type, and test commands all pass cleanly. Boundary rule enforced.
 
 ### Success criteria
+
 - [ ] `pnpm lint` exits 0.
 - [ ] `pnpm format:check` exits 0 (or `pnpm format` was run last).
 - [ ] `pnpm typecheck` exits 0.
@@ -1125,6 +1228,7 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
 - [ ] An attempt to import `chrome.tabs` from `src/core/` (try it in a throwaway file) is flagged by ESLint with the FR-S-01 message. Delete the throwaway file after verifying.
 
 ### Review checklist
+
 - [ ] `eslint.config.js` is flat config (no `.eslintrc.*` exists).
 - [ ] Tailwind plugin runs (verify by saving a component — class order changes).
 - [ ] `tests/setup.ts` resets `fakeBrowser` in `beforeEach`.
@@ -1132,11 +1236,13 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
 - [ ] No husky / lint-staged installed — CI catches issues per PRD direction.
 
 ### Common pitfalls
+
 - **ESLint "projectService" fails** → set `tsconfigRootDir: import.meta.dirname` (done above) and ensure `tsconfig.json` includes the files being linted.
 - **Vitest cannot resolve `@/...`** → confirm `vitest.config.ts`'s `resolve.alias` block matches `tsconfig.json` paths.
 - **Tailwind class sort changes too aggressive** → that's expected; let Prettier own class order.
 
 ### References
+
 - ESLint flat config: https://eslint.org/docs/latest/use/configure/configuration-files
 - typescript-eslint v8 flat config: https://typescript-eslint.io/getting-started
 - Vitest: https://vitest.dev/guide/
@@ -1150,15 +1256,18 @@ Install ESLint 9 flat config, Prettier with the Tailwind plugin, Vitest with the
 **Estimated effort:** 30–45 minutes.
 
 ### Objective
+
 A single GitHub Actions workflow that runs install → lint → typecheck → test → build on every PR and every push to `main`. The PR cannot merge unless the workflow is green.
 
 ### Prerequisites
+
 - Phase 4 complete (all local quality gates green).
 - A GitHub remote exists. If it does not, create the public repo `historia` on GitHub from day one ([REL-104](./PRD.md#rel-104)) and add it as `origin`.
 
 ### Steps
 
 1. **Create the workflow file** at `.github/workflows/ci.yml`.
+
    ```yaml
    name: CI
 
@@ -1205,12 +1314,15 @@ A single GitHub Actions workflow that runs install → lint → typecheck → te
    ```
 
 2. **Add a `CODEOWNERS` file** at `.github/CODEOWNERS` (single owner for v1).
+
    ```
    * @<your-github-handle>
    ```
+
    - Replace `<your-github-handle>` with `abhi-j0407` (the personal GitHub handle for this repo; commit author identity is `Abhishek <abhishek.j0407@gmail.com>`, set per-repo in Phase 1).
 
 3. **Add a pull request template** at `.github/pull_request_template.md`.
+
    ```markdown
    ## Phase
 
@@ -1234,6 +1346,7 @@ A single GitHub Actions workflow that runs install → lint → typecheck → te
    ```
 
 4. **Add an issue template** at `.github/ISSUE_TEMPLATE/bug.yml` (helpful for the public-from-day-one stance).
+
    ```yaml
    name: Bug report
    description: Something is broken
@@ -1277,20 +1390,24 @@ A single GitHub Actions workflow that runs install → lint → typecheck → te
 7. **Merge the PR** once green.
 
 ### Files created
+
 - `.github/workflows/ci.yml`
 - `.github/CODEOWNERS`
 - `.github/pull_request_template.md`
 - `.github/ISSUE_TEMPLATE/bug.yml`
 
 ### Outputs
+
 - A green CI run on `main`. Branch protection prevents accidental direct pushes.
 
 ### Success criteria
+
 - [ ] The `verify` job runs on PR and on push to `main`.
 - [ ] All five steps (install, lint, typecheck, test, build) pass on a clean check-out.
 - [ ] Branch protection requires `verify` to pass before merge.
 
 ### Review checklist
+
 - [ ] `actions/checkout@v4` (not @v3 — security cadence).
 - [ ] `pnpm/action-setup@v4` with explicit `version: 9` to match `package.json#packageManager`.
 - [ ] `node-version-file: .nvmrc` keeps Node version in one place.
@@ -1298,11 +1415,13 @@ A single GitHub Actions workflow that runs install → lint → typecheck → te
 - [ ] `--frozen-lockfile` is set on install (catches lockfile drift).
 
 ### Common pitfalls
+
 - **Cache miss on every run** → `cache: pnpm` requires the lockfile to exist before install; the `setup-node` step handles this correctly.
 - **`pnpm exec wxt prepare` not running** → the `postinstall` script in `package.json` triggers `wxt prepare` automatically.
 - **TypeScript out-of-memory** on CI → unlikely at v1 size, but if it appears, set `NODE_OPTIONS=--max-old-space-size=4096` on the typecheck step.
 
 ### References
+
 - GitHub Actions for pnpm: https://pnpm.io/continuous-integration#github-actions
 - Branch protection rules: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
 
@@ -1314,14 +1433,17 @@ A single GitHub Actions workflow that runs install → lint → typecheck → te
 **Estimated effort:** 90 minutes.
 
 ### Objective
-Write the canonical type definitions for the data model and the URL-filtering module. Both ship with full unit tests. No runtime dependencies, no chrome.* — pure TypeScript that runs in Node.
+
+Write the canonical type definitions for the data model and the URL-filtering module. Both ship with full unit tests. No runtime dependencies, no chrome.\* — pure TypeScript that runs in Node.
 
 ### Prerequisites
+
 - Phase 5 complete (CI green on main).
 
 ### Steps
 
 1. **Create `src/core/types.ts`** as the verbatim transcription of PRD [§6](./PRD.md#6-data-model). Use `interface` to match the PRD.
+
    ```ts
    /**
     * Canonical data shapes shared across core, background, and dashboard layers.
@@ -1377,6 +1499,7 @@ Write the canonical type definitions for the data model and the URL-filtering mo
    ```
 
 2. **Create `src/core/log.ts`** — the single error reporter ([E-001](./PRD.md#e-001)).
+
    ```ts
    /** Prefix-and-forward to console.error per E-001. No remote telemetry in v1. */
    export function log(message: string, ...rest: unknown[]): void {
@@ -1392,13 +1515,15 @@ Write the canonical type definitions for the data model and the URL-filtering mo
    - B-002: `chrome://newtab/`, `about:blank`, and `""` drop; `https://example.com` is kept.
    - B-003: `localhost`, `127.0.0.1`, `0.0.0.0`, `::1`, `*.local` drop; `app.localhost.example.com` (not a real local) is kept.
    - B-004: one search URL per of the 9 engines drops; corresponding non-search pages (`google.com/maps`, `duckduckgo.com/`, `search.brave.com/`, `startpage.com/about`) are kept.
-   Use `it.each([...])` to enumerate URLs concisely.
+     Use `it.each([...])` to enumerate URLs concisely.
 
 5. **Run quality gates.**
+
    ```bash
    pnpm lint && pnpm typecheck && pnpm test
    pnpm test:coverage
    ```
+
    - All filters and types compile cleanly. ESLint reports no violations. Coverage for `src/core/filters.ts` ≥ 90% per [T-004](./PRD.md#t-004).
 
 6. **Commit.**
@@ -1406,18 +1531,21 @@ Write the canonical type definitions for the data model and the URL-filtering mo
    - `git commit -m "feat(core): types, log helper, and URL filters (B-001..B-004)"`
 
 ### Files created
+
 - `src/core/types.ts`
 - `src/core/log.ts`
 - `src/core/filters.ts`, `src/core/filters.test.ts`
 
 ### Success criteria
+
 - [ ] `src/core/types.ts` exports the seven shapes verbatim from PRD §6.
 - [ ] `shouldDropURL` correctly drops every PRD-listed URL pattern (B-001..B-004).
 - [ ] Coverage for `filters.ts` ≥ 90% lines, branches, functions, statements.
-- [ ] ESLint enforces the FR-S-01 boundary (no chrome.* in `src/core/`).
+- [ ] ESLint enforces the FR-S-01 boundary (no chrome.\* in `src/core/`).
 - [ ] `pnpm test` reports ≥ 30 passing assertions across the four describe blocks.
 
 ### Review checklist
+
 - [ ] No `any` types.
 - [ ] Type-only imports use `import type` (enforced by `consistent-type-imports`).
 - [ ] Hostnames are lowercased before matching.
@@ -1426,12 +1554,14 @@ Write the canonical type definitions for the data model and the URL-filtering mo
 - [ ] Rule predicates live in a single array (data-driven per [FR-F-01](./PRD.md#71-url-filtering)).
 
 ### Common pitfalls
+
 - **TLD pattern overreach.** Use `/(^|\.)google\.[a-z.]+$/` to match `google.com`, `google.co.uk`, etc. Avoid `*` glob — the regex form is more precise and bounded.
 - **Startpage path forms.** Both `/sp/search` and `/do/search` must be covered.
 - **DuckDuckGo path.** It's the root path `/` with a `q=` query param (not `/search`).
 - **The "search.yahoo.com" rule** matches the whole host — the PRD does not constrain the path.
 
 ### References
+
 - WHATWG URL API: https://developer.mozilla.org/en-US/docs/Web/API/URL
 
 ---
@@ -1442,19 +1572,23 @@ Write the canonical type definitions for the data model and the URL-filtering mo
 **Estimated effort:** 60 minutes.
 
 ### Objective
+
 Add `domain.ts` (apex extraction via tldts) and `dates.ts` (date-fns wrappers for day-key conversion, range enumeration, and selector resolution). Both pure, fully unit-tested.
 
 ### Prerequisites
+
 - Phase 6 complete.
 
 ### Steps
 
 1. **Install runtime dependencies.**
+
    ```bash
    pnpm add tldts@^7 date-fns@^4
    ```
 
 2. **Create `src/core/domain.ts`** with a single export:
+
    ```ts
    import { getDomain } from 'tldts';
 
@@ -1496,9 +1630,11 @@ Add `domain.ts` (apex extraction via tldts) and `dates.ts` (date-fns wrappers fo
    - `resolveRange('all', '2025-09-01', now=2026-05-22)` returns `{ start: '2025-09-01', end: '2026-05-22' }`.
 
 6. **Run quality gates.**
+
    ```bash
    pnpm lint && pnpm typecheck && pnpm test:coverage
    ```
+
    - Coverage for `domain.ts` and `dates.ts` ≥ 90%.
 
 7. **Commit.**
@@ -1506,22 +1642,26 @@ Add `domain.ts` (apex extraction via tldts) and `dates.ts` (date-fns wrappers fo
    - `git commit -m "feat(core): apex extraction (tldts) and local-tz date helpers (B-006)"`
 
 ### Files created
+
 - `src/core/domain.ts`, `src/core/domain.test.ts`
 - `src/core/dates.ts`, `src/core/dates.test.ts`
 
 ### Success criteria
+
 - [ ] `apexOf` returns lowercase apex or null per PSL semantics.
 - [ ] `toDayKey` is timezone-correct (B-006) and tested explicitly at the 23:55/00:01 boundary.
 - [ ] `resolveRange` produces inclusive N-day windows matching PRD [UX-S-02](./PRD.md#ux-s-02).
 - [ ] Coverage ≥ 90% on both `domain.ts` and `dates.ts`.
 
 ### Review checklist
+
 - [ ] `tldts` is the runtime dep, not `tldts-experimental` or a fork.
 - [ ] No UTC math anywhere — `format(d, 'yyyy-MM-dd')` is local-tz by design.
 - [ ] No `Date.now()` calls inside production functions; the current time arrives via the optional `now` parameter (default `new Date()`).
 - [ ] `eachDayInRange` returns a plain `DayKey[]` array, not a generator.
 
 ### References
+
 - tldts: https://github.com/remusao/tldts#readme
 - date-fns format tokens: https://date-fns.org/docs/format
 - date-fns `differenceInCalendarDays`: https://date-fns.org/docs/differenceInCalendarDays
@@ -1534,9 +1674,11 @@ Add `domain.ts` (apex extraction via tldts) and `dates.ts` (date-fns wrappers fo
 **Estimated effort:** 3–4 hours.
 
 ### Objective
+
 Implement the pure aggregation function, the quantile-bucketed intensity algorithm, the winner-palette assigner, and the synthetic-history fixture. All shipped with rigorous tests.
 
 ### Prerequisites
+
 - Phase 7 complete.
 
 ### Steps
@@ -1601,9 +1743,11 @@ Implement the pure aggregation function, the quantile-bucketed intensity algorit
    - `legend.length === 11` and `legend[10].apex === null`.
 
 8. **Run quality gates and coverage.**
+
    ```bash
    pnpm lint && pnpm typecheck && pnpm test:coverage
    ```
+
    - All five per-file coverage gates from Phase 4 must pass (`filters`, `aggregate`, `intensity`, `dates`, `domain`).
 
 9. **Commit.**
@@ -1611,12 +1755,14 @@ Implement the pure aggregation function, the quantile-bucketed intensity algorit
    - `git commit -m "feat(core): aggregation, intensity bucketing, winner palette + fixtures"`
 
 ### Files created
+
 - `src/core/aggregate.ts`, `src/core/aggregate.test.ts`
 - `src/core/intensity.ts`, `src/core/intensity.test.ts`
 - `src/core/palette.ts`, `src/core/palette.test.ts`
 - `tests/fixtures/synthetic-history.ts`
 
 ### Success criteria
+
 - [ ] `aggregate()` matches all of [B-005..B-008](./PRD.md#72-aggregation) under test.
 - [ ] `aggregate([])` returns a well-formed aggregate without throwing.
 - [ ] `buildIntensityScale` covers the 5-level case and the < 5-distinct fallback.
@@ -1624,6 +1770,7 @@ Implement the pure aggregation function, the quantile-bucketed intensity algorit
 - [ ] Per-file coverage gates pass for all five core files listed in [T-004](./PRD.md#t-004).
 
 ### Review checklist
+
 - [ ] `aggregate.ts` does not import from `src/background/` or reference `chrome.*` (FR-S-01).
 - [ ] All maps use plain `Record<>` shapes as the PRD specifies, with sparse storage (zero-value days omitted).
 - [ ] The intensity scale assigns 0 only to non-positive values (the empty bucket).
@@ -1632,12 +1779,14 @@ Implement the pure aggregation function, the quantile-bucketed intensity algorit
 - [ ] Synthetic fixture is deterministic — no `Date.now()`, no `Math.random()`.
 
 ### Common pitfalls
+
 - **Quantile boundary off-by-one** — the `(p80, ∞)` bucket means strictly greater than p80. The order `if (v <= qs[3]) return 4; return 5;` enforces that.
 - **Fallback for < 5 distinct values** — repeat the maximum distinct value in remaining slots so the comparator chain stays monotonic.
 - **Synthetic fixture's filtered URLs** — they must appear in `SYNTHETIC_RAW` (so the filter logic is exercised) but disappear in `syntheticVisits()` output.
 - **`dailyWinner` build** — when iterating, do NOT use `Object.entries(visitsPerSitePerDay)` and search by day; pivot to `Map<DayKey, Map<apex, count>>` first, then resolve winners. Trying to mutate during the outer iteration breaks B-005 tie-break.
 
 ### References
+
 - Quantile method (linear interpolation, Type 7): https://en.wikipedia.org/wiki/Quantile#Estimating_quantiles_from_a_sample
 - Public Suffix List: https://publicsuffix.org/
 
@@ -1649,9 +1798,11 @@ Implement the pure aggregation function, the quantile-bucketed intensity algorit
 **Estimated effort:** 75 minutes.
 
 ### Objective
+
 A thin, fully-typed wrapper around `chrome.storage.local` that owns the two PRD keys (`aggregate.v1`, `ui.v1`), handles schema migration ([ST-003](./PRD.md#st-003)), and exposes a change subscription. All tested with `fakeBrowser`.
 
 ### Prerequisites
+
 - Phase 8 complete.
 
 ### Steps
@@ -1683,6 +1834,7 @@ A thin, fully-typed wrapper around `chrome.storage.local` that owns the two PRD 
    - `subscribeAggregate(listener)` fires when `writeAggregate` runs; the unsubscribe function stops further dispatch.
 
 5. **Run quality gates.**
+
    ```bash
    pnpm lint && pnpm typecheck && pnpm test
    ```
@@ -1692,21 +1844,25 @@ A thin, fully-typed wrapper around `chrome.storage.local` that owns the two PRD 
    - `git commit -m "feat(background): chrome.storage facade with schema migration (ST-001..ST-005)"`
 
 ### Files created
+
 - `src/background/cache.ts`, `src/background/cache.test.ts`
 
 ### Success criteria
+
 - [ ] Single `set` per `writeAggregate` (ST-004).
 - [ ] Schema migration drops stale aggregates ([ST-003](./PRD.md#st-003)) without throwing.
 - [ ] `subscribeAggregate` returns a working unsubscribe handle.
 - [ ] All 7+ test cases pass.
 
 ### Review checklist
+
 - [ ] No `JSON.stringify` calls — chrome.storage handles serialization.
 - [ ] Listener filter checks both the key AND `areaName === 'local'`.
 - [ ] `writeAggregate` throws synchronously-rejected promise rather than silently dropping bad data.
 - [ ] No coupling to dashboard code; storage facade is layer-pure (background only).
 
 ### References
+
 - chrome.storage: https://developer.chrome.com/docs/extensions/reference/api/storage
 - @webext-core/fake-browser: https://webext-core.aklinker1.io/fake-browser/
 
@@ -1718,9 +1874,11 @@ A thin, fully-typed wrapper around `chrome.storage.local` that owns the two PRD 
 **Estimated effort:** 90 minutes.
 
 ### Objective
-Wire the service worker shell: top-level listener registration for every chrome event the extension uses, the action-click handler, the runtime message router (for `force-refresh` and `BackfillProgress`), and a chrome.* error-wrapper utility. Backfill logic itself ships in Phase 11.
+
+Wire the service worker shell: top-level listener registration for every chrome event the extension uses, the action-click handler, the runtime message router (for `force-refresh` and `BackfillProgress`), and a chrome.\* error-wrapper utility. Backfill logic itself ships in Phase 11.
 
 ### Prerequisites
+
 - Phase 9 complete.
 
 ### Steps
@@ -1744,9 +1902,10 @@ Wire the service worker shell: top-level listener registration for every chrome 
 
 4. **Create `src/background/chrome-promise.ts`** — central wrapper to enforce [E-004](./PRD.md#e-004).
    - Export `async function callChrome<T>(label: string, fn: () => Promise<T>): Promise<T>` — wraps `fn()` in try/catch; on error, calls `log()` with the label and rethrows.
-   - Used by `requestBackfill` and all other chrome.* call sites in Phases 11–12.
+   - Used by `requestBackfill` and all other chrome.\* call sites in Phases 11–12.
 
 5. **Create the manifest snapshot test** at `src/background/index.test.ts`. Verify the file registers a listener on each required chrome event when imported. Pattern:
+
    ```ts
    import { describe, it, expect } from 'vitest';
    import { fakeBrowser } from 'wxt/testing';
@@ -1765,6 +1924,7 @@ Wire the service worker shell: top-level listener registration for every chrome 
    ```
 
 6. **Update `src/entrypoints/background.ts`** to call the new orchestrator:
+
    ```ts
    import { registerBackgroundListeners } from '@/background';
 
@@ -1781,6 +1941,7 @@ Wire the service worker shell: top-level listener registration for every chrome 
    - `pnpm dev` → from the Chrome extension's "Inspect views" panel, run `chrome.runtime.sendMessage({ type: 'force-refresh' })` in the worker console. Verify `[historia] requestBackfill (stub)` logs once.
 
 8. **Run quality gates.**
+
    ```bash
    pnpm lint && pnpm typecheck && pnpm test
    ```
@@ -1790,32 +1951,38 @@ Wire the service worker shell: top-level listener registration for every chrome 
    - `git commit -m "feat(background): top-level service worker wiring (SW-001) with stubs for backfill/debounce"`
 
 ### Files created
+
 - `src/background/ingest.ts` (stub)
 - `src/background/debounce.ts` (stub)
 - `src/background/chrome-promise.ts`
 - `src/background/index.test.ts`
 
 ### Files modified
+
 - `src/background/index.ts` (full wiring)
 - `src/entrypoints/background.ts` (calls orchestrator)
 
 ### Success criteria
+
 - [ ] Every listener required by [SW-001](./PRD.md#sw-001) is registered synchronously on top-level evaluation.
 - [ ] `chrome.action.onClicked` opens the dashboard tab ([FR-M-03](./PRD.md#5-manifest--permissions)).
 - [ ] `chrome.runtime.onMessage` handles `force-refresh` and `get-backfill-progress`.
 - [ ] `index.test.ts` asserts all six listener registrations.
 
 ### Review checklist
+
 - [ ] No async work inside `defineBackground.main` before listeners register. Listeners come first.
 - [ ] All `chrome.*` calls go through `callChrome` for error logging.
 - [ ] No top-level `await` in the background module.
 - [ ] `requestBackfill` is async and Phase 10 leaves the body as a stub log; do not partially implement here.
 
 ### Common pitfalls
+
 - **Listeners registered inside an async block** → fails MV3 wake-from-idle.
 - **`chrome.runtime.onMessage` listener** must return `true` if it answers asynchronously, or return the response synchronously. Use a clear branch.
 
 ### References
+
 - MV3 service worker lifecycle (event registration): https://developer.chrome.com/docs/extensions/develop/concepts/service-workers/events
 - chrome.action: https://developer.chrome.com/docs/extensions/reference/api/action
 - chrome.runtime.onMessage: https://developer.chrome.com/docs/extensions/reference/api/runtime#event-onMessage
@@ -1828,9 +1995,11 @@ Wire the service worker shell: top-level listener registration for every chrome 
 **Estimated effort:** 4–5 hours.
 
 ### Objective
+
 Replace the `requestBackfill` stub with the real streaming pipeline: enumerate URLs from `chrome.history.search`, filter, fetch per-URL visits with a 32-concurrency limiter, accumulate into an in-memory buffer, re-aggregate, throttle writes per [P-003](./PRD.md#p-003), and broadcast [BackfillProgress](./PRD.md#d-006) messages.
 
 ### Prerequisites
+
 - Phase 10 complete.
 
 ### Steps
@@ -1874,6 +2043,7 @@ Replace the `requestBackfill` stub with the real streaming pipeline: enumerate U
    - With a real history of a few thousand URLs, the backfill completes within ~20s per [P-002](./PRD.md#p-002).
 
 6. **Quality gates.**
+
    ```bash
    pnpm lint && pnpm typecheck && pnpm test
    pnpm build
@@ -1884,13 +2054,16 @@ Replace the `requestBackfill` stub with the real streaming pipeline: enumerate U
    - `git commit -m "feat(background): streaming backfill pipeline with concurrency limiter (SW-003, P-001..P-003)"`
 
 ### Files created
+
 - `src/background/concurrency.ts`, `src/background/concurrency.test.ts`
 - `src/background/ingest.test.ts`
 
 ### Files modified
+
 - `src/background/ingest.ts` (full implementation)
 
 ### Success criteria
+
 - [ ] Backfill produces the correct aggregate for the synthetic fixture.
 - [ ] Concurrency limiter caps in-flight at 32.
 - [ ] Storage writes obey [P-003](./PRD.md#p-003): ≤ 100 total, throttled by 200 URLs OR 1000ms, final write always happens.
@@ -1898,6 +2071,7 @@ Replace the `requestBackfill` stub with the real streaming pipeline: enumerate U
 - [ ] `force-refresh` cleanly aborts and restarts a running backfill.
 
 ### Review checklist
+
 - [ ] All `chrome.*` calls wrapped via `callChrome`.
 - [ ] `AbortController.signal` is honored in long loops (check at the top of each iteration).
 - [ ] No retained references to old `currentRun` after completion (memory leak).
@@ -1905,12 +2079,14 @@ Replace the `requestBackfill` stub with the real streaming pipeline: enumerate U
 - [ ] No silent swallowing of errors — only the "no receiver" sendMessage error is suppressed, with an explicit comment.
 
 ### Common pitfalls
+
 - **`chrome.history.search({ maxResults: 0 })`** treatment varies. The PRD says paginate if 0 doesn't mean "no limit." Implement the fallback path or the orchestrator will appear to do nothing on some Chrome builds.
 - **`getVisits` returns `VisitItem` with `visitTime` (not `visitedAt`).** Map field correctly: `{ url, apexDomain: apexOf(url)!, title: historyItem.title ?? '', visitedAt: visit.visitTime ?? 0 }`.
 - **Title from `chrome.history.search`** is on the `HistoryItem`, not the `VisitItem`. Carry titles through the URL list.
 - **Sparse storage invariant** — `aggregate()` already omits zero-value days; do not re-introduce them.
 
 ### References
+
 - chrome.history.search: https://developer.chrome.com/docs/extensions/reference/api/history#method-search
 - chrome.history.getVisits: https://developer.chrome.com/docs/extensions/reference/api/history#method-getVisits
 - chrome.history.onVisited: https://developer.chrome.com/docs/extensions/reference/api/history#event-onVisited
@@ -1923,9 +2099,11 @@ Replace the `requestBackfill` stub with the real streaming pipeline: enumerate U
 **Estimated effort:** 90 minutes.
 
 ### Objective
+
 Real implementation of the debounced incremental update path. Every `chrome.history.onVisited` schedules a `chrome.alarms` recompute (30s, debounced by re-creating the alarm). The alarm handler runs an incremental aggregate that fetches only URLs with `lastVisitTime > lastAggregatedAt`, merges into the existing cached aggregate, and writes once.
 
 ### Prerequisites
+
 - Phase 11 complete.
 
 ### Steps
@@ -1967,6 +2145,7 @@ Real implementation of the debounced incremental update path. Every `chrome.hist
    - `pnpm dev`. Open the dashboard. Visit a new site (e.g., `https://example.org`). Wait ~30s. The dashboard's storage subscription (Phase 13) should refresh. (For Phase 12 we can verify storage-only: inspect `chrome.storage.local` in DevTools.)
 
 7. **Quality gates.**
+
    ```bash
    pnpm lint && pnpm typecheck && pnpm test
    pnpm build
@@ -1977,13 +2156,16 @@ Real implementation of the debounced incremental update path. Every `chrome.hist
    - `git commit -m "feat(background): incremental updates via chrome.alarms debounce (SW-004, SW-005)"`
 
 ### Files created
+
 - `src/background/incremental.ts`, `src/background/incremental.test.ts`
 - `src/background/debounce.test.ts`
 
 ### Files modified
+
 - `src/background/debounce.ts` (full implementation)
 
 ### Success criteria
+
 - [ ] `scheduleRecompute()` debounces correctly (alarm re-creation resets timer).
 - [ ] Incremental merge is pure and unit-tested.
 - [ ] Exactly one storage write per incremental cycle.
@@ -1991,12 +2173,14 @@ Real implementation of the debounced incremental update path. Every `chrome.hist
 - [ ] Fallback path triggered when new-visit count exceeds threshold.
 
 ### Review checklist
+
 - [ ] No use of `setTimeout` anywhere in the worker — `chrome.alarms` only (worker idle shutdown kills setTimeout).
-- [ ] `mergeIncremental` is pure: no chrome.*, no Date.now() (parameter), no I/O.
+- [ ] `mergeIncremental` is pure: no chrome.\*, no Date.now() (parameter), no I/O.
 - [ ] Daily-winner tie-break in the incremental path uses the same B-005 logic as `aggregate()` — extract to a shared helper if duplication appears.
 - [ ] Top-sites re-sort uses the same B-007 comparator as `aggregate()`.
 
 ### References
+
 - chrome.alarms: https://developer.chrome.com/docs/extensions/reference/api/alarms
 - MV3 alarm minimum delay (30s): https://developer.chrome.com/docs/extensions/reference/api/alarms#period_in_minutes
 
@@ -2008,9 +2192,11 @@ Real implementation of the debounced incremental update path. Every `chrome.hist
 **Estimated effort:** 3–4 hours.
 
 ### Objective
+
 Replace the smoke-test App with the real dashboard shell: header, layout regions, error boundary, empty/loading/error states, and two data hooks (`useAggregate`, `useBackfillProgress`). The shell reads aggregate from `chrome.storage.local` and subscribes to `chrome.storage.onChanged` per [SW-003a](./PRD.md#sw-003a). Views themselves are placeholders here; Phase 14 ships the heatmap; Phase 15 wires the three views.
 
 ### Prerequisites
+
 - Phase 12 complete (full background pipeline working).
 
 ### Steps
@@ -2069,6 +2255,7 @@ Replace the smoke-test App with the real dashboard shell: header, layout regions
    - Right-aligns the select via flex layout.
 
 10. **Replace `src/dashboard/App.tsx`** with the real shell:
+
     ```tsx
     import { useCallback } from 'react';
 
@@ -2104,11 +2291,7 @@ Replace the smoke-test App with the real dashboard shell: header, layout regions
 
       return (
         <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-6 py-10">
-          <Header
-            aggregate={aggregate}
-            onRefresh={handleRefresh}
-            isRefreshing={isBackfillActive}
-          />
+          <Header aggregate={aggregate} onRefresh={handleRefresh} isRefreshing={isBackfillActive} />
 
           <BackfillProgressBar progress={progress} />
 
@@ -2179,7 +2362,8 @@ Replace the smoke-test App with the real dashboard shell: header, layout regions
       // Phase 14 + 15 replace this with the three real views.
       return (
         <div className="rounded-md border border-dashed p-6 text-sm">
-          Active view: <strong>{props.view}</strong> · {props.aggregate.topSites.length} sites tracked
+          Active view: <strong>{props.view}</strong> · {props.aggregate.topSites.length} sites
+          tracked
         </div>
       );
     }
@@ -2203,6 +2387,7 @@ Replace the smoke-test App with the real dashboard shell: header, layout regions
     - Press Tab through the page. Focus rings appear on Header refresh button, tab triggers, select trigger.
 
 14. **Quality gates.**
+
     ```bash
     pnpm lint && pnpm typecheck && pnpm test && pnpm build
     ```
@@ -2212,6 +2397,7 @@ Replace the smoke-test App with the real dashboard shell: header, layout regions
     - `git commit -m "feat(dashboard): shell, hooks, error boundary, progress strip wired to storage"`
 
 ### Files created
+
 - `src/dashboard/hooks/useAggregate.ts`, `useAggregate.test.tsx`
 - `src/dashboard/hooks/useBackfillProgress.ts`, `useBackfillProgress.test.tsx`
 - `src/dashboard/hooks/useUIPrefs.ts`, `useUIPrefs.test.tsx`
@@ -2224,9 +2410,11 @@ Replace the smoke-test App with the real dashboard shell: header, layout regions
 - `src/dashboard/App.test.tsx`
 
 ### Files modified
+
 - `src/dashboard/App.tsx` (real shell)
 
 ### Success criteria
+
 - [ ] Storage subscription delivers aggregate updates without a manual page refresh.
 - [ ] All three states (`loading`, `empty`, `populated`) render correctly.
 - [ ] Refresh button triggers a `force-refresh` message and the progress strip re-appears.
@@ -2234,6 +2422,7 @@ Replace the smoke-test App with the real dashboard shell: header, layout regions
 - [ ] All test cases pass.
 
 ### Review checklist
+
 - [ ] Dashboard does not import from `src/background/index`, `ingest`, or `debounce` — only the pure constants from `@/background/cache` (key names, version, defaults).
 - [ ] No `useEffect` cleanup is missing (every subscription returns an unsubscribe).
 - [ ] No state-management library (REL-002).
@@ -2244,12 +2433,14 @@ Replace the smoke-test App with the real dashboard shell: header, layout regions
 - [ ] No design tokens invented beyond neutral grayscale (visual identity = Phase 16).
 
 ### Common pitfalls
+
 - **`useAggregate` flicker.** Initial paint may see `aggregate === null` then real data 50ms later. The `isInitialLoad` flag exists so consumers can suppress empty states until the first storage read resolves.
 - **Stale subscribe handle in StrictMode.** React 18 mounts effects twice in dev. The unsubscribe function must be idempotent.
 - **`chrome.runtime.sendMessage` with no receiver.** If the worker is asleep when `useBackfillProgress` sends `get-backfill-progress`, the call rejects after a delay. Wrap in try/catch and treat as "no progress to report yet."
 - **`writeUIPrefs` race.** Quick repeated `updatePrefs` calls can fire overlapping writes; chrome.storage merges by key, so this is safe. Do not introduce a serializer.
 
 ### References
+
 - React 18 StrictMode effects: https://react.dev/reference/react/StrictMode#fixing-bugs-found-by-double-rendering-in-development
 - shadcn Tabs: https://ui.shadcn.com/docs/components/tabs
 - shadcn Select: https://ui.shadcn.com/docs/components/select
@@ -2263,9 +2454,11 @@ Replace the smoke-test App with the real dashboard shell: header, layout regions
 **Estimated effort:** 4–5 hours.
 
 ### Objective
+
 A single SVG component, `Heatmap.tsx`, that powers all three views via a discriminated `mode` prop. Implements intensity bucketing colors, categorical winner colors, weekday/month labels, accessible tooltips, and the geometry rules from [HM-005..HM-007](./PRD.md#hm-005). No design polish — neutral palette only; Phase 16 swaps in the final ramp.
 
 ### Prerequisites
+
 - Phase 13 complete (dashboard shell renders with real aggregate).
 
 ### Steps
@@ -2292,10 +2485,15 @@ A single SVG component, `Heatmap.tsx`, that powers all three views via a discrim
    - `function intensityColor(level: IntensityLevel, ramp = PLACEHOLDER_INTENSITY_RAMP): string` — straight lookup.
 
 4. **Create `src/dashboard/components/Heatmap.tsx`** with the API from [HM-001](./PRD.md#hm-001):
+
    ```ts
    type HeatmapMode =
      | { kind: 'intensity'; data: Record<DayKey, number>; ramp?: IntensityRamp }
-     | { kind: 'categorical'; data: Record<DayKey, { apex: string; visits: number }>; colorOf: (apex: string) => string };
+     | {
+         kind: 'categorical';
+         data: Record<DayKey, { apex: string; visits: number }>;
+         colorOf: (apex: string) => string;
+       };
 
    interface HeatmapProps {
      mode: HeatmapMode;
@@ -2304,6 +2502,7 @@ A single SVG component, `Heatmap.tsx`, that powers all three views via a discrim
      renderTooltip?: (day: DayKey) => React.ReactNode;
    }
    ```
+
    - Body responsibilities:
      - `useMemo`: geometry, intensity scale (when `mode.kind === 'intensity'`), and a fast `Map<DayKey, IntensityLevel>` lookup so per-cell color is O(1).
      - SVG root with `width` and `height` from geometry. `role="img"` and `aria-label` summarizing the chart (e.g. "Activity heatmap for {range.start} to {range.end}").
@@ -2333,9 +2532,10 @@ A single SVG component, `Heatmap.tsx`, that powers all three views via a discrim
 7. **Mount the heatmap in `ViewPlaceholder`** (temporarily, just to verify) — render the intensity heatmap of `aggregate.totalVisitsPerDay` over the active date range. This will be replaced by Phase 15's real views.
 
 8. **Quality gates.**
-    ```bash
-    pnpm lint && pnpm typecheck && pnpm test && pnpm build
-    ```
+
+   ```bash
+   pnpm lint && pnpm typecheck && pnpm test && pnpm build
+   ```
 
 9. **Manual smoke.**
    - `pnpm dev`. The dashboard's `ViewPlaceholder` now shows a real heatmap with shading. Tab through the cells — focus rings advance one cell at a time. Hover shows the native `<title>` tooltip.
@@ -2345,11 +2545,13 @@ A single SVG component, `Heatmap.tsx`, that powers all three views via a discrim
     - `git commit -m "feat(dashboard): single Heatmap SVG primitive with intensity + categorical modes (HM-001..HM-008)"`
 
 ### Files created
+
 - `src/dashboard/components/heatmap-geometry.ts`, `heatmap-geometry.test.ts`
 - `src/dashboard/components/heatmap-color.ts`
 - `src/dashboard/components/Heatmap.tsx`, `Heatmap.test.tsx`
 
 ### Success criteria
+
 - [ ] Single SVG primitive covers both modes via the `mode` prop union.
 - [ ] Quantile bucketing from `src/core/intensity.ts` drives intensity mode.
 - [ ] Each cell has a `<title>` child AND is tab-focusable.
@@ -2358,6 +2560,7 @@ A single SVG component, `Heatmap.tsx`, that powers all three views via a discrim
 - [ ] Render ≤ 16 ms for a 365-day range (verify with Profiler).
 
 ### Review checklist
+
 - [ ] No render-time `Date` parsing — geometry is memoized.
 - [ ] No per-cell function allocation — `onCellHover` callback is stable.
 - [ ] No design polish — only the placeholder grayscale ramp.
@@ -2365,11 +2568,13 @@ A single SVG component, `Heatmap.tsx`, that powers all three views via a discrim
 - [ ] No keyboard arrow-key navigation (explicitly out of scope, [HM-006](./PRD.md#hm-006)).
 
 ### Common pitfalls
+
 - **First-week alignment.** If you naïvely emit cells starting at column 0 row `eachDay[0].getDay()`, the first column will visually look like a partial week. Solution: leading days of the calendar week BEFORE `range.start` get no cell; the in-range cells still live in column 0 but at their correct row.
 - **Tooltip positioning.** The shadcn `Tooltip` uses Radix Popper which expects an `Anchor`. The simplest reliable pattern is one Tooltip with `controlled` state driven by `onCellHover` and an invisible anchor positioned via `transform`. If that becomes painful, render the tooltip as a sibling absolute `<div>` positioned by cell coordinates — both are acceptable in v1.
 - **Performance from many `<title>` strings.** Pre-compute titles in the memo: `cells.map(c => ({...c, title: `${c.day}: ${count}`}))`.
 
 ### References
+
 - SVG `<rect>` and `<title>`: https://developer.mozilla.org/en-US/docs/Web/SVG/Element/title
 - shadcn Tooltip: https://ui.shadcn.com/docs/components/tooltip
 - React profiler API: https://react.dev/reference/react/Profiler
@@ -2382,9 +2587,11 @@ A single SVG component, `Heatmap.tsx`, that powers all three views via a discrim
 **Estimated effort:** 4–5 hours.
 
 ### Objective
+
 Ship the three view components — `PerSiteView`, `OverallView`, `WinnersView` — each consuming the aggregate, applying the active date range, and rendering the correct heatmap mode plus its stats card / site switcher / legend. Wire the toolbar's view + range selectors into the App's render tree.
 
 ### Prerequisites
+
 - Phase 14 complete.
 
 ### Steps
@@ -2459,6 +2666,7 @@ Ship the three view components — `PerSiteView`, `OverallView`, `WinnersView` �
 11. **Manual smoke.** `pnpm dev`. Click through the three tabs. Change the date range. Click chips in the per-site view. Open "Show more" sheet. Hover heatmap cells — tooltips render. Refresh dashboard.
 
 12. **Quality gates.**
+
     ```bash
     pnpm lint && pnpm typecheck && pnpm test && pnpm build
     ```
@@ -2468,6 +2676,7 @@ Ship the three view components — `PerSiteView`, `OverallView`, `WinnersView` �
     - `git commit -m "feat(dashboard): three views, site switcher, stats cards, favicons (UX-PS/OV/W-01)"`
 
 ### Files created
+
 - `src/dashboard/lib/range-filter.ts`, `range-filter.test.ts`
 - `src/dashboard/components/Favicon.tsx`, `Favicon.test.tsx`
 - `src/dashboard/components/SiteSwitcher.tsx`, `SiteSwitcher.test.tsx`
@@ -2477,9 +2686,11 @@ Ship the three view components — `PerSiteView`, `OverallView`, `WinnersView` �
 - `src/dashboard/views/WinnersView.tsx`, `WinnersView.test.tsx`
 
 ### Files modified
+
 - `src/dashboard/App.tsx` (real view selection)
 
 ### Success criteria
+
 - [ ] All three views render against real aggregate data.
 - [ ] Per-site default selection respects [UX-PS-02](./PRD.md#ux-ps-02).
 - [ ] Site switcher chip activation persists via `useUIPrefs`.
@@ -2488,20 +2699,23 @@ Ship the three view components — `PerSiteView`, `OverallView`, `WinnersView` �
 - [ ] Favicon failure falls back to letter-tile without console noise.
 
 ### Review checklist
+
 - [ ] Range filtering happens at read time per locked decision in PRD §19.
 - [ ] No business logic inside view components — pure rendering over `src/dashboard/lib/range-filter` outputs.
-- [ ] No new chrome.* references in `src/dashboard/`.
+- [ ] No new chrome.\* references in `src/dashboard/`.
 - [ ] Tooltip content includes the day, visit count, and apex per the relevant UX rule.
 - [ ] `aria-selected` on the active site-switcher chip.
 - [ ] No `Date.now()` inside views — `resolveRange` accepts `now` from caller (App passes `new Date()`).
 
 ### Common pitfalls
+
 - **Selection drift.** If `lastSelectedSite` is no longer in top 10 (e.g. user's habits shifted), the view must auto-fall-back to `topSites[0]` and persist the change so subsequent reloads stay consistent ([UX-PS-02](./PRD.md#ux-ps-02)).
 - **Sheet body too tall.** The shadcn Sheet allows scrolling — confirm the inner list is scrollable when there are 100+ sites.
 - **Runner-up resolution.** Requires re-reading `visitsPerSitePerDay`; do not store extra fields on `dailyWinner` (the aggregate shape is locked in PRD §6).
 - **Favicon proxy 4xx for unknown domains.** The `<img>` `onError` handler MUST not trigger an infinite loop — flip a state once and render the fallback `<span>` next time.
 
 ### References
+
 - ARIA tablist pattern: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
 - shadcn Sheet: https://ui.shadcn.com/docs/components/sheet
 - `referrerPolicy="no-referrer"`: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#referrerpolicy
@@ -2514,9 +2728,11 @@ Ship the three view components — `PerSiteView`, `OverallView`, `WinnersView` �
 **Estimated effort:** Variable — multiple sessions. Driven by the `impeccable` skill.
 
 ### Objective
+
 Produce the distinctive visual identity for historia — palette, typography, spacing, motion, heatmap intensity ramp, daily-winners categorical palette, microcopy — and apply it by overriding the placeholder tokens introduced in Phase 3. Functionality does not change. Output: `DESIGN.md` at repo root, updated `src/dashboard/styles.css` tokens, updated `PLACEHOLDER_INTENSITY_RAMP` and `PLACEHOLDER_PALETTE` constants.
 
 ### Prerequisites
+
 - Phase 15 complete (functional dashboard renders real data across all three views).
 - A representative local browsing history exists in the dev Chrome profile so the design can be iterated against real heatmap shapes (per PRD §19.1 rationale).
 
@@ -2559,6 +2775,7 @@ Produce the distinctive visual identity for historia — palette, typography, sp
 13. **Manual smoke at multiple viewport widths.** Resize the dashboard tab to 1024px, 1440px, 1920px. Confirm no horizontal scrollbar appears outside the heatmap's intentional overflow.
 
 14. **Quality gates.**
+
     ```bash
     pnpm lint && pnpm typecheck && pnpm test && pnpm build
     ```
@@ -2568,17 +2785,20 @@ Produce the distinctive visual identity for historia — palette, typography, sp
     - `git commit -m "feat(design): visual identity pass via impeccable — palette, typography, motion, ramps"`
 
 ### Files created
+
 - `DESIGN.md`
 - `PRODUCT.md` (if not pre-existing)
 - `public/fonts/*.woff2` (if local fonts chosen)
 
 ### Files modified
+
 - `src/dashboard/styles.css` (final tokens, font-face)
 - `src/dashboard/components/heatmap-color.ts` (real intensity ramp)
 - `src/core/palette.ts` (real winners palette — hex constants only)
 - Various components for visual polish (microcopy, motion, treatments)
 
 ### Success criteria
+
 - [ ] `DESIGN.md` documents the full identity with rationale and contrast results.
 - [ ] No component visually resembles stock shadcn ([DSGN-003](./PRD.md#dsgn-003)).
 - [ ] Every color pair on screen passes WCAG AA.
@@ -2588,6 +2808,7 @@ Produce the distinctive visual identity for historia — palette, typography, sp
 - [ ] All Phase 15 tests still green.
 
 ### Review checklist
+
 - [ ] `src/core/` boundary (FR-S-01) intact — palette.ts is hex constants only.
 - [ ] No new runtime dependencies added beyond the locked stack.
 - [ ] Custom fonts (if any) ship as files; CSS does not `@import` from a remote URL.
@@ -2597,11 +2818,13 @@ Produce the distinctive visual identity for historia — palette, typography, sp
 - [ ] No literal hex values inside components — they reference CSS variables defined in `styles.css`.
 
 ### Common pitfalls
+
 - **Re-litigating scope.** Phase 16 is identity, not features. If the design pass surfaces a UX gap (e.g. "we need a date scrubber"), do NOT add it — record it as a deferred item in PRODUCT.md or open a GitHub issue.
 - **Dependency creep.** No `framer-motion`, no `radix-icons`, no `tailwind-merge-variants`. The locked stack stands.
 - **Contrast regressions on intensity ramp.** A low-intensity color must still be distinguishable from "empty" for users with mild color-vision deficiency. Test with a simulator (e.g. Chrome DevTools rendering > emulate vision deficiency).
 
 ### References
+
 - WCAG 2.1 contrast: https://www.w3.org/TR/WCAG21/#contrast-minimum
 - prefers-reduced-motion: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
 - impeccable skill behavior is documented in the skill itself; consult its outputs directly.
@@ -2614,9 +2837,11 @@ Produce the distinctive visual identity for historia — palette, typography, sp
 **Estimated effort:** 3–5 hours.
 
 ### Objective
+
 Produce the final release artifacts: real icons (16/32/48/128), public-facing `README.md`, `PRIVACY.md`, CWS screenshots, version bump to `0.1.0`. Manual end-to-end QA. CI must be green. The output is a release-quality zip ready for both unpacked side-load and CWS submission.
 
 ### Prerequisites
+
 - Phase 16 complete (final design identity in place).
 
 ### Steps
@@ -2680,6 +2905,7 @@ Produce the final release artifacts: real icons (16/32/48/128), public-facing `R
    - Run a Lighthouse accessibility audit on the dashboard tab (Chrome DevTools → Lighthouse). Confirm ≥ 95 accessibility score.
 
 9. **Update CI to also build the zip artifact** (optional but recommended). Add a step in `.github/workflows/ci.yml`:
+
    ```yaml
    - name: Zip
      run: pnpm zip
@@ -2692,12 +2918,14 @@ Produce the final release artifacts: real icons (16/32/48/128), public-facing `R
    ```
 
 10. **Tag and create a GitHub Release.**
+
     ```bash
     git checkout main
     git pull
     git tag -a v0.1.0 -m "historia v0.1.0 — initial release"
     git push origin v0.1.0
     ```
+
     - In the GitHub UI, draft a new Release from the tag. Attach the `historia-0.1.0-chrome.zip` artifact. Body: changelog summary + links to PRD/DESIGN/PRIVACY.
 
 11. **Submit to Chrome Web Store** (manual, gated on [REL-201](./PRD.md#rel-201) checklist):
@@ -2715,15 +2943,18 @@ Produce the final release artifacts: real icons (16/32/48/128), public-facing `R
     - `git push`
 
 ### Files created
+
 - `README.md`, `PRIVACY.md`
 - `public/icon-{16,32,48,128}.png` (real)
 - `assets/cws/listing.md`, `assets/cws/screenshots/*.png`, `assets/cws/promo-tile-440x280.png`
 
 ### Files modified
+
 - `package.json` (version → 0.1.0)
 - `.github/workflows/ci.yml` (optional zip artifact step)
 
 ### Success criteria
+
 - [ ] All four icon sizes present and correct dimensions.
 - [ ] README explains install (both paths), dev, privacy summary, and links docs.
 - [ ] PRIVACY.md publicly accessible at a stable GitHub URL.
@@ -2734,6 +2965,7 @@ Produce the final release artifacts: real icons (16/32/48/128), public-facing `R
 - [ ] CWS listing submitted (post-merge action; not a code gate).
 
 ### Review checklist
+
 - [ ] No accidental commit of zip artifacts to the repo (`.output/` is gitignored).
 - [ ] No tracking pixels, analytics scripts, or remote fonts introduced.
 - [ ] Privacy policy is plain language, not legalese.
@@ -2742,12 +2974,14 @@ Produce the final release artifacts: real icons (16/32/48/128), public-facing `R
 - [ ] Permission justifications in listing.md match `SEC-004` exactly.
 
 ### Common pitfalls
+
 - **Manifest version mismatch.** WXT reads `package.json#version`. Do not edit `manifest.json` directly; bump the package.
 - **Screenshots dated.** Re-capture screenshots after the design pass so they match what users see, not the placeholder grayscale.
 - **PRIVACY.md not reachable.** CWS rejects listings without a working privacy policy URL. Verify the public link before submitting.
 - **CWS rejecting "history" permission as overbroad.** The [SEC-004](./PRD.md#sec-004) justification is short on purpose; if CWS asks for more detail, expand it inline in the listing — the source of truth in the repo can stay terse.
 
 ### References
+
 - Chrome Web Store publishing guide: https://developer.chrome.com/docs/webstore/publish
 - CWS image requirements: https://developer.chrome.com/docs/webstore/images
 - GitHub Releases: https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
@@ -2760,18 +2994,18 @@ All commands assume the repo root as the working directory.
 
 ### B.1 Day-to-day
 
-| Command | Purpose |
-|---|---|
-| `pnpm install` | Install/refresh dependencies. Triggers `wxt prepare` via `postinstall`. |
-| `pnpm dev` | Launch WXT dev mode; auto-loads the extension into Chrome. |
-| `pnpm build` | Production build to `.output/chrome-mv3/`. |
-| `pnpm zip` | Build and zip to `.output/historia-<version>-chrome.zip`. |
-| `pnpm typecheck` | `tsc --noEmit` over the project. |
-| `pnpm lint` / `pnpm lint:fix` | ESLint (or fix). |
-| `pnpm format` / `pnpm format:check` | Prettier write / check. |
-| `pnpm test` | Vitest run-once. |
-| `pnpm test:watch` | Vitest watch mode. |
-| `pnpm test:coverage` | Vitest with V8 coverage, enforces per-file gates from [T-004](./PRD.md#t-004). |
+| Command                             | Purpose                                                                        |
+| ----------------------------------- | ------------------------------------------------------------------------------ |
+| `pnpm install`                      | Install/refresh dependencies. Triggers `wxt prepare` via `postinstall`.        |
+| `pnpm dev`                          | Launch WXT dev mode; auto-loads the extension into Chrome.                     |
+| `pnpm build`                        | Production build to `.output/chrome-mv3/`.                                     |
+| `pnpm zip`                          | Build and zip to `.output/historia-<version>-chrome.zip`.                      |
+| `pnpm typecheck`                    | `tsc --noEmit` over the project.                                               |
+| `pnpm lint` / `pnpm lint:fix`       | ESLint (or fix).                                                               |
+| `pnpm format` / `pnpm format:check` | Prettier write / check.                                                        |
+| `pnpm test`                         | Vitest run-once.                                                               |
+| `pnpm test:watch`                   | Vitest watch mode.                                                             |
+| `pnpm test:coverage`                | Vitest with V8 coverage, enforces per-file gates from [T-004](./PRD.md#t-004). |
 
 ### B.2 Full local quality gate (run before every commit)
 
@@ -2798,12 +3032,12 @@ gh pr create --fill                           # or open via UI
 
 ### B.5 Inspecting the extension in Chrome
 
-| Action | Where |
-|---|---|
-| View service worker logs | `chrome://extensions` → historia → "service worker" link → DevTools |
-| Inspect `chrome.storage.local` | DevTools → Application → Storage → Extension Storage → Local |
-| Force backfill from worker console | `chrome.runtime.sendMessage({ type: 'force-refresh' })` |
-| Trigger a fake history visit | Browse to a new URL in the Chrome window |
+| Action                             | Where                                                                              |
+| ---------------------------------- | ---------------------------------------------------------------------------------- |
+| View service worker logs           | `chrome://extensions` → historia → "service worker" link → DevTools                |
+| Inspect `chrome.storage.local`     | DevTools → Application → Storage → Extension Storage → Local                       |
+| Force backfill from worker console | `chrome.runtime.sendMessage({ type: 'force-refresh' })`                            |
+| Trigger a fake history visit       | Browse to a new URL in the Chrome window                                           |
 | See dashboard React component tree | Open the dashboard tab → DevTools → Components (React DevTools extension required) |
 
 ---
@@ -2872,26 +3106,26 @@ gh pr create --fill                           # or open via UI
 
 Update this table as phases land. The phase is "Done" only when CI is green for the PR that delivers it and the Review checklist for that phase has been confirmed.
 
-| # | Phase | PRD §19.1 mapping | Branch | PR | Status |
-|---|---|---|---|---|---|
-| 0 | Preflight & Environment | — | n/a | n/a | [x] |
-| 1 | Repo Bootstrap | Foundation | `phase/01-repo-bootstrap` | [#1](https://github.com/abhi-j0407/historia/pull/1) | [x] |
-| 2 | WXT + React + TypeScript Scaffold | Foundation | `phase/02-wxt-scaffold` | [#2](https://github.com/abhi-j0407/historia/pull/2) | [x] |
-| 3 | Tailwind v4 & shadcn/ui Primitives | Foundation | `phase/03-tailwind-shadcn` | [#3](https://github.com/abhi-j0407/historia/pull/3) | [x] |
-| 4 | Lint, Format, Test Infrastructure | Foundation | `phase/04-quality-tooling` | | [ ] |
-| 5 | CI Pipeline | Foundation | `phase/05-ci-pipeline` | | [ ] |
-| 6 | Core Types & URL Filters | Data plumbing | `phase/06-core-types-filters` | | [ ] |
-| 7 | Domain & Date Helpers | Data plumbing | `phase/07-domain-dates` | | [ ] |
-| 8 | Aggregation Engine, Intensity & Palette | Data plumbing | `phase/08-aggregate-intensity` | | [ ] |
-| 9 | Storage Facade | Service worker + storage | `phase/09-storage-facade` | | [ ] |
-| 10 | Service Worker Foundation | Service worker + storage | `phase/10-sw-foundation` | | [ ] |
-| 11 | Backfill Orchestrator | Service worker + storage | `phase/11-backfill` | | [ ] |
-| 12 | Incremental Updates & Manual Refresh | Service worker + storage | `phase/12-incremental` | | [ ] |
-| 13 | Dashboard Shell & Data Hooks | Dashboard skeleton | `phase/13-dashboard-shell` | | [ ] |
-| 14 | Heatmap Primitive | Dashboard skeleton | `phase/14-heatmap` | | [ ] |
-| 15 | Three Views & Toolbar | Dashboard skeleton | `phase/15-views` | | [ ] |
-| 16 | Design Pass (impeccable) | Design pass | `phase/16-design` | | [ ] |
-| 17 | Release Polish & v0.1.0 | Polish + release prep | `phase/17-release` | | [ ] |
+| #   | Phase                                   | PRD §19.1 mapping        | Branch                         | PR                                                  | Status |
+| --- | --------------------------------------- | ------------------------ | ------------------------------ | --------------------------------------------------- | ------ |
+| 0   | Preflight & Environment                 | —                        | n/a                            | n/a                                                 | [x]    |
+| 1   | Repo Bootstrap                          | Foundation               | `phase/01-repo-bootstrap`      | [#1](https://github.com/abhi-j0407/historia/pull/1) | [x]    |
+| 2   | WXT + React + TypeScript Scaffold       | Foundation               | `phase/02-wxt-scaffold`        | [#2](https://github.com/abhi-j0407/historia/pull/2) | [x]    |
+| 3   | Tailwind v4 & shadcn/ui Primitives      | Foundation               | `phase/03-tailwind-shadcn`     | [#3](https://github.com/abhi-j0407/historia/pull/3) | [x]    |
+| 4   | Lint, Format, Test Infrastructure       | Foundation               | `phase/04-quality-tooling`     |                                                     | [ ]    |
+| 5   | CI Pipeline                             | Foundation               | `phase/05-ci-pipeline`         |                                                     | [ ]    |
+| 6   | Core Types & URL Filters                | Data plumbing            | `phase/06-core-types-filters`  |                                                     | [ ]    |
+| 7   | Domain & Date Helpers                   | Data plumbing            | `phase/07-domain-dates`        |                                                     | [ ]    |
+| 8   | Aggregation Engine, Intensity & Palette | Data plumbing            | `phase/08-aggregate-intensity` |                                                     | [ ]    |
+| 9   | Storage Facade                          | Service worker + storage | `phase/09-storage-facade`      |                                                     | [ ]    |
+| 10  | Service Worker Foundation               | Service worker + storage | `phase/10-sw-foundation`       |                                                     | [ ]    |
+| 11  | Backfill Orchestrator                   | Service worker + storage | `phase/11-backfill`            |                                                     | [ ]    |
+| 12  | Incremental Updates & Manual Refresh    | Service worker + storage | `phase/12-incremental`         |                                                     | [ ]    |
+| 13  | Dashboard Shell & Data Hooks            | Dashboard skeleton       | `phase/13-dashboard-shell`     |                                                     | [ ]    |
+| 14  | Heatmap Primitive                       | Dashboard skeleton       | `phase/14-heatmap`             |                                                     | [ ]    |
+| 15  | Three Views & Toolbar                   | Dashboard skeleton       | `phase/15-views`               |                                                     | [ ]    |
+| 16  | Design Pass (impeccable)                | Design pass              | `phase/16-design`              |                                                     | [ ]    |
+| 17  | Release Polish & v0.1.0                 | Polish + release prep    | `phase/17-release`             |                                                     | [ ]    |
 
 ### Handoff Block template
 
@@ -2916,4 +3150,3 @@ Open PHASE-PLAN.md → "Phase [N+1]". First file to open: [path]. First command:
 ---
 
 **End of plan.**
-
