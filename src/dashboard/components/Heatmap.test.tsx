@@ -5,8 +5,8 @@ import { eachDayInRange } from '@/core/dates';
 import { buildIntensityScale } from '@/core/intensity';
 import type { DayKey } from '@/core/types';
 
-import { computeGeometry } from './heatmap-geometry';
 import { Heatmap } from './Heatmap';
+import { computeGeometry } from './heatmap-geometry';
 
 function intensityDataForRange(
   start: DayKey,
