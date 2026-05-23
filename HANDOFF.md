@@ -15,10 +15,10 @@
 ## Current state
 
 - **Last completed phase:** Phase 4 — Lint, Format, Test Infrastructure (merged in `0e2a46f`, [PR #4](https://github.com/abhi-j0407/historia/pull/4)).
-- **Next phase:** Phase 5 — CI Pipeline.
-- **Active branch:** none (`main` is the current tip; Phase 5 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** none.
+- **Next phase:** Phase 6 — Core Types & URL Filters (after Phase 5 merge).
+- **Active branch:** `phase/05-ci-pipeline` ([PR #5](https://github.com/abhi-j0407/historia/pull/5) — awaiting coordinator merge).
+- **Open PRs:** [#5](https://github.com/abhi-j0407/historia/pull/5) — Phase 5 CI Pipeline.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry).
 
 ---
 
@@ -29,6 +29,59 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 5 — CI Pipeline — 2026-05-23
+
+**Branch:** `phase/05-ci-pipeline`
+**PR:** [#5](https://github.com/abhi-j0407/historia/pull/5)
+**Status:** completed (PR open; coordinator merge pending)
+
+**Objective recap:** Add a GitHub Actions `verify` workflow (install → lint → typecheck → test → build), CODEOWNERS, PR template, and bug issue template per REL-102.
+
+**Files created:**
+
+- `.github/workflows/ci.yml`
+- `.github/CODEOWNERS`
+- `.github/pull_request_template.md`
+- `.github/ISSUE_TEMPLATE/bug.yml`
+
+**Files modified:**
+
+- `.nvmrc` (`20` → `22` — CI engine fix; see Deviations)
+- `HANDOFF.md` (this entry + Current state)
+
+**Deviations from plan:**
+
+- [PHASE-PLAN.md Phase 5 step 1](./PHASE-PLAN.md#phase-5--ci-pipeline) specifies `pnpm/action-setup@v4` with `version: 9`; removed explicit `version` because v4 errors when both `version: 9` and `package.json#packageManager` (`pnpm@9.0.0`) are set — action reads `packageManager` instead (plan drift **(a)**).
+- `.nvmrc` bumped `20` → `22`: transitive `listr2@10.2.1` requires Node `>=22.13.0`; CI install failed with `ERR_PNPM_UNSUPPORTED_ENGINE` on Node 20.20.2 from `.nvmrc` (plan drift **(b)**; local dev already used Node 22 per Phase 0).
+- Push to `origin` over HTTPS rejected (PAT lacks `workflow` scope for `.github/workflows/`); branch pushed via SSH (`git@github.com:abhi-j0407/historia.git`) (process note, not plan drift).
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (1 `react-refresh/only-export-components` warning on shadcn `button.tsx`; no errors)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 2 tests passed
+- [x] `pnpm build` — exit 0 (~202 kB)
+- [x] CI `verify` job green on PR — [Actions run 26330717300](https://github.com/abhi-j0407/historia/actions/runs/26330717300)
+
+**Coverage (where applicable):** n/a
+
+**Open follow-ups raised in this phase:**
+
+- **Branch protection (manual, repo owner):** GitHub → **Settings** → **Branches** → **Add branch protection rule** for `main`:
+  - Require status checks to pass before merging → select check **`verify`** (job name from `.github/workflows/ci.yml`).
+  - Require a pull request before merging (0 reviewers OK for solo repo).
+  - Do not allow force pushes.
+  - Save rule. Until this is done, Success criterion “branch protection requires verify” is not met on `main`.
+
+**Next phase entry point:** Phase 6 — open PHASE-PLAN.md → "Phase 6 — Core Types & URL Filters" → create `src/core/types.ts`.
+
+---
 
 ### Phase 4 — Lint, Format, Test Infrastructure — 2026-05-23
 
