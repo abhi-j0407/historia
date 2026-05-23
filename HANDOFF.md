@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 5 — CI Pipeline (merged in `4150230`, [PR #5](https://github.com/abhi-j0407/historia/pull/5)).
-- **Next phase:** Phase 6 — Core Types & URL Filters.
-- **Active branch:** none (`main` is the current tip; Phase 6 will create its own branch).
-- **Open PRs:** none.
+- **Last completed phase:** Phase 6 — Core Types & URL Filters (pending merge; see open PR).
+- **Next phase:** Phase 7 — Domain & Date Helpers.
+- **Active branch:** `phase/06-core-types-filters` (open PR).
+- **Open PRs:** [#6](https://github.com/abhi-j0407/historia/pull/6) — Phase 6 Core Types & URL Filters.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
 
 ---
@@ -29,6 +29,51 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 6 — Core Types & URL Filters — 2026-05-23
+
+**Branch:** `phase/06-core-types-filters`
+**PR:** [#6](https://github.com/abhi-j0407/historia/pull/6)
+**Status:** completed
+
+**Objective recap:** Add canonical PRD §6 types, E-001 `log` helper, and B-001..B-004 data-driven URL filters in pure `src/core/` with full unit tests and T-004 coverage on `filters.ts`.
+
+**Files created:**
+
+- `src/core/types.ts`
+- `src/core/log.ts`
+- `src/core/filters.ts`
+- `src/core/filters.test.ts`
+
+**Files modified:**
+
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+
+- `src/core/.gitkeep` (replaced by real modules)
+
+**Deviations from plan:**
+
+- IPv6 loopback URLs (`http://[::1]/`) expose hostname `[::1]` via the URL API; `normalizeHostname` strips bracket notation so B-003 matches PRD `::1` (implementation detail, not PRD change).
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format` / `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings on `log.ts` eslint-disable and shadcn `button.tsx`)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 47 tests passed (45 filter + 2 smoke)
+- [x] `pnpm test:coverage` — `filters.ts`: **100%** statements, **97.95%** branches, **100%** functions, **100%** lines (T-004 ≥ 90%)
+- [x] `pnpm build` — exit 0 (~203 kB)
+
+**Coverage (where applicable):** `src/core/filters.ts` — Stmts 100%, Branch 97.95%, Funcs 100%, Lines 100%
+
+**Open follow-ups raised in this phase:**
+None
 
 ### Phase 5 — CI Pipeline — 2026-05-23
 
