@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 6 — Core Types & URL Filters (pending merge; see open PR).
+- **Last completed phase:** Phase 6 — Core Types & URL Filters (merged in `4f2b7f3`, [PR #6](https://github.com/abhi-j0407/historia/pull/6)).
 - **Next phase:** Phase 7 — Domain & Date Helpers.
-- **Active branch:** `phase/06-core-types-filters` (open PR).
-- **Open PRs:** [#6](https://github.com/abhi-j0407/historia/pull/6) — Phase 6 Core Types & URL Filters.
+- **Active branch:** none (`main` is the current tip; Phase 7 will create its own branch).
+- **Open PRs:** none.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
 
 ---
