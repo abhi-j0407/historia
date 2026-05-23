@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 7 — Domain & Date Helpers (merged in `6a1bca5`, [PR #7](https://github.com/abhi-j0407/historia/pull/7)).
+- **Last completed phase:** Phase 8 — Aggregation Engine, Intensity & Palette (merged in `8247bf6`, [PR #8](https://github.com/abhi-j0407/historia/pull/8)).
 - **Next phase:** Phase 9 — Storage Facade.
-- **Active branch:** `phase/08-aggregate-intensity` ([PR #8](https://github.com/abhi-j0407/historia/pull/8) open, awaiting merge).
-- **Open PRs:** [#8](https://github.com/abhi-j0407/historia/pull/8) — Phase 8 — Aggregation Engine, Intensity & Palette.
+- **Active branch:** none (`main` is the current tip; Phase 9 will create its own branch).
+- **Open PRs:** none.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
 
 ---
@@ -34,7 +34,7 @@
 
 **Branch:** `phase/08-aggregate-intensity`
 **PR:** [#8](https://github.com/abhi-j0407/historia/pull/8)
-**Status:** completed (open PR, pending merge)
+**Status:** completed
 
 **Objective recap:** Pure `aggregate()` (B-005..B-008), HM-003 intensity bucketing, UX-W-02 winner palette placeholders, and T-002 synthetic history fixture — all unit-tested in `src/core/`.
 
