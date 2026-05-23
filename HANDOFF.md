@@ -55,6 +55,7 @@
 - `wxt-env.d.ts` (eslint-disable for triple-slash reference)
 - `src/background/index.ts` (`no-misused-promises`: extract `openDashboard()`)
 - Prettier reformatted: `src/dashboard/components/ui/button.tsx`, `card.tsx`, `popover.tsx`, `select.tsx`, `sheet.tsx`, `tabs.tsx`, `tooltip.tsx`, `src/dashboard/lib/cn.ts`, `src/dashboard/styles.css`
+- Prettier reformatted (coordinator fix pass): `EXECUTION.md`, `HANDOFF.md`, `PHASE-PLAN.md`, `PRD.md`
 
 **Deviations from plan:**
 
@@ -65,6 +66,7 @@
 - `eslint.config.js`: `disableTypeChecked` block for `eslint.config.js` (not in `tsconfig` include pattern `*.config.*`).
 - No shadcn `no-unsafe-*` ESLint override needed (plan drift **(b)** did not trigger after `pnpm format` + `pnpm lint:fix`).
 - [PHASE-PLAN.md Phase 4 step 13](./PHASE-PLAN.md#phase-4--lint-format-test-infrastructure) `git add .`; staging uses explicit paths per [PHASE-PLAN.md §A.8](./PHASE-PLAN.md#a8-commit-branching-pr-rel-103).
+- Coordinator fix pass: ran `pnpm format` on root markdown docs (`EXECUTION.md`, `HANDOFF.md`, `PHASE-PLAN.md`, `PRD.md`) omitted from initial Phase 4 commit so `pnpm format:check` exits 0.
 
 **Decisions made during implementation:**
 None
@@ -72,7 +74,7 @@ None
 **Quality gates:**
 
 - [x] `pnpm lint` clean — exit 0 (1 `react-refresh/only-export-components` warning on shadcn `button.tsx`; no errors)
-- [x] `pnpm format:check` clean
+- [x] `pnpm format:check` clean — exit 0 (`All matched files use Prettier code style!`, verified after formatting root markdown docs)
 - [x] `pnpm typecheck` clean
 - [x] `pnpm test` — 2 tests passed (`tests/smoke.test.ts`)
 - [x] `pnpm build` clean — `.output/chrome-mv3` ~202 kB
