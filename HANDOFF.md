@@ -72,7 +72,7 @@ None
 - [x] `pnpm test` — 144 tests passed (17 new dashboard tests)
 - [x] `pnpm build` — exit 0 (~467 kB; `dashboard` chunk ~293 kB)
 - [ ] Manual smoke (PHASE-PLAN Step 11) — **deferred.** Owner: `pnpm dev`, three tabs, date range, per-site chips + Show more sheet, heatmap tooltips, Refresh.
-- [ ] CI green on PR head — pending
+- [x] CI green on PR head — Lint, typecheck, test, build success on `58a824a`
 
 **Coverage (where applicable):** N/A (dashboard views; no new T-004 core gates)
 
