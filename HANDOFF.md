@@ -77,7 +77,7 @@ None
 - [x] Icon dimensions — `file public/icon-*.png` → 16/32/48/128
 - [x] SEC-005 — no `content_security_policy` in built manifest; `wxt.config.ts` unchanged
 - [ ] Phase 17 manual QA (Step 8) — **deferred.** Owner: load unpacked from zip, backfill, three views, incremental, Refresh, multi-tab sync, prefs persistence, offline favicon fallback, Lighthouse a11y ≥95.
-- [ ] CI green on PR head — pending after P-002 test stabilization push
+- [x] CI green on PR head — `d9c5b53` success
 - [ ] GitHub Release `v0.1.0` + CWS submit — **post-merge owner** (Steps 10–11)
 
 **Coverage (where applicable):** N/A
