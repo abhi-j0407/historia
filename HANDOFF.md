@@ -71,13 +71,13 @@ None
 - [x] `pnpm format:check` — exit 0
 - [x] `pnpm lint` — exit 0 (pre-existing warnings)
 - [x] `pnpm typecheck` — exit 0
-- [x] `pnpm test` — 144 passed (Heatmap P-002 timing test occasionally flaky locally; passed on retry)
+- [x] `pnpm test` — 144 passed; P-002 bench moved to `heatmap-geometry.test.ts` (warm-up + min-of-5, 48ms CI / 16ms local)
 - [x] `pnpm build` — exit 0; `manifest.json#version === "0.1.0"`
 - [x] `pnpm zip` — `.output/historia-0.1.0-chrome.zip`
 - [x] Icon dimensions — `file public/icon-*.png` → 16/32/48/128
 - [x] SEC-005 — no `content_security_policy` in built manifest; `wxt.config.ts` unchanged
 - [ ] Phase 17 manual QA (Step 8) — **deferred.** Owner: load unpacked from zip, backfill, three views, incremental, Refresh, multi-tab sync, prefs persistence, offline favicon fallback, Lighthouse a11y ≥95.
-- [x] CI green on PR head — `dbdd2d7` success
+- [ ] CI green on PR head — pending after P-002 test stabilization push
 - [ ] GitHub Release `v0.1.0` + CWS submit — **post-merge owner** (Steps 10–11)
 
 **Coverage (where applicable):** N/A

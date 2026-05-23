@@ -59,6 +59,8 @@ pnpm lint
 pnpm typecheck
 ```
 
+To regenerate release icons and CWS images: `python3 -m pip install Pillow`, then `python3 scripts/generate-release-assets.py`.
+
 ## Project documents
 
 - [PRD.md](./PRD.md) — product requirements (locked behavior)

@@ -4,7 +4,7 @@
 
 ## What this extension does
 
-historia reads your **local** Chrome browsing history on your device. It counts visits per website (by apex domain) per day and shows heatmaps and statistics in a full-page dashboard. It does not read page titles or full URLs in the stored aggregate—only visit counts grouped by site and date.
+historia reads your **local** Chrome browsing history. It counts visits per apex domain per day and shows heatmaps and statistics in the dashboard. Stored aggregates keep visit counts by site and date—not raw URLs or page titles.
 
 ## What data leaves your device
 
@@ -12,7 +12,7 @@ Almost nothing. The only network request is when the dashboard loads **favicons*
 
 `https://www.google.com/s2/favicons?domain={apex}&sz=64`
 
-That URL includes the **apex domain name** (for example `example.com`) so Google can return an icon. It does **not** include your identity, history URLs, or visit counts. If the request fails, historia shows a letter tile instead and the rest of the dashboard works offline.
+The URL includes the apex domain (for example `example.com`) so Google can return an icon—not your identity, history URLs, or visit counts. On failure, historia shows a letter tile and the dashboard works offline.
 
 ## What data is stored
 
