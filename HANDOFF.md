@@ -33,7 +33,7 @@
 ### Phase 16 — Design Pass (impeccable) — 2026-05-23
 
 **Branch:** `phase/16-design`
-**PR:** [#16](https://github.com/abhi-j0407/historia/pull/16) (URL confirmed after `curl` create)
+**PR:** [#16](https://github.com/abhi-j0407/historia/pull/16)
 **Status:** completed (automated gates; manual viewport + Chrome smoke deferred to owner)
 
 **Objective recap:** Visual identity pass only: PRODUCT.md + DESIGN.md, warm paper/copper tokens, INTENSITY_RAMP + WINNER_PALETTE, dashboard polish, HM-007 scroll on heatmap only, WCAG AA documented. No feature changes.
@@ -71,7 +71,7 @@ None
 - [x] `pnpm test` — 144 passed
 - [x] `pnpm build` — exit 0 (~472 kB)
 - [ ] Manual smoke (PHASE-PLAN Steps 1, 6, 13) — **deferred.** Owner: `pnpm dev`, three views × 7d/30d/all at 1024/1440/1920; reduce-motion check.
-- [ ] CI green on PR head — pending after push
+- [x] CI green on PR head — Lint, typecheck, test, build success on `85b8bb0`
 
 **Coverage (where applicable):** N/A
 
