@@ -71,7 +71,7 @@ None
 - [x] `pnpm test` — 63 tests passed
 - [x] `pnpm test:coverage` — `domain.ts` and `dates.ts` each **100%** statements/branches/functions/lines (T-004 ≥ 90%)
 - [x] `pnpm build` — exit 0 (~203 kB)
-- [ ] CI green on PR — pending verify workflow on [#7](https://github.com/abhi-j0407/historia/pull/7)
+- [x] CI green on PR — [verify run](https://github.com/abhi-j0407/historia/actions/runs/26331808129) success on `6cf06ea`
 
 **Coverage (where applicable):** `src/core/domain.ts` — Stmts 100%, Branch 100%, Funcs 100%, Lines 100%. `src/core/dates.ts` — Stmts 100%, Branch 100%, Funcs 100%, Lines 100%.
 
