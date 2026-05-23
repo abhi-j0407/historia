@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 13 — Dashboard Shell & Data Hooks (merged in `7bac155`, [PR #13](https://github.com/abhi-j0407/historia/pull/13)).
-- **Next phase:** Phase 14 — Heatmap Primitive.
-- **Active branch:** none (`main` is the current tip; Phase 14 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10–13 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
+- **Last completed phase:** Phase 14 — Heatmap Primitive (pending merge; see open PR).
+- **Next phase:** Phase 15 — Three Views & Toolbar.
+- **Active branch:** `phase/14-heatmap` (open PR).
+- **Open PRs:** [#14](https://github.com/abhi-j0407/historia/pull/14) — Phase 14 Heatmap Primitive.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10–14 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
 
 ---
 
@@ -29,6 +29,57 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 14 — Heatmap Primitive — 2026-05-23
+
+**Branch:** `phase/14-heatmap`
+**PR:** [#14](https://github.com/abhi-j0407/historia/pull/14)
+**Status:** completed (automated gates; CI pending on PR head; Phase 14 Step 9 manual Chrome smoke deferred to owner)
+
+**Objective recap:** Ship single SVG `Heatmap.tsx` primitive (intensity + categorical modes), pure geometry/color modules, tests, and temporary `ViewPlaceholder` mount with horizontal scroll wrapper per HM-007.
+
+**Files created:**
+
+- `src/dashboard/components/heatmap-geometry.ts`, `heatmap-geometry.test.ts`
+- `src/dashboard/components/heatmap-color.ts`
+- `src/dashboard/components/Heatmap.tsx`, `Heatmap.test.tsx`
+
+**Files modified:**
+
+- `src/dashboard/App.tsx` (ViewPlaceholder: `overflow-x-auto` + intensity heatmap over `totalVisitsPerDay` via `resolveRange`)
+- `src/dashboard/App.test.tsx`
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- P-002 automated check benchmarks pure `computeGeometry` + `buildIntensityScale` for 365 days (≤16 ms in vitest); full React Profiler in jsdom is not representative (~120 ms mount). Chrome DevTools Profiler for 365-cell render deferred to owner manual smoke.
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings on `log.ts`, shadcn `button.tsx`)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 127 tests passed (11 new heatmap tests)
+- [x] `pnpm build` — exit 0 (~449 kB; `dashboard` chunk ~277 kB)
+- [ ] Manual smoke (PHASE-PLAN Step 9) — **deferred.** Owner: `pnpm dev`, open dashboard, confirm ViewPlaceholder heatmap + Tab through cells + native `<title>` on hover.
+- [ ] React Profiler 365-day render ≤16 ms in Chrome — **deferred** (see Deviations; pure prep path verified in vitest).
+- [x] CI green on PR head — Lint, typecheck, test, build success on `e671a13`
+
+**Coverage (where applicable):** N/A (dashboard components; no new T-004 core gates)
+
+**Open follow-ups raised in this phase:**
+
+- **Manual smoke (Step 9):** Owner to verify heatmap in ViewPlaceholder and cell focus/tooltip behavior in Chrome.
+- **Phase 15:** Replace `ViewPlaceholder` with `PerSiteView`, `OverallView`, `WinnersView`.
+
+**Next phase entry point:** Phase 15 — open PHASE-PLAN.md → "Phase 15 — Three Views & Toolbar" → `range-filter.ts`.
 
 ### Phase 13 — Dashboard Shell & Data Hooks — 2026-05-23
 
