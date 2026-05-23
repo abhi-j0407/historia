@@ -13,11 +13,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 2 — WXT + React + TypeScript Scaffold (merged in `f9fb1d8`, [PR #2](https://github.com/abhi-j0407/historia/pull/2)).
-- **Next phase:** Phase 3 — Tailwind v4 & shadcn/ui Primitives.
-- **Active branch:** none (`main` is the current tip; Phase 3 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** none. Visual smoke for Phase 2 was verified by the coordinator via static-served `.output/chrome-mv3/dashboard.html` + IDE browser snapshot (h1 "historia", text "Dashboard scaffold is alive."). Phase 4 step 6 amended on `main` post-merge to drop the now-redundant `vitest@^2` install.
+- **Last completed phase:** Phase 3 — Tailwind v4 & shadcn/ui Primitives (branch `phase/03-tailwind-shadcn`, PR pending).
+- **Next phase:** Phase 4 — Lint, Format, Test Infrastructure.
+- **Active branch:** `phase/03-tailwind-shadcn` (awaiting coordinator review).
+- **Open PRs:** pending (Phase 3).
+- **Open follow-ups:** none.
 
 ---
 
@@ -28,6 +28,59 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 3 — Tailwind v4 & shadcn/ui Primitives — 2026-05-23
+
+**Branch:** `phase/03-tailwind-shadcn`
+**PR:** pending
+**Status:** completed
+
+**Objective recap:** Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui primitives into `src/dashboard/components/ui/`, and verify the smoke-test dashboard renders Tailwind utilities with neutral grayscale tokens only.
+
+**Files created:**
+- `src/dashboard/styles.css`
+- `src/dashboard/lib/cn.ts`
+- `components.json`
+- `src/dashboard/components/ui/button.tsx`
+- `src/dashboard/components/ui/tabs.tsx`
+- `src/dashboard/components/ui/select.tsx`
+- `src/dashboard/components/ui/popover.tsx`
+- `src/dashboard/components/ui/tooltip.tsx`
+- `src/dashboard/components/ui/card.tsx`
+- `src/dashboard/components/ui/sheet.tsx`
+
+**Files modified:**
+- `wxt.config.ts` (added `vite` factory with `@tailwindcss/vite`)
+- `src/dashboard/App.tsx` (Button + Tailwind layout classes)
+- `src/entrypoints/dashboard/main.tsx` (imports `styles.css` above React imports)
+- `package.json` / `pnpm-lock.yaml` (Tailwind v4, shadcn peers, Radix, `clsx`, `tailwind-merge`, `lucide-react`, `class-variance-authority`)
+- `HANDOFF.md` (this entry + Current state)
+
+**Deviations from plan:**
+- [PHASE-PLAN.md Phase 3 step 14](./PHASE-PLAN.md#phase-3--tailwind-v4--shadcnui-primitives) says `git add .`; staging uses explicit paths per [PHASE-PLAN.md §A.8](./PHASE-PLAN.md#a8-commit-branching-pr-rel-103).
+- Steps 9–10 combined into one `pnpm dlx shadcn@latest add … --yes` invocation (all seven primitives).
+- Added `class-variance-authority` explicitly after `pnpm typecheck` failed — shadcn CLI reported dependency install but `cva` was missing from `package.json` until `pnpm add class-variance-authority`.
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+- [x] `pnpm typecheck` clean — `tsc --noEmit` exit 0
+- [x] `pnpm build` clean — `.output/chrome-mv3/assets/dashboard-*.css` ~25 kB; dashboard chunk ~173 kB
+- [x] No `tailwind.config.js`; `@import 'tailwindcss';` once in `styles.css`
+- [x] `src/dashboard/components/ui/` contains exactly 7 primitives (button, tabs, select, popover, tooltip, card, sheet)
+- [x] System font stack only (SEC-001); no remote font CDN
+- n/a (Phase 4) — `pnpm lint`, `pnpm test`
+- [ ] Manual smoke in Chrome — implementer did not re-run `pnpm dev`; coordinator should verify styled heading + shadcn button + focus ring
+
+**Coverage (where applicable):** n/a
+
+**Open follow-ups raised in this phase:**
+None
+
+**Next phase entry point:** Phase 4 — open PHASE-PLAN.md → "Phase 4 — Lint, Format, Test Infrastructure" → first command: `pnpm add -D eslint@^9 typescript-eslint@^8 …`.
+
+---
 
 ### Phase 2 — WXT + React + TypeScript Scaffold — 2026-05-23
 
@@ -83,7 +136,7 @@ None
 **Coverage (where applicable):** n/a
 
 **Open follow-ups raised in this phase:**
-- Coordinator must confirm visual smoke with user before approving merge (toolbar icon → dashboard tab content).
+- None. Visual smoke verified post-implementation by coordinator (see Quality gates above).
 
 **Next phase entry point:** Phase 3 — open PHASE-PLAN.md → "Phase 3 — Tailwind v4 & shadcn/ui Primitives" → first command: `pnpm add -D tailwindcss@^4 @tailwindcss/vite@^4`.
 
