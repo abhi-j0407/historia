@@ -13,11 +13,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 0 — Preflight & Environment (Phase 1 implementation committed locally on `phase/01-repo-bootstrap`; awaiting push + PR).
-- **Next phase:** Phase 1 — finish push/PR, then Phase 2 — WXT + React + TypeScript Scaffold.
+- **Last completed phase:** Phase 1 — Repo Bootstrap.
+- **Next phase:** Phase 2 — WXT + React + TypeScript Scaffold.
 - **Active branch:** `phase/01-repo-bootstrap`.
-- **Open PRs:** none — blocked: export `GH_PAT` and push (see Phase 1 handoff Open follow-ups).
-- **Open follow-ups:** export `GH_PAT`, push `main` + `phase/01-repo-bootstrap`, open PR `Phase 1 — Repo Bootstrap`.
+- **Open PRs:** https://github.com/abhi-j0407/historia/pull/1
+- **Open follow-ups:** none.
 
 ---
 
@@ -32,8 +32,8 @@
 ### Phase 1 — Repo Bootstrap — 2026-05-23
 
 **Branch:** `phase/01-repo-bootstrap`
-**PR:** pending — blocked on `GH_PAT` (see Open follow-ups)
-**Status:** completed (local); PR not opened
+**PR:** https://github.com/abhi-j0407/historia/pull/1
+**Status:** completed
 
 **Objective recap:** Initialize the repo with deterministic tooling baseline: git, pnpm, `package.json`, license, ignore files, editorconfig. No application code yet.
 
@@ -62,12 +62,12 @@ None (everything was pre-decided by coordinator amendments — recorded here for
 - [x] `LICENSE` is standard MIT with year 2026 and copyright holder `Abhishek` (deviation from plan's "Abhishek Jain" — see Deviations)
 - [x] No `node_modules/` exists yet — verified absent
 - [x] `git status` clean on `phase/01-repo-bootstrap` after both commits — verified after `docs: add Phase 1 handoff entry`
-- [ ] PR opened on github.com/abhi-j0407/historia — blocked: `GH_PAT` not set in shell
+- [x] PR opened on github.com/abhi-j0407/historia — https://github.com/abhi-j0407/historia/pull/1
 
 **Coverage (where applicable):** n/a
 
 **Open follow-ups raised in this phase:**
-- Export `GH_PAT` in the shell, then run: `git remote add origin "https://abhi-j0407:$GH_PAT@github.com/abhi-j0407/historia.git"`, `git push -u origin main`, `git push -u origin phase/01-repo-bootstrap`, open PR titled `Phase 1 — Repo Bootstrap`, update this entry's PR field and Current state Open PRs.
+None
 
 **Next phase entry point:** Phase 2 — open PHASE-PLAN.md → "Phase 2 — WXT + React + TypeScript Scaffold" → first command: `pnpm add -D wxt@^0.20 @wxt-dev/module-react`.
 
