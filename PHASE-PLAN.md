@@ -3125,7 +3125,7 @@ Update this table as phases land. The phase is "Done" only when CI is green for 
 | 14  | Heatmap Primitive                       | Dashboard skeleton       | `phase/14-heatmap`             | [#14](https://github.com/abhi-j0407/historia/pull/14) | [x]    |
 | 15  | Three Views & Toolbar                   | Dashboard skeleton       | `phase/15-views`               | [#15](https://github.com/abhi-j0407/historia/pull/15) | [x]    |
 | 16  | Design Pass (impeccable)                | Design pass              | `phase/16-design`              | [#16](https://github.com/abhi-j0407/historia/pull/16) | [x]    |
-| 17  | Release Polish & v0.1.0                 | Polish + release prep    | `phase/17-release`             |                                                       | [ ]    |
+| 17  | Release Polish & v0.1.0                 | Polish + release prep    | `phase/17-release`             | [#17](https://github.com/abhi-j0407/historia/pull/17) | [x]    |
 
 ### Handoff Block template
 

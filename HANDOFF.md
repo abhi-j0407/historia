@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 17 — Release Polish & v0.1.0 (pending merge; see open PR).
-- **Next phase:** none for v0.1.0 scope — post-merge owner: tag `v0.1.0`, GitHub Release with zip, CWS submission, README CWS link PR.
-- **Active branch:** `phase/17-release` (until PR merges).
-- **Open PRs:** [#17](https://github.com/abhi-j0407/historia/pull/17) (`phase/17-release`).
+- **Last completed phase:** Phase 17 — Release Polish & v0.1.0 (merged in `fd19ab2`, [PR #17](https://github.com/abhi-j0407/historia/pull/17)).
+- **Next phase:** none — v0.1.0 implementation plan complete (Phases 0–17).
+- **Active branch:** none (`main` is the current tip).
+- **Open PRs:** none.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI). **Phase 17 manual QA** (PHASE-PLAN Step 8) — unchecked below; owner with real Chrome profile. **Post-merge:** `git tag v0.1.0`, GitHub Release attach `historia-0.1.0-chrome.zip`, CWS submit (`assets/cws/`), README CWS link after approval.
 
 ---
@@ -34,7 +34,7 @@
 
 **Branch:** `phase/17-release`
 **PR:** [#17](https://github.com/abhi-j0407/historia/pull/17)
-**Status:** in review (automated gates pass locally; manual QA deferred to owner)
+**Status:** completed (automated gates + CI; manual QA and Release/CWS steps deferred to owner)
 
 **Objective recap:** Release prep only: real copper/paper icons, README, PRIVACY.md, version 0.1.0, CWS listing + screenshots + promo tile, CI zip artifact. No product logic changes.
 
@@ -50,6 +50,7 @@
 - `package.json` (version → `0.1.0`)
 - `.github/workflows/ci.yml` (zip + upload-artifact, 14-day retention)
 - `.gitignore` (`assets/source/`)
+- `src/dashboard/components/Heatmap.test.tsx`, `heatmap-geometry.test.ts` (P-002 bench moved; CI-stable)
 - `HANDOFF.md` (this entry + Current state)
 
 **Files removed:**
