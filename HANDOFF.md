@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 16 — Design Pass (impeccable) (PR open; merge pending coordinator).
+- **Last completed phase:** Phase 16 — Design Pass (impeccable) (merged in `392ee32`, [PR #16](https://github.com/abhi-j0407/historia/pull/16)).
 - **Next phase:** Phase 17 — Release Polish & v0.1.0.
-- **Active branch:** `phase/16-design` ([PR #16](https://github.com/abhi-j0407/historia/pull/16) — update URL if renumbered).
-- **Open PRs:** Phase 16 design pass.
+- **Active branch:** none (`main` is the current tip; Phase 17 will create its own branch).
+- **Open PRs:** none.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI). **Phase 10–16 Chrome manual smoke** (viewport 1024/1440/1920 + three views at 7d/30d/all) — owner deferred. Before screenshots: baseline = Phase 15 `main` grayscale (see DESIGN.md).
 
 ---
@@ -34,7 +34,7 @@
 
 **Branch:** `phase/16-design`
 **PR:** [#16](https://github.com/abhi-j0407/historia/pull/16)
-**Status:** completed (automated gates; manual viewport + Chrome smoke deferred to owner)
+**Status:** completed (automated gates + CI; manual viewport + Chrome smoke deferred to owner)
 
 **Objective recap:** Visual identity pass only: PRODUCT.md + DESIGN.md, warm paper/copper tokens, INTENSITY_RAMP + WINNER_PALETTE, dashboard polish, HM-007 scroll on heatmap only, WCAG AA documented. No feature changes.
 
@@ -71,7 +71,7 @@ None
 - [x] `pnpm test` — 144 passed
 - [x] `pnpm build` — exit 0 (~472 kB)
 - [ ] Manual smoke (PHASE-PLAN Steps 1, 6, 13) — **deferred.** Owner: `pnpm dev`, three views × 7d/30d/all at 1024/1440/1920; reduce-motion check.
-- [x] CI green on PR head — Lint, typecheck, test, build success on `85b8bb0`
+- [x] CI green on PR head — Lint, typecheck, test, build success on `2e08096`
 
 **Coverage (where applicable):** N/A
 
