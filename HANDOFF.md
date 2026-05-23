@@ -13,11 +13,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 0 — Preflight & Environment.
-- **Next phase:** Phase 1 — Repo Bootstrap.
-- **Active branch:** none (Phase 1 will create it).
-- **Open PRs:** none.
-- **Open follow-ups:** none.
+- **Last completed phase:** Phase 0 — Preflight & Environment (Phase 1 implementation committed locally on `phase/01-repo-bootstrap`; awaiting push + PR).
+- **Next phase:** Phase 1 — finish push/PR, then Phase 2 — WXT + React + TypeScript Scaffold.
+- **Active branch:** `phase/01-repo-bootstrap`.
+- **Open PRs:** none — blocked: export `GH_PAT` and push (see Phase 1 handoff Open follow-ups).
+- **Open follow-ups:** export `GH_PAT`, push `main` + `phase/01-repo-bootstrap`, open PR `Phase 1 — Repo Bootstrap`.
 
 ---
 
@@ -28,6 +28,50 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 1 — Repo Bootstrap — 2026-05-23
+
+**Branch:** `phase/01-repo-bootstrap`
+**PR:** pending — blocked on `GH_PAT` (see Open follow-ups)
+**Status:** completed (local); PR not opened
+
+**Objective recap:** Initialize the repo with deterministic tooling baseline: git, pnpm, `package.json`, license, ignore files, editorconfig. No application code yet.
+
+**Files created:**
+- `.gitignore`
+- `.editorconfig`
+- `.nvmrc`
+- `.npmrc`
+- `LICENSE`
+- `package.json`
+
+**Files modified:**
+- `HANDOFF.md` (this entry)
+
+**Deviations from plan:**
+- `git add` list extended to include `HANDOFF.md` and `EXECUTION.md` — [EXECUTION.md §1](./EXECUTION.md#1-roles) establishes both as source-of-truth docs tracked from day one.
+- Workflow extensions A–F (init + per-repo identity + remote + branch + PR mechanics) added on top of [PHASE-PLAN.md Phase 1 step 8](./PHASE-PLAN.md#phase-1--repo-bootstrap) — [EXECUTION.md §4](./EXECUTION.md#4-implementer-chat--per-phase-prompt-template) / [PHASE-PLAN.md §A.8](./PHASE-PLAN.md#a8-commit-branching-pr-rel-103): one phase = one PR; Status Tracker reserves branch `phase/01-repo-bootstrap` and a PR column.
+- LICENSE copyright holder changed from "Abhishek Jain" to "Abhishek" to match personal commit identity for this repo — coordinator amendments to PHASE-PLAN.md (personal email + name throughout).
+
+**Decisions made during implementation:**
+None (everything was pre-decided by coordinator amendments — recorded here for traceability: Status Tracker Phase 0 marked `[x]`; `package.json#author` personal email `abhishek.j0407@gmail.com`; Phase 5 CODEOWNERS note `@abhi-j0407`; LICENSE copyright holder `Abhishek`).
+
+**Quality gates:**
+- [x] `git log --oneline` shows the bootstrap commit — `66ca146 chore: bootstrap repo with package.json, license, and ignore files`
+- [x] `cat package.json` shows the fields exactly as specified — `name: historia`, `author: Abhishek <abhishek.j0407@gmail.com>`, `type: module`, `packageManager: pnpm@9.0.0`, `engines.node: >=20.10.0`
+- [x] `LICENSE` is standard MIT with year 2026 and copyright holder `Abhishek` (deviation from plan's "Abhishek Jain" — see Deviations)
+- [x] No `node_modules/` exists yet — verified absent
+- [x] `git status` clean on `phase/01-repo-bootstrap` after both commits — verified after `docs: add Phase 1 handoff entry`
+- [ ] PR opened on github.com/abhi-j0407/historia — blocked: `GH_PAT` not set in shell
+
+**Coverage (where applicable):** n/a
+
+**Open follow-ups raised in this phase:**
+- Export `GH_PAT` in the shell, then run: `git remote add origin "https://abhi-j0407:$GH_PAT@github.com/abhi-j0407/historia.git"`, `git push -u origin main`, `git push -u origin phase/01-repo-bootstrap`, open PR titled `Phase 1 — Repo Bootstrap`, update this entry's PR field and Current state Open PRs.
+
+**Next phase entry point:** Phase 2 — open PHASE-PLAN.md → "Phase 2 — WXT + React + TypeScript Scaffold" → first command: `pnpm add -D wxt@^0.20 @wxt-dev/module-react`.
+
+---
 
 ### Phase 0 — Preflight & Environment — 2026-05-23
 
