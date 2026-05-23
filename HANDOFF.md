@@ -18,7 +18,7 @@
 - **Next phase:** Phase 11 — Backfill Orchestrator.
 - **Active branch:** `phase/10-sw-foundation` (awaiting merge of PR #10).
 - **Open PRs:** [#10](https://github.com/abhi-j0407/historia/pull/10) — Service Worker Foundation.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). Phase 10 Step 7 Chrome manual smoke deferred — owner will verify before release (see Phase 10 entry).
 
 ---
 
@@ -34,7 +34,7 @@
 
 **Branch:** `phase/10-sw-foundation`
 **PR:** [#10](https://github.com/abhi-j0407/historia/pull/10)
-**Status:** completed
+**Status:** completed (automated gates + CI; Phase 10 Step 7 Chrome manual smoke deferred to owner)
 
 **Objective recap:** Wire SW-001 top-level listener registration, FR-M-03 action-click dashboard open, runtime message router (`force-refresh`, `get-backfill-progress`), E-004 `callChrome` wrapper, and Phase 11/12 stubs for ingest and debounce.
 
@@ -71,13 +71,14 @@ None
 - [x] `pnpm typecheck` — exit 0
 - [x] `pnpm test` — 87 tests passed (1 new in `index.test.ts`)
 - [x] `pnpm build` — exit 0 (~203 kB)
-- [x] Manual smoke — `pnpm dev` started, WXT opened Chrome (`✔ Opened browser` in dev log); implementer did not re-run toolbar click or worker-console `force-refresh` in this session — coordinator should confirm Phase 10 step 7 interactively
+- [ ] Manual smoke (PHASE-PLAN Step 7) — **deferred.** Owner will verify later: `pnpm dev` → toolbar icon opens dashboard tab; worker console `chrome.runtime.sendMessage({ type: 'force-refresh' })` → one `[historia] requestBackfill (stub)` log. Not checked in implementer/coordinator sessions.
 - [x] CI green on PR — [CI run](https://github.com/abhi-j0407/historia/actions/runs/26332769792) success on `4d02916`
 
 **Coverage (where applicable):** N/A (background wiring; no new T-004 core files)
 
 **Open follow-ups raised in this phase:**
-None
+
+- **Manual smoke (Step 7):** Owner to run Chrome checks listed under Quality gates when convenient; update this entry with one-line observations and check the box. Does not block starting Phase 11 if coordinator accepts deferral.
 
 **Next phase entry point:** Phase 11 — open PHASE-PLAN.md → "Phase 11 — Backfill Orchestrator" → replace `src/background/ingest.ts` stub with full pipeline.
 
