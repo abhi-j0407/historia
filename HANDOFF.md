@@ -72,7 +72,7 @@ None
 - [x] `pnpm test` — 95 tests passed (8 new: 2 concurrency + 6 ingest)
 - [x] `pnpm build` — exit 0 (~338 kB; `background.js` ~138 kB)
 - [ ] Manual smoke (PHASE-PLAN Step 5) — **deferred.** Owner: uninstall dev extension, `pnpm dev`, click icon, confirm `aggregate.v1` in `chrome.storage.local` during/after backfill. Not run in implementer session.
-- [x] CI green on PR head — `Lint, typecheck, test, build` success on `e81355c`
+- [x] CI green on PR head — [CI run](https://github.com/abhi-j0407/historia/actions/runs/26333695952) success on `e81355c` (docs commit `3cc5a58` re-runs CI)
 
 **Coverage (where applicable):** N/A (background orchestrator; no new T-004 core files)
 
