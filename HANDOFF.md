@@ -13,11 +13,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 3 — Tailwind v4 & shadcn/ui Primitives (merged in `c81c6f3`, [PR #3](https://github.com/abhi-j0407/historia/pull/3)).
-- **Next phase:** Phase 4 — Lint, Format, Test Infrastructure.
-- **Active branch:** none (`main` is the current tip; Phase 4 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** none. Visual smoke for Phase 3 verified by coordinator (computed-style probe via static-served built `dashboard.html`: `<h1>` 30px, `<button>` HSL(0,0%,9%), system-stack font, no remote font CDN).
+- **Last completed phase:** Phase 4 — Lint, Format, Test Infrastructure (open PR on branch `phase/04-quality-tooling`).
+- **Next phase:** Phase 5 — CI Pipeline.
+- **Active branch:** `phase/04-quality-tooling`.
+- **Open PRs:** [#4](https://github.com/abhi-j0407/historia/pull/4) — Phase 4 quality tooling (awaiting coordinator review).
+- **Open follow-ups:** none.
 
 ---
 
@@ -28,6 +28,62 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 4 — Lint, Format, Test Infrastructure — 2026-05-23
+
+**Branch:** `phase/04-quality-tooling`
+**PR:** [#4](https://github.com/abhi-j0407/historia/pull/4)
+**Status:** completed (awaiting merge)
+
+**Objective recap:** Install ESLint 9 flat config, Prettier with Tailwind plugin, Vitest with WxtVitest, and Testing Library; verify smoke tests pass; enforce FR-S-01 module boundary in `src/core/`.
+
+**Files created:**
+- `eslint.config.js`
+- `.prettierrc.json`
+- `.prettierignore`
+- `vitest.config.ts`
+- `tests/setup.ts`
+- `tests/smoke.test.ts`
+- `.vscode/settings.json`
+- `.vscode/extensions.json`
+
+**Files modified:**
+- `package.json` / `pnpm-lock.yaml` (ESLint, Prettier, Vitest companions, `pnpm.overrides.vite-node: "6.0.0"` — see Deviations)
+- `wxt-env.d.ts` (eslint-disable for triple-slash reference)
+- `src/background/index.ts` (`no-misused-promises`: extract `openDashboard()`)
+- Prettier reformatted: `src/dashboard/components/ui/button.tsx`, `card.tsx`, `popover.tsx`, `select.tsx`, `sheet.tsx`, `tabs.tsx`, `tooltip.tsx`, `src/dashboard/lib/cn.ts`, `src/dashboard/styles.css`
+
+**Deviations from plan:**
+- [PHASE-PLAN.md Phase 4 step 1](./PHASE-PLAN.md#phase-4--lint-format-test-infrastructure) omits `@eslint/js@^9`; added to `pnpm add -D` because `eslint.config.js` imports `@eslint/js` (plan drift **(a)**).
+- `wxt-env.d.ts`: `/* eslint-disable @typescript-eslint/triple-slash-reference -- WXT-required type bridge per Phase 2 deviation. */` (plan drift **(c)**).
+- `vitest.config.ts` / tests import `WxtVitest` from `wxt/testing/vitest-plugin` and `fakeBrowser` from `wxt/testing/fake-browser` (not `wxt/testing` barrel) — avoids `__vite_ssr_exportName__` under Vite 8 + jsdom.
+- `package.json` `pnpm.overrides`: added `vite-node: "6.0.0"` alongside existing `vite: "8.0.14"` so `vitest@2` + `WxtVitest()` run cleanly (vitest@2 otherwise pulls `vite-node@2`, which breaks WXT testing on Vite 8).
+- `eslint.config.js`: `disableTypeChecked` block for `eslint.config.js` (not in `tsconfig` include pattern `*.config.*`).
+- No shadcn `no-unsafe-*` ESLint override needed (plan drift **(b)** did not trigger after `pnpm format` + `pnpm lint:fix`).
+- [PHASE-PLAN.md Phase 4 step 13](./PHASE-PLAN.md#phase-4--lint-format-test-infrastructure) `git add .`; staging uses explicit paths per [PHASE-PLAN.md §A.8](./PHASE-PLAN.md#a8-commit-branching-pr-rel-103).
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+- [x] `pnpm lint` clean — exit 0 (1 `react-refresh/only-export-components` warning on shadcn `button.tsx`; no errors)
+- [x] `pnpm format:check` clean
+- [x] `pnpm typecheck` clean
+- [x] `pnpm test` — 2 tests passed (`tests/smoke.test.ts`)
+- [x] `pnpm build` clean — `.output/chrome-mv3` ~202 kB
+- [x] FR-S-01 probe — `src/core/_boundary_probe.ts` (deleted after verify):
+  - `no-restricted-imports`: `src/core/ must not import from background or dashboard layers (FR-S-01).`
+  - `no-restricted-globals`: `Unexpected use of 'chrome'. src/core/ must not reference chrome.* (FR-S-01).`
+- n/a (Phase 5) — CI green on PR
+
+**Coverage (where applicable):** n/a (T-004 gates configured in `vitest.config.ts`; no `src/core/*.ts` modules yet)
+
+**Open follow-ups raised in this phase:**
+None
+
+**Next phase entry point:** Phase 5 — open PHASE-PLAN.md → "Phase 5 — CI Pipeline" → create `.github/workflows/ci.yml`.
+
+---
 
 ### Phase 3 — Tailwind v4 & shadcn/ui Primitives — 2026-05-23
 
