@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 12 — Incremental Updates & Manual Refresh (merged in `57d1a75`, [PR #12](https://github.com/abhi-j0407/historia/pull/12)).
-- **Next phase:** Phase 13 — Dashboard Shell & Data Hooks.
-- **Active branch:** none (`main` is the current tip; Phase 13 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10/11/12 Chrome manual smoke** — owner deferred; see respective HANDOFF entries. Phase 13 wires dashboard Refresh (E-002); worker `force-refresh` → `requestBackfill({ force: true })` is already in place (SW-005).
+- **Last completed phase:** Phase 13 — Dashboard Shell & Data Hooks (open PR `e485f5d`, [#13](https://github.com/abhi-j0407/historia/pull/13)).
+- **Next phase:** Phase 14 — Heatmap Primitive.
+- **Active branch:** `phase/13-dashboard-shell` (awaiting merge of PR #13).
+- **Open PRs:** [#13](https://github.com/abhi-j0407/historia/pull/13) — Dashboard Shell & Data Hooks.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10/11/12/13 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
 
 ---
 
@@ -29,6 +29,59 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 13 — Dashboard Shell & Data Hooks — 2026-05-23
+
+**Branch:** `phase/13-dashboard-shell`
+**PR:** [#13](https://github.com/abhi-j0407/historia/pull/13)
+**Status:** completed (automated gates + CI pending; Phase 13 Step 13 manual dashboard smoke deferred to owner)
+
+**Objective recap:** Replace smoke-test `App.tsx` with real dashboard shell (header, toolbar, error boundary, loading/empty/populated states) and data hooks (`useAggregate`, `useBackfillProgress`, `useUIPrefs`) reading aggregate from `chrome.storage.local` per SW-003a. Views remain `ViewPlaceholder` until Phases 14–15.
+
+**Files created:**
+
+- `src/dashboard/lib/storage-bridge.ts`
+- `src/dashboard/hooks/useAggregate.ts`, `useAggregate.test.tsx`
+- `src/dashboard/hooks/useBackfillProgress.ts`, `useBackfillProgress.test.tsx`
+- `src/dashboard/hooks/useUIPrefs.ts`, `useUIPrefs.test.tsx`
+- `src/dashboard/components/ErrorBanner.tsx`, `ErrorBoundary.tsx`, `BackfillProgressBar.tsx`, `Header.tsx`, `Toolbar.tsx`
+- `src/dashboard/App.test.tsx`
+
+**Files modified:**
+
+- `src/dashboard/App.tsx` (real shell per PHASE-PLAN Step 10)
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- `AGGREGATE_VERSION` imported from `@/core/types` (not re-exported by `@/background/cache`).
+- Header Refresh uses `aria-label="Refresh browsing history"` on the icon+text button (A.6 accessible label).
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings on `log.ts`, shadcn `button.tsx`)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 116 tests passed (10 new dashboard tests)
+- [x] `pnpm build` — exit 0 (~433 kB; `dashboard` chunk ~265 kB)
+- [ ] Manual smoke (PHASE-PLAN Step 13) — **deferred.** Owner: `pnpm dev`, open dashboard, confirm header/toolbar/ViewPlaceholder site count; click Refresh → progress strip + placeholder updates; Tab through controls for focus rings.
+- [x] CI green on PR head — Lint, typecheck, test, build success on `e485f5d`
+
+**Coverage (where applicable):** N/A (dashboard shell; no new T-004 core file gates)
+
+**Open follow-ups raised in this phase:**
+
+- **Manual smoke (Step 13):** Owner to verify dashboard shell + Refresh → `force-refresh` + storage subscription end-to-end in Chrome.
+- **Phase 14:** Replace `ViewPlaceholder` with `Heatmap.tsx` primitive.
+
+**Next phase entry point:** Phase 14 — open PHASE-PLAN.md → "Phase 14 — Heatmap Primitive" → `heatmap-geometry.ts`.
 
 ### Phase 12 — Incremental Updates & Manual Refresh — 2026-05-23
 
