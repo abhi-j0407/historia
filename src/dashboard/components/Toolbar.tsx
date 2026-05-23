@@ -23,14 +23,32 @@ export function Toolbar({
   return (
     <div className="flex flex-wrap items-center justify-between gap-4">
       <Tabs value={view} onValueChange={(v) => onViewChange(v as UIPrefs['lastView'])}>
-        <TabsList>
-          <TabsTrigger value="per-site">Sites</TabsTrigger>
-          <TabsTrigger value="overall">Daily</TabsTrigger>
-          <TabsTrigger value="winners">Winners</TabsTrigger>
+        <TabsList className="bg-surface-elevated h-auto gap-1 rounded-full p-1">
+          <TabsTrigger
+            value="per-site"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full px-4 py-1.5 text-sm data-[state=active]:shadow-none"
+          >
+            Sites
+          </TabsTrigger>
+          <TabsTrigger
+            value="overall"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full px-4 py-1.5 text-sm data-[state=active]:shadow-none"
+          >
+            Daily
+          </TabsTrigger>
+          <TabsTrigger
+            value="winners"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full px-4 py-1.5 text-sm data-[state=active]:shadow-none"
+          >
+            Winners
+          </TabsTrigger>
         </TabsList>
       </Tabs>
       <Select value={range} onValueChange={(v) => onRangeChange(v as UIPrefs['lastDateRange'])}>
-        <SelectTrigger className="w-[180px]" aria-label="Date range">
+        <SelectTrigger
+          className="border-border bg-card w-[180px] rounded-full"
+          aria-label="Date range"
+        >
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

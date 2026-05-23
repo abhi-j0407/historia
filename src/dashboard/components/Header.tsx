@@ -15,24 +15,29 @@ export function Header({
   isRefreshing: boolean;
 }): JSX.Element {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-4">
+    <header className="border-border flex flex-wrap items-end justify-between gap-4 border-b pb-6">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">historia</h1>
+        <p className="text-primary text-xs font-medium tracking-[0.2em] uppercase">Local history</p>
+        <h1 className="font-display text-foreground mt-1 text-4xl font-normal tracking-tight">
+          historia
+        </h1>
         {aggregate ? (
-          <p className="text-muted-foreground mt-1 text-sm">
-            updated {formatDistanceToNow(new Date(aggregate.computedAt), { addSuffix: true })}
+          <p className="text-muted-foreground mt-2 text-sm">
+            Updated {formatDistanceToNow(new Date(aggregate.computedAt), { addSuffix: true })}
           </p>
         ) : null}
       </div>
       <Button
         type="button"
-        variant="ghost"
+        variant="outline"
+        size="sm"
+        className="border-primary/30 text-primary hover:bg-accent motion-safe:transition-colors"
         onClick={onRefresh}
         disabled={isRefreshing}
         aria-label="Refresh browsing history"
       >
         <RefreshCw className={isRefreshing ? 'motion-safe:animate-spin' : undefined} aria-hidden />
-        Refresh
+        Sync history
       </Button>
     </header>
   );

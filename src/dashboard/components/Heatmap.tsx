@@ -4,9 +4,9 @@ import { eachDayInRange } from '@/core/dates';
 import { buildIntensityScale, type IntensityLevel } from '@/core/intensity';
 import type { DayKey } from '@/core/types';
 import {
+  INTENSITY_RAMP,
   intensityColor,
   type IntensityRamp,
-  PLACEHOLDER_INTENSITY_RAMP,
 } from '@/dashboard/components/heatmap-color';
 import { computeGeometry } from '@/dashboard/components/heatmap-geometry';
 import {
@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from '@/dashboard/components/ui/tooltip';
 
-const EMPTY_CATEGORICAL_COLOR = '#f4f4f5';
+const EMPTY_CATEGORICAL_COLOR = INTENSITY_RAMP[0];
 
 export type HeatmapMode =
   | { kind: 'intensity'; data: Record<DayKey, number>; ramp?: IntensityRamp }
@@ -85,7 +85,7 @@ export function Heatmap(props: HeatmapProps): JSX.Element {
     const days = eachDayInRange(range.start, range.end);
 
     if (mode.kind === 'intensity') {
-      const ramp = mode.ramp ?? PLACEHOLDER_INTENSITY_RAMP;
+      const ramp = mode.ramp ?? INTENSITY_RAMP;
       const fills = buildIntensityLookup(mode.data, days, ramp);
       return geometry.cells.map((cell) => {
         const count = mode.data[cell.day] ?? 0;
@@ -176,12 +176,12 @@ export function Heatmap(props: HeatmapProps): JSX.Element {
   );
 
   if (renderTooltip === undefined) {
-    return svg;
+    return <div className="max-w-full overflow-x-auto">{svg}</div>;
   }
 
   return (
     <TooltipProvider delayDuration={0}>
-      <div className="relative inline-block">
+      <div className="relative inline-block max-w-full overflow-x-auto">
         {svg}
         {hoveredCell !== null ? (
           <Tooltip open>

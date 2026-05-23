@@ -1,4 +1,4 @@
-/** Placeholder intensity ramp until Phase 16 design pass (HM-002). */
+/** Intensity ramp for heatmap fills (HM-002). Hex lives here and in core palette only. */
 
 import type { IntensityLevel } from '@/core/intensity';
 
@@ -11,19 +11,20 @@ export interface IntensityRamp {
   5: string;
 }
 
-export const PLACEHOLDER_INTENSITY_RAMP: IntensityRamp = {
-  0: '#f4f4f5',
-  1: '#d4d4d8',
-  2: '#a1a1aa',
-  3: '#71717a',
-  4: '#52525b',
-  5: '#27272a',
+/** Warm copper ramp: empty bucket + five visit-intensity steps on light paper. */
+export const INTENSITY_RAMP: IntensityRamp = {
+  0: '#F5F0E8',
+  1: '#D2A876',
+  2: '#C49252',
+  3: '#B8895A',
+  4: '#8F5C2E',
+  5: '#5C3A1A',
 };
 
 /** Maps HM-003 intensity level to a fill color. */
 export function intensityColor(
   level: IntensityLevel,
-  ramp: IntensityRamp = PLACEHOLDER_INTENSITY_RAMP,
+  ramp: IntensityRamp = INTENSITY_RAMP,
 ): string {
   return ramp[level];
 }

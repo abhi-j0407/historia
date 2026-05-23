@@ -47,10 +47,10 @@ export function SiteSwitcher({
             role="tab"
             aria-selected={site.apexDomain === selectedApex}
             className={cn(
-              'focus-visible:ring-ring inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:outline-none',
+              'focus-visible:ring-ring inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm focus-visible:ring-2 focus-visible:outline-none motion-safe:transition-colors',
               site.apexDomain === selectedApex
-                ? 'border-foreground bg-muted font-medium'
-                : 'border-border bg-background hover:bg-muted/60',
+                ? 'border-primary bg-accent text-accent-foreground font-medium'
+                : 'border-border bg-card hover:bg-muted/70',
             )}
             onClick={() => onSelect(site.apexDomain)}
           >

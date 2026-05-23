@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 15 — Three Views & Toolbar (merged in `5f38467`, [PR #15](https://github.com/abhi-j0407/historia/pull/15)).
-- **Next phase:** Phase 16 — Design Pass (impeccable).
-- **Active branch:** none (`main` is the current tip; Phase 16 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10–15 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
+- **Last completed phase:** Phase 16 — Design Pass (impeccable) (PR open; merge pending coordinator).
+- **Next phase:** Phase 17 — Release Polish & v0.1.0.
+- **Active branch:** `phase/16-design` ([PR #16](https://github.com/abhi-j0407/historia/pull/16) — update URL if renumbered).
+- **Open PRs:** Phase 16 design pass.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI). **Phase 10–16 Chrome manual smoke** (viewport 1024/1440/1920 + three views at 7d/30d/all) — owner deferred. Before screenshots: baseline = Phase 15 `main` grayscale (see DESIGN.md).
 
 ---
 
@@ -29,6 +29,58 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 16 — Design Pass (impeccable) — 2026-05-23
+
+**Branch:** `phase/16-design`
+**PR:** [#16](https://github.com/abhi-j0407/historia/pull/16) (URL confirmed after `curl` create)
+**Status:** completed (automated gates; manual viewport + Chrome smoke deferred to owner)
+
+**Objective recap:** Visual identity pass only: PRODUCT.md + DESIGN.md, warm paper/copper tokens, INTENSITY_RAMP + WINNER_PALETTE, dashboard polish, HM-007 scroll on heatmap only, WCAG AA documented. No feature changes.
+
+**Files created:**
+
+- `PRODUCT.md`, `DESIGN.md`
+
+**Files modified:**
+
+- `src/dashboard/styles.css`, `heatmap-color.ts`, `Heatmap.tsx`, `heatmap-geometry.ts`, `heatmap-geometry.test.ts`
+- `src/core/palette.ts`
+- `src/dashboard/App.tsx`, `App.test.tsx`, `Header.tsx`, `Toolbar.tsx`, `StatsCard.tsx`, `ErrorBanner.tsx`, `SiteSwitcher.tsx`, `BackfillProgressBar.tsx`
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- No local `.woff2` fonts; curated system display stack (Iowan Old Style / Palatino / Georgia) per REL-001.
+- Before PNG screenshots not attached in-repo; DESIGN.md references Phase 15 baseline on `main`.
+
+**Decisions made during implementation:**
+
+- Warm archival aesthetic (copper intensity ramp, distinct winner hues) to satisfy DSGN-003 anti-default.
+- Default heatmap `cellSize` 11px (was 12px), documented in DESIGN.md.
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 144 passed
+- [x] `pnpm build` — exit 0 (~472 kB)
+- [ ] Manual smoke (PHASE-PLAN Steps 1, 6, 13) — **deferred.** Owner: `pnpm dev`, three views × 7d/30d/all at 1024/1440/1920; reduce-motion check.
+- [ ] CI green on PR head — pending after push
+
+**Coverage (where applicable):** N/A
+
+**Open follow-ups raised in this phase:**
+
+- Manual viewport + Chrome design smoke (owner).
+- Optional: attach before/after screenshots to PR from Phase 15 baseline.
+
+**Next phase entry point:** Phase 17 — icons, README, PRIVACY.md, v0.1.0 per PHASE-PLAN.
 
 ### Phase 15 — Three Views & Toolbar — 2026-05-23
 
