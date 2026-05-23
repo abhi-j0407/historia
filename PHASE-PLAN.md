@@ -3120,7 +3120,7 @@ Update this table as phases land. The phase is "Done" only when CI is green for 
 | 9   | Storage Facade                          | Service worker + storage | `phase/09-storage-facade`      | [#9](https://github.com/abhi-j0407/historia/pull/9)   | [x]    |
 | 10  | Service Worker Foundation               | Service worker + storage | `phase/10-sw-foundation`       | [#10](https://github.com/abhi-j0407/historia/pull/10) | [x]    |
 | 11  | Backfill Orchestrator                   | Service worker + storage | `phase/11-backfill`            | [#11](https://github.com/abhi-j0407/historia/pull/11) | [x]    |
-| 12  | Incremental Updates & Manual Refresh    | Service worker + storage | `phase/12-incremental`         |                                                       | [ ]    |
+| 12  | Incremental Updates & Manual Refresh    | Service worker + storage | `phase/12-incremental`         | [#12](https://github.com/abhi-j0407/historia/pull/12) | [x]    |
 | 13  | Dashboard Shell & Data Hooks            | Dashboard skeleton       | `phase/13-dashboard-shell`     |                                                       | [ ]    |
 | 14  | Heatmap Primitive                       | Dashboard skeleton       | `phase/14-heatmap`             |                                                       | [ ]    |
 | 15  | Three Views & Toolbar                   | Dashboard skeleton       | `phase/15-views`               |                                                       | [ ]    |

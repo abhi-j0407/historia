@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 12 — Incremental Updates & Manual Refresh (PR open: [PR #12](https://github.com/abhi-j0407/historia/pull/12), branch `phase/12-incremental`).
+- **Last completed phase:** Phase 12 — Incremental Updates & Manual Refresh (merged in `57d1a75`, [PR #12](https://github.com/abhi-j0407/historia/pull/12)).
 - **Next phase:** Phase 13 — Dashboard Shell & Data Hooks.
-- **Active branch:** `phase/12-incremental` (awaiting merge of PR #12).
-- **Open PRs:** [#12](https://github.com/abhi-j0407/historia/pull/12) — Incremental Updates & Manual Refresh.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10 Step 7**, **Phase 11 Step 5**, and **Phase 12 Step 6** Chrome manual smoke — owner deferred; see Phase 10/11/12 HANDOFF entries. Dashboard **Refresh** button wiring is Phase 13 (E-002); `force-refresh` in `index.ts` already calls `requestBackfill({ force: true })` (SW-005).
+- **Active branch:** none (`main` is the current tip; Phase 13 will create its own branch).
+- **Open PRs:** none.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10/11/12 Chrome manual smoke** — owner deferred; see respective HANDOFF entries. Phase 13 wires dashboard Refresh (E-002); worker `force-refresh` → `requestBackfill({ force: true })` is already in place (SW-005).
 
 ---
 
