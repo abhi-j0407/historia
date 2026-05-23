@@ -70,7 +70,7 @@ None
 - [x] `pnpm build` — exit 0 (~449 kB; `dashboard` chunk ~277 kB)
 - [ ] Manual smoke (PHASE-PLAN Step 9) — **deferred.** Owner: `pnpm dev`, open dashboard, confirm ViewPlaceholder heatmap + Tab through cells + native `<title>` on hover.
 - [ ] React Profiler 365-day render ≤16 ms in Chrome — **deferred** (see Deviations; pure prep path verified in vitest).
-- [ ] CI green on PR head — pending after push
+- [x] CI green on PR head — Lint, typecheck, test, build success on `e671a13`
 
 **Coverage (where applicable):** N/A (dashboard components; no new T-004 core gates)
 
