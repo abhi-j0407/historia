@@ -2877,7 +2877,7 @@ Update this table as phases land. The phase is "Done" only when CI is green for 
 | 0 | Preflight & Environment | — | n/a | n/a | [x] |
 | 1 | Repo Bootstrap | Foundation | `phase/01-repo-bootstrap` | [#1](https://github.com/abhi-j0407/historia/pull/1) | [x] |
 | 2 | WXT + React + TypeScript Scaffold | Foundation | `phase/02-wxt-scaffold` | [#2](https://github.com/abhi-j0407/historia/pull/2) | [x] |
-| 3 | Tailwind v4 & shadcn/ui Primitives | Foundation | `phase/03-tailwind-shadcn` | | [ ] |
+| 3 | Tailwind v4 & shadcn/ui Primitives | Foundation | `phase/03-tailwind-shadcn` | [#3](https://github.com/abhi-j0407/historia/pull/3) | [x] |
 | 4 | Lint, Format, Test Infrastructure | Foundation | `phase/04-quality-tooling` | | [ ] |
 | 5 | CI Pipeline | Foundation | `phase/05-ci-pipeline` | | [ ] |
 | 6 | Core Types & URL Filters | Data plumbing | `phase/06-core-types-filters` | | [ ] |

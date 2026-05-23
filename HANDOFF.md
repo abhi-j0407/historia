@@ -13,11 +13,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 3 — Tailwind v4 & shadcn/ui Primitives (branch `phase/03-tailwind-shadcn`, PR pending).
+- **Last completed phase:** Phase 3 — Tailwind v4 & shadcn/ui Primitives (merged in `c81c6f3`, [PR #3](https://github.com/abhi-j0407/historia/pull/3)).
 - **Next phase:** Phase 4 — Lint, Format, Test Infrastructure.
-- **Active branch:** `phase/03-tailwind-shadcn` (awaiting coordinator review).
-- **Open PRs:** pending (Phase 3).
-- **Open follow-ups:** none.
+- **Active branch:** none (`main` is the current tip; Phase 4 will create its own branch).
+- **Open PRs:** none.
+- **Open follow-ups:** none. Visual smoke for Phase 3 verified by coordinator (computed-style probe via static-served built `dashboard.html`: `<h1>` 30px, `<button>` HSL(0,0%,9%), system-stack font, no remote font CDN).
 
 ---
 
@@ -32,7 +32,7 @@
 ### Phase 3 — Tailwind v4 & shadcn/ui Primitives — 2026-05-23
 
 **Branch:** `phase/03-tailwind-shadcn`
-**PR:** pending
+**PR:** [#3](https://github.com/abhi-j0407/historia/pull/3) (merged in `c81c6f3`; PR opened by coordinator post-implementation — see process note in coordinator-side commit)
 **Status:** completed
 
 **Objective recap:** Wire Tailwind CSS v4 through `@tailwindcss/vite`, install the locked shadcn/ui primitives into `src/dashboard/components/ui/`, and verify the smoke-test dashboard renders Tailwind utilities with neutral grayscale tokens only.
@@ -71,7 +71,7 @@ None
 - [x] `src/dashboard/components/ui/` contains exactly 7 primitives (button, tabs, select, popover, tooltip, card, sheet)
 - [x] System font stack only (SEC-001); no remote font CDN
 - n/a (Phase 4) — `pnpm lint`, `pnpm test`
-- [ ] Manual smoke in Chrome — implementer did not re-run `pnpm dev`; coordinator should verify styled heading + shadcn button + focus ring
+- [x] Manual smoke verified by coordinator — computed-style probe on static-served built `dashboard.html`: `<h1>` 30px / system-stack font, `<button>` background `rgb(23,23,23)` ≈ HSL(0,0%,9%) (`--primary`), `<p>` color `rgb(115,115,115)` ≈ HSL(0,0%,45%) (`--muted-foreground`), `<main>` max-width 768px (`max-w-3xl`), body bg white. Button source includes `focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`.
 
 **Coverage (where applicable):** n/a
 

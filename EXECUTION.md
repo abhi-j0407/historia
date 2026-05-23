@@ -105,14 +105,18 @@ Start by reading PRD.md, PHASE-PLAN.md, and HANDOFF.md. Then summarize: where we
 
 Every implementer prompt MUST instruct the implementer that, as its **final action** before returning to the user, it constructs a ready-to-paste coordinator review prompt by filling the §5 template below with the phase's actual values and prints it as the last thing in its reply. The user copies the block verbatim and pastes it into the coordinator chat — no manual rewriting, no template lookup.
 
+**Hard pre-condition: the PR must already exist before the auto-prompt is generated.** The implementer MUST open the PR via the GitHub API (using the PAT embedded in the local `origin` remote URL — never echoed) BEFORE printing the auto-generated review block. If the API call returns anything other than HTTP 201, the implementer must STOP and return a `blocked — needs input` status with the API response body, NOT print a `/compare/...` URL or "PR: pending" placeholder. A `/compare/` URL is not a PR and is unacceptable in the auto-prompt or in HANDOFF.md.
+
 The implementer fills these slots:
 - `<N>` — the phase number it just implemented.
-- `<link>` — the PR URL it just opened.
+- `<link>` — the **fully-qualified PR URL** of the form `https://github.com/abhi-j0407/historia/pull/<number>` returned by the GitHub API as `html_url`. Never a `/compare/` URL, never `pending`, never a placeholder.
 - `phase/<NN>-<short-slug>` — the branch it pushed.
 
 The implementer also tailors the body of the §5 prompt to reflect the actual quality gates that apply to the phase (e.g. for Phase 1 the gates are the Phase 1 Success criteria, not `pnpm lint/typecheck/test/build`, because those tools are not yet installed). The implementer's coordinator-review-prompt block must be wrapped in a triple-backtick code fence so it round-trips cleanly.
 
-This rule is the cheapest way to keep the coordinator–implementer cycle frictionless. Forgetting this step is grounds for a "change requests" verdict from the coordinator.
+The implementer also writes the same fully-qualified PR URL into the new HANDOFF.md entry's `**PR:**` field at commit time. Marking that field as `pending` or `<pending>` is forbidden — open the PR first, then commit the HANDOFF entry with the URL filled in.
+
+This rule is the cheapest way to keep the coordinator–implementer cycle frictionless. Skipping the PR-open step, or printing a `/compare/` URL, or leaving HANDOFF "PR: pending" are all grounds for an automatic "change requests" verdict from the coordinator regardless of code-quality.
 
 ---
 
@@ -158,7 +162,7 @@ Workflow:
 6. Push: git push -u origin phase/<NN>-<short-slug>
 7. Open PR: use the PR template (.github/pull_request_template.md) once it exists (Phase 5 creates it; for earlier phases, write a brief PR body referencing Phase <N> and the relevant PRD IDs).
 8. Report back to me with: PR link, one-line status ("complete" or "blocked — needs input"), and a short note on any open follow-ups raised but not addressed in-scope.
-9. **Auto-generate the coordinator review prompt** as the LAST thing in your reply (per EXECUTION.md §4a). Fill the §5 template with this phase's actual values (`<N>` = the phase number, `<link>` = the PR URL, `phase/<NN>-<short-slug>` = the branch you pushed) and tailor the gate list to reflect the gates that actually apply to this phase (e.g. if certain `pnpm` scripts cannot run yet because their tooling is added in a later phase, substitute the phase's own Success criteria from PHASE-PLAN.md). Wrap the entire generated block in a triple-backtick code fence so the user can copy it verbatim. This is non-optional.
+9. **Auto-generate the coordinator review prompt** as the LAST thing in your reply (per EXECUTION.md §4a). Pre-condition: the PR MUST already be open with a real number; if `curl` to `POST /repos/.../pulls` did not return HTTP 201, STOP with `blocked — needs input` instead of generating the review block. Fill the §5 template with this phase's actual values (`<N>` = the phase number, `<link>` = the fully-qualified `https://github.com/abhi-j0407/historia/pull/<number>` URL — never a `/compare/` URL — `phase/<NN>-<short-slug>` = the branch you pushed). Tailor the gate list to reflect the gates that actually apply to this phase (e.g. if certain `pnpm` scripts cannot run yet because their tooling is added in a later phase, substitute the phase's own Success criteria from PHASE-PLAN.md). Wrap the entire generated block in a triple-backtick code fence so the user can copy it verbatim. This is non-optional.
 
 Do NOT merge the PR. The coordinator chat reviews and merges separately.
 
