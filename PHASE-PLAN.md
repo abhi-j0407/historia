@@ -3106,26 +3106,26 @@ gh pr create --fill                           # or open via UI
 
 Update this table as phases land. The phase is "Done" only when CI is green for the PR that delivers it and the Review checklist for that phase has been confirmed.
 
-| #   | Phase                                   | PRD §19.1 mapping        | Branch                         | PR                                                  | Status |
-| --- | --------------------------------------- | ------------------------ | ------------------------------ | --------------------------------------------------- | ------ |
-| 0   | Preflight & Environment                 | —                        | n/a                            | n/a                                                 | [x]    |
-| 1   | Repo Bootstrap                          | Foundation               | `phase/01-repo-bootstrap`      | [#1](https://github.com/abhi-j0407/historia/pull/1) | [x]    |
-| 2   | WXT + React + TypeScript Scaffold       | Foundation               | `phase/02-wxt-scaffold`        | [#2](https://github.com/abhi-j0407/historia/pull/2) | [x]    |
-| 3   | Tailwind v4 & shadcn/ui Primitives      | Foundation               | `phase/03-tailwind-shadcn`     | [#3](https://github.com/abhi-j0407/historia/pull/3) | [x]    |
-| 4   | Lint, Format, Test Infrastructure       | Foundation               | `phase/04-quality-tooling`     | [#4](https://github.com/abhi-j0407/historia/pull/4) | [x]    |
-| 5   | CI Pipeline                             | Foundation               | `phase/05-ci-pipeline`         | [#5](https://github.com/abhi-j0407/historia/pull/5) | [x]    |
-| 6   | Core Types & URL Filters                | Data plumbing            | `phase/06-core-types-filters`  | [#6](https://github.com/abhi-j0407/historia/pull/6) | [x]    |
-| 7   | Domain & Date Helpers                   | Data plumbing            | `phase/07-domain-dates`        | [#7](https://github.com/abhi-j0407/historia/pull/7) | [x]    |
-| 8   | Aggregation Engine, Intensity & Palette | Data plumbing            | `phase/08-aggregate-intensity` | [#8](https://github.com/abhi-j0407/historia/pull/8) | [x]    |
-| 9   | Storage Facade                          | Service worker + storage | `phase/09-storage-facade`      | [#9](https://github.com/abhi-j0407/historia/pull/9) | [x]    |
-| 10  | Service Worker Foundation               | Service worker + storage | `phase/10-sw-foundation`       |                                                     | [ ]    |
-| 11  | Backfill Orchestrator                   | Service worker + storage | `phase/11-backfill`            |                                                     | [ ]    |
-| 12  | Incremental Updates & Manual Refresh    | Service worker + storage | `phase/12-incremental`         |                                                     | [ ]    |
-| 13  | Dashboard Shell & Data Hooks            | Dashboard skeleton       | `phase/13-dashboard-shell`     |                                                     | [ ]    |
-| 14  | Heatmap Primitive                       | Dashboard skeleton       | `phase/14-heatmap`             |                                                     | [ ]    |
-| 15  | Three Views & Toolbar                   | Dashboard skeleton       | `phase/15-views`               |                                                     | [ ]    |
-| 16  | Design Pass (impeccable)                | Design pass              | `phase/16-design`              |                                                     | [ ]    |
-| 17  | Release Polish & v0.1.0                 | Polish + release prep    | `phase/17-release`             |                                                     | [ ]    |
+| #   | Phase                                   | PRD §19.1 mapping        | Branch                         | PR                                                    | Status |
+| --- | --------------------------------------- | ------------------------ | ------------------------------ | ----------------------------------------------------- | ------ |
+| 0   | Preflight & Environment                 | —                        | n/a                            | n/a                                                   | [x]    |
+| 1   | Repo Bootstrap                          | Foundation               | `phase/01-repo-bootstrap`      | [#1](https://github.com/abhi-j0407/historia/pull/1)   | [x]    |
+| 2   | WXT + React + TypeScript Scaffold       | Foundation               | `phase/02-wxt-scaffold`        | [#2](https://github.com/abhi-j0407/historia/pull/2)   | [x]    |
+| 3   | Tailwind v4 & shadcn/ui Primitives      | Foundation               | `phase/03-tailwind-shadcn`     | [#3](https://github.com/abhi-j0407/historia/pull/3)   | [x]    |
+| 4   | Lint, Format, Test Infrastructure       | Foundation               | `phase/04-quality-tooling`     | [#4](https://github.com/abhi-j0407/historia/pull/4)   | [x]    |
+| 5   | CI Pipeline                             | Foundation               | `phase/05-ci-pipeline`         | [#5](https://github.com/abhi-j0407/historia/pull/5)   | [x]    |
+| 6   | Core Types & URL Filters                | Data plumbing            | `phase/06-core-types-filters`  | [#6](https://github.com/abhi-j0407/historia/pull/6)   | [x]    |
+| 7   | Domain & Date Helpers                   | Data plumbing            | `phase/07-domain-dates`        | [#7](https://github.com/abhi-j0407/historia/pull/7)   | [x]    |
+| 8   | Aggregation Engine, Intensity & Palette | Data plumbing            | `phase/08-aggregate-intensity` | [#8](https://github.com/abhi-j0407/historia/pull/8)   | [x]    |
+| 9   | Storage Facade                          | Service worker + storage | `phase/09-storage-facade`      | [#9](https://github.com/abhi-j0407/historia/pull/9)   | [x]    |
+| 10  | Service Worker Foundation               | Service worker + storage | `phase/10-sw-foundation`       | [#10](https://github.com/abhi-j0407/historia/pull/10) | [x]    |
+| 11  | Backfill Orchestrator                   | Service worker + storage | `phase/11-backfill`            |                                                       | [ ]    |
+| 12  | Incremental Updates & Manual Refresh    | Service worker + storage | `phase/12-incremental`         |                                                       | [ ]    |
+| 13  | Dashboard Shell & Data Hooks            | Dashboard skeleton       | `phase/13-dashboard-shell`     |                                                       | [ ]    |
+| 14  | Heatmap Primitive                       | Dashboard skeleton       | `phase/14-heatmap`             |                                                       | [ ]    |
+| 15  | Three Views & Toolbar                   | Dashboard skeleton       | `phase/15-views`               |                                                       | [ ]    |
+| 16  | Design Pass (impeccable)                | Design pass              | `phase/16-design`              |                                                       | [ ]    |
+| 17  | Release Polish & v0.1.0                 | Polish + release prep    | `phase/17-release`             |                                                       | [ ]    |
 
 ### Handoff Block template
 

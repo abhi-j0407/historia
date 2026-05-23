@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 10 — Service Worker Foundation ([PR #10](https://github.com/abhi-j0407/historia/pull/10), branch `phase/10-sw-foundation`).
+- **Last completed phase:** Phase 10 — Service Worker Foundation (merged in `a9723ee`, [PR #10](https://github.com/abhi-j0407/historia/pull/10)).
 - **Next phase:** Phase 11 — Backfill Orchestrator.
-- **Active branch:** `phase/10-sw-foundation` (awaiting merge of PR #10).
-- **Open PRs:** [#10](https://github.com/abhi-j0407/historia/pull/10) — Service Worker Foundation.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). Phase 10 Step 7 Chrome manual smoke deferred — owner will verify before release (see Phase 10 entry).
+- **Active branch:** none (`main` is the current tip; Phase 11 will create its own branch).
+- **Open PRs:** none.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10 Step 7 Chrome manual smoke** — owner deferred; verify toolbar → dashboard and `force-refresh` stub log when convenient, then check the box in the Phase 10 HANDOFF entry.
 
 ---
 
