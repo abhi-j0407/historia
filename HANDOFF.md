@@ -13,10 +13,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 1 — Repo Bootstrap.
+- **Last completed phase:** Phase 1 — Repo Bootstrap (merged in `fc648e7`, [PR #1](https://github.com/abhi-j0407/historia/pull/1)).
 - **Next phase:** Phase 2 — WXT + React + TypeScript Scaffold.
-- **Active branch:** `phase/01-repo-bootstrap`.
-- **Open PRs:** https://github.com/abhi-j0407/historia/pull/1
+- **Active branch:** none (`main` is the current tip; Phase 2 will create its own branch).
+- **Open PRs:** none.
 - **Open follow-ups:** none.
 
 ---

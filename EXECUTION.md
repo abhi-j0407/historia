@@ -18,7 +18,7 @@ A single chat instance you keep open for the duration of the project. Responsibi
 - Owns the project mental model. Reads [HANDOFF.md](./HANDOFF.md), [PHASE-PLAN.md](./PHASE-PLAN.md), and the current branch state to know what's next.
 - Generates the implementer prompt for each phase.
 - After each phase, **independently reviews** the implementer's PR: inspects the actual diff, re-runs the quality gates locally, compares the HANDOFF.md entry against the diff, and walks the phase's Review checklist.
-- Approves the merge. Updates the [PHASE-PLAN.md status tracker](./PHASE-PLAN.md#status-tracker) on `main`.
+- **Takes direct action on the merge.** When approved, the coordinator squash-merges the PR via the GitHub API (using the PAT embedded in the local `origin` remote URL — never echoed to chat), pulls `main`, deletes the local + remote branch, updates the [PHASE-PLAN.md status tracker](./PHASE-PLAN.md#status-tracker) and HANDOFF "Current state", commits + pushes those updates on `main`, and proceeds to the next phase prompt without round-tripping through the user. The user is only involved when a real decision (PRD ambiguity, scope expansion, blocker) needs human judgment.
 - Catches drift before it compounds.
 
 ### Implementer (one fresh chat per phase)
@@ -31,6 +31,7 @@ A brand-new chat opened for each phase. Knows nothing except what's in the repo 
 - Runs the full quality gate (`pnpm lint && pnpm typecheck && pnpm test && pnpm build`) plus any manual smoke tests the phase requires.
 - Appends a fresh entry to [HANDOFF.md](./HANDOFF.md) using the template at the bottom of that file.
 - Commits, pushes the phase branch, opens a PR. Reports the PR link back to you.
+- **Auto-generates the coordinator review prompt** as the final step of its turn (see §4a below) so the user can paste it directly into the coordinator chat with zero rewriting.
 - Does **not** merge to `main` — coordinator owns the merge.
 
 ### Why this separation works
@@ -100,6 +101,21 @@ Start by reading PRD.md, PHASE-PLAN.md, and HANDOFF.md. Then summarize: where we
 
 ---
 
+## 4a. Auto-generation of the coordinator review prompt (mandatory final implementer step)
+
+Every implementer prompt MUST instruct the implementer that, as its **final action** before returning to the user, it constructs a ready-to-paste coordinator review prompt by filling the §5 template below with the phase's actual values and prints it as the last thing in its reply. The user copies the block verbatim and pastes it into the coordinator chat — no manual rewriting, no template lookup.
+
+The implementer fills these slots:
+- `<N>` — the phase number it just implemented.
+- `<link>` — the PR URL it just opened.
+- `phase/<NN>-<short-slug>` — the branch it pushed.
+
+The implementer also tailors the body of the §5 prompt to reflect the actual quality gates that apply to the phase (e.g. for Phase 1 the gates are the Phase 1 Success criteria, not `pnpm lint/typecheck/test/build`, because those tools are not yet installed). The implementer's coordinator-review-prompt block must be wrapped in a triple-backtick code fence so it round-trips cleanly.
+
+This rule is the cheapest way to keep the coordinator–implementer cycle frictionless. Forgetting this step is grounds for a "change requests" verdict from the coordinator.
+
+---
+
 ## 4. Implementer chat — per-phase prompt template
 
 Each time you start a new phase, you ask the coordinator: *"Generate the implementer prompt for Phase N."* The coordinator produces a filled-in version of the template below. You open a **fresh chat**, paste it, and let the implementer work.
@@ -140,8 +156,9 @@ Workflow:
    - Conventional Commit message (feat/fix/chore/etc.). One commit for the implementation, one commit for the HANDOFF.md update is fine. Or a single commit with both — your call.
    - Never --no-verify.
 6. Push: git push -u origin phase/<NN>-<short-slug>
-7. Open PR: use the PR template (.github/pull_request_template.md). In the PR body, reference Phase <N> and the relevant PRD IDs.
+7. Open PR: use the PR template (.github/pull_request_template.md) once it exists (Phase 5 creates it; for earlier phases, write a brief PR body referencing Phase <N> and the relevant PRD IDs).
 8. Report back to me with: PR link, one-line status ("complete" or "blocked — needs input"), and a short note on any open follow-ups raised but not addressed in-scope.
+9. **Auto-generate the coordinator review prompt** as the LAST thing in your reply (per EXECUTION.md §4a). Fill the §5 template with this phase's actual values (`<N>` = the phase number, `<link>` = the PR URL, `phase/<NN>-<short-slug>` = the branch you pushed) and tailor the gate list to reflect the gates that actually apply to this phase (e.g. if certain `pnpm` scripts cannot run yet because their tooling is added in a later phase, substitute the phase's own Success criteria from PHASE-PLAN.md). Wrap the entire generated block in a triple-backtick code fence so the user can copy it verbatim. This is non-optional.
 
 Do NOT merge the PR. The coordinator chat reviews and merges separately.
 
