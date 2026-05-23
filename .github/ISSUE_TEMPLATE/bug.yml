@@ -1,0 +1,24 @@
+name: Bug report
+description: Something is broken
+labels: ['bug']
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: A clear and concise description of the issue.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Numbered list of steps.
+    validations:
+      required: true
+  - type: input
+    id: chrome-version
+    attributes:
+      label: Chrome / Chromium version
+    validations:
+      required: true
