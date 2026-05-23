@@ -14,10 +14,10 @@
 ## Current state
 
 - **Last completed phase:** Phase 1 — Repo Bootstrap (merged in `fc648e7`, [PR #1](https://github.com/abhi-j0407/historia/pull/1)).
-- **Next phase:** Phase 2 — WXT + React + TypeScript Scaffold.
-- **Active branch:** none (`main` is the current tip; Phase 2 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** none.
+- **Next phase:** Phase 3 — Tailwind v4 & shadcn/ui Primitives.
+- **Active branch:** `phase/02-wxt-scaffold`
+- **Open PRs:** <pending>
+- **Open follow-ups:** Visual smoke (dashboard tab shows heading + paragraph) pending coordinator confirmation with user — see Phase 2 quality gates.
 
 ---
 
@@ -28,6 +28,66 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 2 — WXT + React + TypeScript Scaffold — 2026-05-23
+
+**Branch:** `phase/02-wxt-scaffold`
+**PR:** <pending>
+**Status:** completed
+
+**Objective recap:** Stand up WXT with the React module, strict TypeScript, the locked `src/` layout from PRD §4, and a smoke-test dashboard page that renders "historia" when the extension is loaded in Chrome via `pnpm dev`.
+
+**Files created:**
+- `tsconfig.json`
+- `wxt.config.ts`
+- `wxt-env.d.ts`
+- `src/entrypoints/background.ts`
+- `src/entrypoints/dashboard.html`
+- `src/entrypoints/dashboard/main.tsx`
+- `src/background/index.ts`
+- `src/dashboard/App.tsx`
+- `public/icon-16.png`
+- `public/icon-32.png`
+- `public/icon-48.png`
+- `public/icon-128.png`
+- `src/core/.gitkeep`
+- `src/dashboard/views/.gitkeep`
+- `src/dashboard/components/.gitkeep`
+- `src/dashboard/components/ui/.gitkeep`
+- `src/dashboard/hooks/.gitkeep`
+- `tests/fixtures/.gitkeep`
+
+**Files modified:**
+- `HANDOFF.md` (this entry + Current state)
+- `package.json` (WXT/React/TS deps; `vitest@^2` + `pnpm.overrides.vite` — see Deviations)
+- `pnpm-lock.yaml` (first appearance in repo)
+
+**Deviations from plan:**
+- [PHASE-PLAN.md Phase 2 step 16](./PHASE-PLAN.md#phase-2--wxt--react--typescript-scaffold) says `git add .`; staging uses explicit paths per [PHASE-PLAN.md §A.8](./PHASE-PLAN.md#a8-commit-branching-pr-rel-103) (no `git add -A` / `git add .`).
+- Added `wxt-env.d.ts` with `/// <reference path="./.wxt/types/imports.d.ts" />` so `defineBackground` resolves under the plan’s `include: ["src", "tests", "*.config.*", "*.d.ts"]` without widening `include` to `.wxt/types` (generated, gitignored).
+- Installed `vitest@^2` early (Phase 4 step 6) because [PHASE-PLAN.md Phase 2 step 2](./PHASE-PLAN.md#phase-2--wxt--react--typescript-scaffold) `types: ["chrome", "vitest/globals"]` fails `pnpm typecheck` without it; added `pnpm.overrides.vite: "8.0.14"` so `vitest@2` does not pin Vite 5 and break `pnpm build` / `@vitejs/plugin-react` (Vite 8 peer).
+- Placeholder icons via Python 3 + Pillow (`pip3 install --user Pillow`) after ImageMagick (`magick`/`convert`) was unavailable.
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+- [x] `pnpm typecheck` clean — `tsc --noEmit` exit 0 (no output)
+- [x] `pnpm build` clean — `.output/chrome-mv3/manifest.json` 409 B; `manifest_version: 3`; `permissions: ["history","storage","alarms"]`; no `host_permissions`; no `web_accessible_resources`; icons `icon-16.png` … `icon-128.png`
+- [x] Manifest contains only the three permissions; no `host_permissions`; no `web_accessible_resources`
+- [x] `pnpm dev` starts without fatal errors — log excerpt: `✔ Started dev server`, `✔ Built extension`, `✔ Opened browser`; no `error`/`failed` lines in `/tmp/historia-dev.log`
+- [ ] Visual smoke: dashboard tab renders "historia" + "Dashboard scaffold is alive." — **pending user visual smoke** (implementer cannot confirm rendered Chrome tab)
+- n/a (Phase 4) — `pnpm lint`, `pnpm test`
+- n/a (Phase 5) — CI green
+
+**Coverage (where applicable):** n/a
+
+**Open follow-ups raised in this phase:**
+- Coordinator must confirm visual smoke with user before approving merge (toolbar icon → dashboard tab content).
+
+**Next phase entry point:** Phase 3 — open PHASE-PLAN.md → "Phase 3 — Tailwind v4 & shadcn/ui Primitives" → first command: `pnpm add -D tailwindcss@^4 @tailwindcss/vite@^4`.
+
+---
 
 ### Phase 1 — Repo Bootstrap — 2026-05-23
 
