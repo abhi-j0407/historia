@@ -3,9 +3,11 @@ import { fakeBrowser } from 'wxt/testing/fake-browser';
 
 import { registerBackgroundListeners } from './index';
 
+type OnVisitedListener = Parameters<typeof chrome.history.onVisited.addListener>[0];
+
 /** @webext-core/fake-browser does not implement history.onVisited yet. */
 function installHistoryOnVisitedMock(): void {
-  const listeners = new Set<Parameters<chrome.history.OnVisitedEvent['addListener']>[0]>();
+  const listeners = new Set<OnVisitedListener>();
   fakeBrowser.history.onVisited.addListener = vi.fn((listener) => {
     listeners.add(listener);
   });
