@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 6 — Core Types & URL Filters (merged in `4f2b7f3`, [PR #6](https://github.com/abhi-j0407/historia/pull/6)).
-- **Next phase:** Phase 7 — Domain & Date Helpers.
-- **Active branch:** none (`main` is the current tip; Phase 7 will create its own branch).
-- **Open PRs:** none.
+- **Last completed phase:** Phase 7 — Domain & Date Helpers ([PR #7](https://github.com/abhi-j0407/historia/pull/7), branch `phase/07-domain-dates`).
+- **Next phase:** Phase 8 — Aggregation Engine, Intensity & Palette.
+- **Active branch:** `phase/07-domain-dates` (awaiting coordinator review / merge).
+- **Open PRs:** [#7](https://github.com/abhi-j0407/historia/pull/7).
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
 
 ---
@@ -29,6 +29,54 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 7 — Domain & Date Helpers — 2026-05-23
+
+**Branch:** `phase/07-domain-dates`
+**PR:** [#7](https://github.com/abhi-j0407/historia/pull/7)
+**Status:** completed
+
+**Objective recap:** Add `domain.ts` (tldts apex extraction) and `dates.ts` (date-fns day-key helpers, range enumeration, UX-S-02 selector resolution) in pure `src/core/` with T-004 coverage.
+
+**Files created:**
+
+- `src/core/domain.ts`
+- `src/core/domain.test.ts`
+- `src/core/dates.ts`
+- `src/core/dates.test.ts`
+
+**Files modified:**
+
+- `package.json` (runtime deps `tldts@^7`, `date-fns@^4` per REL-001)
+- `pnpm-lock.yaml`
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- `getDomain(url, { allowPrivateDomains: true })` — default `getDomain` returns `github.io` for `user.github.io`; the flag matches PRD glossary / required test case.
+- `/* v8 ignore next */` on ESM import lines — Vitest v8 counts bare imports as uncovered statements/branches; ignores keep T-004 per-file gates honest without changing behavior.
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format` / `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings on `log.ts`, shadcn `button.tsx`)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 63 tests passed
+- [x] `pnpm test:coverage` — `domain.ts` and `dates.ts` each **100%** statements/branches/functions/lines (T-004 ≥ 90%)
+- [x] `pnpm build` — exit 0 (~203 kB)
+- [x] CI green on PR — [verify run](https://github.com/abhi-j0407/historia/actions/runs/26331808129) success on `6cf06ea`
+
+**Coverage (where applicable):** `src/core/domain.ts` — Stmts 100%, Branch 100%, Funcs 100%, Lines 100%. `src/core/dates.ts` — Stmts 100%, Branch 100%, Funcs 100%, Lines 100%.
+
+**Open follow-ups raised in this phase:**
+None
 
 ### Phase 6 — Core Types & URL Filters — 2026-05-23
 
