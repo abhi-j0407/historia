@@ -3117,7 +3117,7 @@ Update this table as phases land. The phase is "Done" only when CI is green for 
 | 6   | Core Types & URL Filters                | Data plumbing            | `phase/06-core-types-filters`  | [#6](https://github.com/abhi-j0407/historia/pull/6) | [x]    |
 | 7   | Domain & Date Helpers                   | Data plumbing            | `phase/07-domain-dates`        | [#7](https://github.com/abhi-j0407/historia/pull/7) | [x]    |
 | 8   | Aggregation Engine, Intensity & Palette | Data plumbing            | `phase/08-aggregate-intensity` | [#8](https://github.com/abhi-j0407/historia/pull/8) | [x]    |
-| 9   | Storage Facade                          | Service worker + storage | `phase/09-storage-facade`      |                                                     | [ ]    |
+| 9   | Storage Facade                          | Service worker + storage | `phase/09-storage-facade`      | [#9](https://github.com/abhi-j0407/historia/pull/9) | [x]    |
 | 10  | Service Worker Foundation               | Service worker + storage | `phase/10-sw-foundation`       |                                                     | [ ]    |
 | 11  | Backfill Orchestrator                   | Service worker + storage | `phase/11-backfill`            |                                                     | [ ]    |
 | 12  | Incremental Updates & Manual Refresh    | Service worker + storage | `phase/12-incremental`         |                                                     | [ ]    |

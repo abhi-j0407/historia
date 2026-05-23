@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 9 — Storage Facade ([PR #9](https://github.com/abhi-j0407/historia/pull/9), branch `phase/09-storage-facade` — awaiting merge).
+- **Last completed phase:** Phase 9 — Storage Facade (merged in `11bc8aa`, [PR #9](https://github.com/abhi-j0407/historia/pull/9)).
 - **Next phase:** Phase 10 — Service Worker Foundation.
-- **Active branch:** `phase/09-storage-facade`.
-- **Open PRs:** [#9](https://github.com/abhi-j0407/historia/pull/9).
+- **Active branch:** none (`main` is the current tip; Phase 10 will create its own branch).
+- **Open PRs:** none.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
 
 ---
