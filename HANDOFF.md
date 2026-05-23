@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 14 — Heatmap Primitive (merged in `c9784e5`, [PR #14](https://github.com/abhi-j0407/historia/pull/14)).
-- **Next phase:** Phase 15 — Three Views & Toolbar.
-- **Active branch:** none (`main` is the current tip; Phase 15 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10–14 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
+- **Last completed phase:** Phase 15 — Three Views & Toolbar (PR open on `phase/15-views`; merge pending coordinator review).
+- **Next phase:** Phase 16 — Design Pass (impeccable).
+- **Active branch:** `phase/15-views`.
+- **Open PRs:** [#15](https://github.com/abhi-j0407/historia/pull/15) (`phase/15-views`).
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10–15 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
 
 ---
 
@@ -29,6 +29,58 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 15 — Three Views & Toolbar — 2026-05-23
+
+**Branch:** `phase/15-views`
+**PR:** [#15](https://github.com/abhi-j0407/historia/pull/15)
+**Status:** completed (automated gates; Phase 15 Step 11 manual Chrome smoke deferred to owner)
+
+**Objective recap:** Ship PerSiteView, OverallView, WinnersView with range-filter helpers, SiteSwitcher, StatsCard, Favicon (SEC-002); wire App view selection, UX-PS-02 apex fallback, HM-007 horizontal scroll; replace ViewPlaceholder.
+
+**Files created:**
+
+- `src/dashboard/lib/range-filter.ts`, `range-filter.test.ts`
+- `src/dashboard/components/Favicon.tsx`, `Favicon.test.tsx`
+- `src/dashboard/components/SiteSwitcher.tsx`, `SiteSwitcher.test.tsx`
+- `src/dashboard/components/StatsCard.tsx`
+- `src/dashboard/views/PerSiteView.tsx`, `PerSiteView.test.tsx`
+- `src/dashboard/views/OverallView.tsx`, `OverallView.test.tsx`
+- `src/dashboard/views/WinnersView.tsx`, `WinnersView.test.tsx`
+
+**Files modified:**
+
+- `src/dashboard/App.tsx`, `App.test.tsx`
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- `WinnersView` test builds a 12-site synthetic aggregate so the legend reliably has 11 entries (fixture has fewer than 10 top sites).
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings on `log.ts`, shadcn `button.tsx`)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 144 tests passed (17 new dashboard tests)
+- [x] `pnpm build` — exit 0 (~467 kB; `dashboard` chunk ~293 kB)
+- [ ] Manual smoke (PHASE-PLAN Step 11) — **deferred.** Owner: `pnpm dev`, three tabs, date range, per-site chips + Show more sheet, heatmap tooltips, Refresh.
+- [ ] CI green on PR head — pending
+
+**Coverage (where applicable):** N/A (dashboard views; no new T-004 core gates)
+
+**Open follow-ups raised in this phase:**
+
+- **Manual smoke (Step 11):** Owner to verify three views, site switcher sheet, tooltips, and prefs persistence in Chrome.
+
+**Next phase entry point:** Phase 16 — open PHASE-PLAN.md → "Phase 16 — Design Pass (impeccable)" → audit screenshots.
 
 ### Phase 14 — Heatmap Primitive — 2026-05-23
 
