@@ -61,7 +61,7 @@ export function computeGeometry(
   range: { start: DayKey; end: DayKey },
   options?: { cellSize?: number; cellGap?: number },
 ): HeatmapGeometry {
-  const cellSize = options?.cellSize ?? 12;
+  const cellSize = options?.cellSize ?? 11;
   const cellGap = options?.cellGap ?? 2;
   const stride = cellSize + cellGap;
   const padStart = sundayOnOrBefore(range.start);

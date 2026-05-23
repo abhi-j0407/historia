@@ -1,20 +1,20 @@
-/** Winner-view color assignment (UX-W-02); final hex values land in Phase 16. */
+/** Winner-view color assignment (UX-W-02); hex constants only (FR-S-01). */
 
 import type { SiteRank } from './types';
 
-// Placeholder grayscale ramp until design pass (Phase 16).
-const PLACEHOLDER_PALETTE: readonly string[] = [
-  '#111827',
-  '#1f2937',
-  '#374151',
-  '#4b5563',
-  '#6b7280',
-  '#9ca3af',
-  '#a8a29e',
-  '#d1d5db',
-  '#d4d4d8',
-  '#e5e7eb',
-  '#f3f4f6',
+/** Eleven-slot categorical ramp: ranks 1–10 plus neutral Other (index 10). */
+export const WINNER_PALETTE: readonly string[] = [
+  '#7A4E2A',
+  '#2F6B4F',
+  '#1F5C8C',
+  '#9C2B30',
+  '#5C3D8C',
+  '#0B7285',
+  '#B45309',
+  '#4A6B5C',
+  '#7C3AED',
+  '#C2410C',
+  '#8A8478',
 ] as const;
 
 export interface WinnerPalette {
@@ -26,10 +26,10 @@ export interface WinnerPalette {
 export function buildWinnerPalette(topSites: readonly SiteRank[]): WinnerPalette {
   const ranked = topSites.slice(0, 10);
   const rankByApex = new Map(ranked.map((site, index) => [site.apexDomain, index]));
-  const otherColor = PLACEHOLDER_PALETTE[10]!;
+  const otherColor = WINNER_PALETTE[10]!;
 
   const legend: { color: string; apex: string | null }[] = ranked.map((site, index) => ({
-    color: PLACEHOLDER_PALETTE[index]!,
+    color: WINNER_PALETTE[index]!,
     apex: site.apexDomain,
   }));
   legend.push({ color: otherColor, apex: null });
@@ -37,7 +37,7 @@ export function buildWinnerPalette(topSites: readonly SiteRank[]): WinnerPalette
   return {
     colorOf(apex: string): string {
       const rank = rankByApex.get(apex);
-      return rank === undefined ? otherColor : PLACEHOLDER_PALETTE[rank]!;
+      return rank === undefined ? otherColor : WINNER_PALETTE[rank]!;
     },
     legend,
   };

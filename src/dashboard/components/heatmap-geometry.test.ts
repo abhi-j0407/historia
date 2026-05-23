@@ -40,14 +40,15 @@ describe('computeGeometry', () => {
     }
   });
 
-  it('uses default cell size 12 and gap 2 with grid offsets 28 and 18', () => {
+  it('uses default cell size 11 and gap 2 with grid offsets 28 and 18', () => {
     const geometry = computeGeometry({ start: '2026-05-17', end: '2026-05-23' });
 
-    expect(geometry.cellSize).toBe(12);
+    expect(geometry.cellSize).toBe(11);
     expect(geometry.cellGap).toBe(2);
     expect(geometry.gridLeft).toBe(28);
     expect(geometry.gridTop).toBe(18);
-    expect(geometry.width).toBe(28 + 14);
-    expect(geometry.height).toBe(18 + 7 * 14);
+    const stride = 11 + 2;
+    expect(geometry.width).toBe(28 + stride);
+    expect(geometry.height).toBe(18 + 7 * stride);
   });
 });

@@ -25,16 +25,16 @@ export function BackfillProgressBar({
     >
       <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
         {indeterminate ? (
-          <div className="bg-foreground/40 h-full w-full motion-safe:animate-pulse" />
+          <div className="bg-primary/50 h-full w-full motion-safe:animate-pulse" />
         ) : (
           <div
-            className="bg-foreground/70 h-full motion-safe:transition-[width]"
+            className="bg-primary h-full motion-safe:transition-[width] motion-safe:duration-300 motion-safe:ease-out"
             style={{ width: `${percent}%` }}
           />
         )}
       </div>
       <p className="text-muted-foreground text-xs">
-        Reading your history… {progress.processed} of {progress.total}
+        Syncing your history locally… {progress.processed} of {progress.total}
       </p>
     </div>
   );

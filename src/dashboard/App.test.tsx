@@ -75,7 +75,7 @@ describe('App', () => {
     const empty = { ...sampleAggregate(), topSites: [] };
     mockHooks({ aggregate: empty, isInitialLoad: false });
     render(<App />);
-    expect(screen.getByText(/nothing to show yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/no browsing rhythm yet/i)).toBeInTheDocument();
   });
 
   it('renders per-site view with heatmap when lastView is per-site', () => {
@@ -121,7 +121,7 @@ describe('App', () => {
     ).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('invokes sendForceRefresh when Refresh is clicked', async () => {
+  it('invokes sendForceRefresh when sync control is clicked', async () => {
     const user = userEvent.setup();
     const sendSpy = vi.spyOn(storageBridge, 'sendForceRefresh').mockResolvedValue();
     mockHooks({ aggregate: sampleAggregate(), isInitialLoad: false });
@@ -147,7 +147,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByRole('alert')).toHaveTextContent(/couldn't read your history/i);
+    expect(screen.getByRole('alert')).toHaveTextContent(/could not read your history/i);
     consoleSpy.mockRestore();
   });
 });
