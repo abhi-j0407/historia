@@ -15,9 +15,9 @@
 ## Current state
 
 - **Last completed phase:** Phase 7 — Domain & Date Helpers (merged in `6a1bca5`, [PR #7](https://github.com/abhi-j0407/historia/pull/7)).
-- **Next phase:** Phase 8 — Aggregation Engine, Intensity & Palette.
-- **Active branch:** none (`main` is the current tip; Phase 8 will create its own branch).
-- **Open PRs:** none.
+- **Next phase:** Phase 9 — Storage Facade.
+- **Active branch:** `phase/08-aggregate-intensity` ([PR #8](https://github.com/abhi-j0407/historia/pull/8) open, awaiting merge).
+- **Open PRs:** [#8](https://github.com/abhi-j0407/historia/pull/8) — Phase 8 — Aggregation Engine, Intensity & Palette.
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
 
 ---
@@ -29,6 +29,58 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 8 — Aggregation Engine, Intensity & Palette — 2026-05-23
+
+**Branch:** `phase/08-aggregate-intensity`
+**PR:** [#8](https://github.com/abhi-j0407/historia/pull/8)
+**Status:** completed (open PR, pending merge)
+
+**Objective recap:** Pure `aggregate()` (B-005..B-008), HM-003 intensity bucketing, UX-W-02 winner palette placeholders, and T-002 synthetic history fixture — all unit-tested in `src/core/`.
+
+**Files created:**
+
+- `src/core/aggregate.ts`
+- `src/core/aggregate.test.ts`
+- `src/core/intensity.ts`
+- `src/core/intensity.test.ts`
+- `src/core/palette.ts`
+- `src/core/palette.test.ts`
+- `tests/fixtures/synthetic-history.ts`
+
+**Files modified:**
+
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- `/* v8 ignore next */` on `aggregate.ts` import line and `intensity.ts` defensive `j >= n` quantile branch — matches Phase 7 pattern for T-004 per-file gates without changing behavior.
+- Synthetic fixture uses per-day hour caps (`9 + i`) so cumulative hours do not roll into the next calendar day.
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0 (existing `node_modules`)
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings on `log.ts`, shadcn `button.tsx`)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 79 tests passed
+- [x] `pnpm test:coverage` — `aggregate.ts`, `intensity.ts`, `palette.ts`, `filters.ts`, `dates.ts`, `domain.ts` each ≥ 90% statements/branches/functions/lines (T-004)
+- [x] `pnpm build` — exit 0 (~203 kB)
+- [x] FR-S-01 spot-check — ESLint `no-restricted-globals` flags `chrome` in `src/core/` (probe file not committed)
+- [x] CI green on PR — [CI run](https://github.com/abhi-j0407/historia/actions/runs/26332144338) success on `369d4e7`
+
+**Coverage (where applicable):** `aggregate.ts` — Stmts 100%, Branch 100%, Funcs 100%, Lines 100%. `intensity.ts` — Stmts 100%, Branch 90.9%, Funcs 100%, Lines 100%. `palette.ts` — 100% all metrics.
+
+**Open follow-ups raised in this phase:**
+None
+
+**Next phase entry point:** Phase 9 — open PHASE-PLAN.md → "Phase 9 — Storage Facade" → create `src/background/cache.ts`.
 
 ### Phase 7 — Domain & Date Helpers — 2026-05-23
 
