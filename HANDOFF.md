@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 11 — Backfill Orchestrator (merged in `c2e20a1`, [PR #11](https://github.com/abhi-j0407/historia/pull/11)).
-- **Next phase:** Phase 12 — Incremental Updates & Manual Refresh.
-- **Active branch:** none (`main` is the current tip; Phase 12 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10 Step 7** and **Phase 11 Step 5** Chrome manual smoke — owner deferred; see Phase 10/11 HANDOFF entries.
+- **Last completed phase:** Phase 12 — Incremental Updates & Manual Refresh (PR open: [PR #12](https://github.com/abhi-j0407/historia/pull/12), branch `phase/12-incremental`).
+- **Next phase:** Phase 13 — Dashboard Shell & Data Hooks.
+- **Active branch:** `phase/12-incremental` (awaiting merge of PR #12).
+- **Open PRs:** [#12](https://github.com/abhi-j0407/historia/pull/12) — Incremental Updates & Manual Refresh.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10 Step 7**, **Phase 11 Step 5**, and **Phase 12 Step 6** Chrome manual smoke — owner deferred; see Phase 10/11/12 HANDOFF entries. Dashboard **Refresh** button wiring is Phase 13 (E-002); `force-refresh` in `index.ts` already calls `requestBackfill({ force: true })` (SW-005).
 
 ---
 
@@ -29,6 +29,58 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 12 — Incremental Updates & Manual Refresh — 2026-05-23
+
+**Branch:** `phase/12-incremental`
+**PR:** [#12](https://github.com/abhi-j0407/historia/pull/12)
+**Status:** completed (automated gates + CI; Phase 12 Step 6 Chrome manual smoke deferred to owner)
+
+**Objective recap:** SW-004 debounced `chrome.alarms` incremental path: `mergeIncremental` pure mutation (B-005/B-007), history delta fetch since `lastAggregatedAt`, single `writeAggregate` per cycle (P-003), `INCREMENTAL_FALLBACK` → full backfill. SW-005 force-refresh unchanged in `index.ts` (dashboard Refresh button lands Phase 13).
+
+**Files created:**
+
+- `src/background/incremental.ts`
+- `src/background/incremental.test.ts`
+- `src/background/debounce.test.ts`
+- `src/core/aggregate-ranking.ts`
+
+**Files modified:**
+
+- `src/background/debounce.ts` (full `handleRecomputeAlarm` orchestration)
+- `src/core/aggregate.ts` (uses shared B-005/B-007 helpers)
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- Extracted `compareSiteRank`, `pickDailyWinner`, `topSitesFromSiteDays`, and `overallTotalsFromSiteDays` into `src/core/aggregate-ranking.ts` (shared by `aggregate.ts` and `incremental.ts` per review checklist).
+- Commit paths include `aggregate-ranking.ts` in addition to the paths listed in the phase task brief.
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings on `log.ts`, shadcn `button.tsx`)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 106 tests passed (11 new: 6 incremental + 5 debounce)
+- [x] `pnpm build` — exit 0 (~339 kB; `background.js` ~140 kB)
+- [ ] Manual smoke (PHASE-PLAN Step 6) — **deferred.** Owner: `pnpm dev`, visit a new URL, wait ~30s, confirm `aggregate.v1` in `chrome.storage.local` updates after debounced recompute. Not run in implementer session.
+- [x] CI green on PR head — Lint, typecheck, test, build success on `fc340c8`
+
+**Coverage (where applicable):** N/A (background incremental path; no new T-004 core file gates)
+
+**Open follow-ups raised in this phase:**
+
+- **Manual smoke (Step 6):** Owner to verify storage updates after browsing + ~30s alarm; update this entry when done.
+- **Dashboard Refresh (E-002):** Phase 13 wires Header `sendForceRefresh()`; worker path already implements SW-005 via existing message handler.
+
+**Next phase entry point:** Phase 13 — open PHASE-PLAN.md → "Phase 13 — Dashboard Shell & Data Hooks" → `useAggregate` / storage bridge.
 
 ### Phase 11 — Backfill Orchestrator — 2026-05-23
 
