@@ -13,7 +13,8 @@
   },
   "pnpm": {
     "overrides": {
-      "vite": "8.0.14"
+      "vite": "8.0.14",
+      "vite-node": "6.0.0"
     }
   },
   "scripts": {
@@ -31,13 +32,29 @@
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
+    "@eslint/js": "^9",
     "@tailwindcss/vite": "^4",
+    "@testing-library/jest-dom": "^6",
+    "@testing-library/react": "^16",
+    "@testing-library/user-event": "^14",
     "@types/chrome": "^0.1.42",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@vitest/coverage-v8": "^2",
     "@wxt-dev/module-react": "^1.2.2",
+    "eslint": "^9",
+    "eslint-config-prettier": "^9",
+    "eslint-plugin-react": "^7",
+    "eslint-plugin-react-hooks": "^5",
+    "eslint-plugin-react-refresh": "^0.4",
+    "eslint-plugin-simple-import-sort": "^12",
+    "globals": "^15",
+    "jsdom": "^25",
+    "prettier": "^3",
+    "prettier-plugin-tailwindcss": "^0.6",
     "tailwindcss": "^4",
     "typescript": "^5.4",
+    "typescript-eslint": "^8",
     "vitest": "^2",
     "wxt": "^0.20"
   },

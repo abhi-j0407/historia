@@ -5,8 +5,12 @@
  * Real backfill, ingestion, and incremental update logic land in Phases 10–12.
  */
 export function handleActionClick(): void {
-  chrome.action.onClicked.addListener(async () => {
-    const url = chrome.runtime.getURL('dashboard.html');
-    await chrome.tabs.create({ url });
+  chrome.action.onClicked.addListener(() => {
+    void openDashboard();
   });
+}
+
+async function openDashboard(): Promise<void> {
+  const url = chrome.runtime.getURL('dashboard.html');
+  await chrome.tabs.create({ url });
 }
