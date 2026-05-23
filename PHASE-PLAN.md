@@ -3113,7 +3113,7 @@ Update this table as phases land. The phase is "Done" only when CI is green for 
 | 2   | WXT + React + TypeScript Scaffold       | Foundation               | `phase/02-wxt-scaffold`        | [#2](https://github.com/abhi-j0407/historia/pull/2) | [x]    |
 | 3   | Tailwind v4 & shadcn/ui Primitives      | Foundation               | `phase/03-tailwind-shadcn`     | [#3](https://github.com/abhi-j0407/historia/pull/3) | [x]    |
 | 4   | Lint, Format, Test Infrastructure       | Foundation               | `phase/04-quality-tooling`     | [#4](https://github.com/abhi-j0407/historia/pull/4) | [x]    |
-| 5   | CI Pipeline                             | Foundation               | `phase/05-ci-pipeline`         |                                                     | [ ]    |
+| 5   | CI Pipeline                             | Foundation               | `phase/05-ci-pipeline`         | [#5](https://github.com/abhi-j0407/historia/pull/5) | [x]    |
 | 6   | Core Types & URL Filters                | Data plumbing            | `phase/06-core-types-filters`  |                                                     | [ ]    |
 | 7   | Domain & Date Helpers                   | Data plumbing            | `phase/07-domain-dates`        |                                                     | [ ]    |
 | 8   | Aggregation Engine, Intensity & Palette | Data plumbing            | `phase/08-aggregate-intensity` |                                                     | [ ]    |

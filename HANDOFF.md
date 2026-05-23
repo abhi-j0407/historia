@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 4 — Lint, Format, Test Infrastructure (merged in `0e2a46f`, [PR #4](https://github.com/abhi-j0407/historia/pull/4)).
-- **Next phase:** Phase 6 — Core Types & URL Filters (after Phase 5 merge).
-- **Active branch:** `phase/05-ci-pipeline` ([PR #5](https://github.com/abhi-j0407/historia/pull/5) — awaiting coordinator merge).
-- **Open PRs:** [#5](https://github.com/abhi-j0407/historia/pull/5) — Phase 5 CI Pipeline.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry).
+- **Last completed phase:** Phase 5 — CI Pipeline (merged in `4150230`, [PR #5](https://github.com/abhi-j0407/historia/pull/5)).
+- **Next phase:** Phase 6 — Core Types & URL Filters.
+- **Active branch:** none (`main` is the current tip; Phase 6 will create its own branch).
+- **Open PRs:** none.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
 
 ---
 
@@ -34,7 +34,7 @@
 
 **Branch:** `phase/05-ci-pipeline`
 **PR:** [#5](https://github.com/abhi-j0407/historia/pull/5)
-**Status:** completed (PR open; coordinator merge pending)
+**Status:** completed
 
 **Objective recap:** Add a GitHub Actions `verify` workflow (install → lint → typecheck → test → build), CODEOWNERS, PR template, and bug issue template per REL-102.
 
@@ -67,14 +67,14 @@ None
 - [x] `pnpm typecheck` — exit 0
 - [x] `pnpm test` — 2 tests passed
 - [x] `pnpm build` — exit 0 (~202 kB)
-- [x] CI `verify` job green on PR — [Actions run 26330717300](https://github.com/abhi-j0407/historia/actions/runs/26330717300)
+- [x] CI `verify` job green on PR — [Actions run 26330749318](https://github.com/abhi-j0407/historia/actions/runs/26330749318) (coordinator re-review; implementer HANDOFF cited 26330717300 — also success)
 
 **Coverage (where applicable):** n/a
 
 **Open follow-ups raised in this phase:**
 
 - **Branch protection (manual, repo owner):** GitHub → **Settings** → **Branches** → **Add branch protection rule** for `main`:
-  - Require status checks to pass before merging → select check **`verify`** (job name from `.github/workflows/ci.yml`).
+  - Require status checks to pass before merging → select check **`Lint, typecheck, test, build`** (the job `name:` in `.github/workflows/ci.yml`; job id is `verify` but GitHub exposes the display name as the status check).
   - Require a pull request before merging (0 reviewers OK for solo repo).
   - Do not allow force pushes.
   - Save rule. Until this is done, Success criterion “branch protection requires verify” is not met on `main`.
