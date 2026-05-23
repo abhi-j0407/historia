@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 13 — Dashboard Shell & Data Hooks (open PR `e485f5d`, [#13](https://github.com/abhi-j0407/historia/pull/13)).
+- **Last completed phase:** Phase 13 — Dashboard Shell & Data Hooks (merged in `7bac155`, [PR #13](https://github.com/abhi-j0407/historia/pull/13)).
 - **Next phase:** Phase 14 — Heatmap Primitive.
-- **Active branch:** `phase/13-dashboard-shell` (awaiting merge of PR #13).
-- **Open PRs:** [#13](https://github.com/abhi-j0407/historia/pull/13) — Dashboard Shell & Data Hooks.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10/11/12/13 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
+- **Active branch:** none (`main` is the current tip; Phase 14 will create its own branch).
+- **Open PRs:** none.
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`). **Phase 10–13 Chrome manual smoke** — owner deferred; see respective HANDOFF entries.
 
 ---
 
