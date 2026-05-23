@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -38,7 +38,10 @@ function mockHooks(options: {
   isInitialLoad: boolean;
   progress?: BackfillProgress;
   lastView?: 'per-site' | 'overall' | 'winners';
-}): void {
+  lastSelectedSite?: string | null;
+  updatePrefs?: ReturnType<typeof vi.fn>;
+}): ReturnType<typeof vi.fn> {
+  const updatePrefs = options.updatePrefs ?? vi.fn();
   vi.spyOn(useAggregateModule, 'useAggregate').mockReturnValue({
     aggregate: options.aggregate,
     isInitialLoad: options.isInitialLoad,
@@ -47,9 +50,14 @@ function mockHooks(options: {
     options.progress ?? idleProgress,
   );
   vi.spyOn(useUIPrefsModule, 'useUIPrefs').mockReturnValue({
-    prefs: { ...defaultPrefs, lastView: options.lastView ?? 'per-site' },
-    updatePrefs: vi.fn(),
+    prefs: {
+      ...defaultPrefs,
+      lastView: options.lastView ?? 'per-site',
+      lastSelectedSite: options.lastSelectedSite !== undefined ? options.lastSelectedSite : null,
+    },
+    updatePrefs,
   });
+  return updatePrefs;
 }
 
 describe('App', () => {
@@ -70,15 +78,47 @@ describe('App', () => {
     expect(screen.getByText(/nothing to show yet/i)).toBeInTheDocument();
   });
 
-  it('renders ViewPlaceholder with heatmap when aggregate has data', () => {
-    const agg = sampleAggregate();
-    mockHooks({ aggregate: agg, isInitialLoad: false, lastView: 'winners' });
+  it('renders per-site view with heatmap when lastView is per-site', () => {
+    mockHooks({ aggregate: sampleAggregate(), isInitialLoad: false, lastView: 'per-site' });
     render(<App />);
-    expect(screen.getByText(/active view:/i)).toHaveTextContent('winners');
-    expect(
-      screen.getByText(new RegExp(`${agg.topSites.length} sites tracked`)),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('tablist', { name: /sites/i })).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /activity heatmap/i })).toBeInTheDocument();
+    expect(screen.getByText('Total visits')).toBeInTheDocument();
+  });
+
+  it('renders overall view when lastView is overall', () => {
+    mockHooks({ aggregate: sampleAggregate(), isInitialLoad: false, lastView: 'overall' });
+    render(<App />);
+    expect(screen.queryByRole('tablist', { name: /sites/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /activity heatmap/i })).toBeInTheDocument();
+    expect(screen.getByText('Avg per calendar day')).toBeInTheDocument();
+  });
+
+  it('renders winners view when lastView is winners', () => {
+    mockHooks({ aggregate: sampleAggregate(), isInitialLoad: false, lastView: 'winners' });
+    render(<App />);
+    expect(screen.getByRole('list', { name: /daily winners legend/i })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /activity heatmap/i })).toBeInTheDocument();
+  });
+
+  it('corrects lastSelectedSite via updatePrefs when it is not in topSites (UX-PS-02)', async () => {
+    const agg = sampleAggregate();
+    const updatePrefs = mockHooks({
+      aggregate: agg,
+      isInitialLoad: false,
+      lastSelectedSite: 'not-in-top-list.example',
+    });
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(updatePrefs).toHaveBeenCalledWith({
+        lastSelectedSite: agg.topSites[0]!.apexDomain,
+      });
+    });
+    expect(
+      screen.getByRole('tab', { name: new RegExp(agg.topSites[0]!.apexDomain) }),
+    ).toHaveAttribute('aria-selected', 'true');
   });
 
   it('invokes sendForceRefresh when Refresh is clicked', async () => {
