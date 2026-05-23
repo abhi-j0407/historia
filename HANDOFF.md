@@ -14,10 +14,10 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 8 — Aggregation Engine, Intensity & Palette (merged in `8247bf6`, [PR #8](https://github.com/abhi-j0407/historia/pull/8)).
-- **Next phase:** Phase 9 — Storage Facade.
-- **Active branch:** none (`main` is the current tip; Phase 9 will create its own branch).
-- **Open PRs:** none.
+- **Last completed phase:** Phase 9 — Storage Facade ([PR #9](https://github.com/abhi-j0407/historia/pull/9), branch `phase/09-storage-facade` — awaiting merge).
+- **Next phase:** Phase 10 — Service Worker Foundation.
+- **Active branch:** `phase/09-storage-facade`.
+- **Open PRs:** [#9](https://github.com/abhi-j0407/historia/pull/9).
 - **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI — see Phase 5 entry; required check name is **Lint, typecheck, test, build**, not `verify`).
 
 ---
@@ -29,6 +29,50 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 9 — Storage Facade — 2026-05-23
+
+**Branch:** `phase/09-storage-facade`
+**PR:** [#9](https://github.com/abhi-j0407/historia/pull/9)
+**Status:** completed
+
+**Objective recap:** Thin `chrome.storage.local` facade for `aggregate.v1` and `ui.v1` with ST-003 schema migration, ST-004 atomic writes, and `subscribeAggregate` for SW-003a — tested with `fakeBrowser`.
+
+**Files created:**
+
+- `src/background/cache.ts`
+- `src/background/cache.test.ts`
+
+**Files modified:**
+
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- `writeAggregate` uses `(agg as { version: number }).version` for runtime validation so ESLint `restrict-template-expressions` accepts the throw branch (Aggregate.version is literal `1` at compile time).
+
+**Decisions made during implementation:**
+None
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (0 errors; pre-existing warnings on `log.ts`, shadcn `button.tsx`)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 86 tests passed (7 new in `cache.test.ts`)
+- [x] `pnpm build` — exit 0 (~203 kB)
+- [x] CI green on PR — [CI run](https://github.com/abhi-j0407/historia/actions/runs/26332447676) success on `3c69fa4`
+
+**Coverage (where applicable):** N/A (background facade; no new T-004 core files)
+
+**Open follow-ups raised in this phase:**
+None
+
+**Next phase entry point:** Phase 10 — open PHASE-PLAN.md → "Phase 10 — Service Worker Foundation" → replace `src/background/index.ts` wiring (do not wire cache into index until ingest/debounce stubs land).
 
 ### Phase 8 — Aggregation Engine, Intensity & Palette — 2026-05-23
 
