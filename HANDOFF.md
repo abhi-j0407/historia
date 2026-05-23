@@ -65,7 +65,7 @@ None
 - [x] `pnpm typecheck` — exit 0
 - [x] `pnpm test` — 86 tests passed (7 new in `cache.test.ts`)
 - [x] `pnpm build` — exit 0 (~203 kB)
-- [x] CI green on PR — [CI run](https://github.com/abhi-j0407/historia/actions/runs/26332377134) success on `81fb674`
+- [x] CI green on PR — [CI run](https://github.com/abhi-j0407/historia/actions/runs/26332447676) success on `3c69fa4`
 
 **Coverage (where applicable):** N/A (background facade; no new T-004 core files)
 
