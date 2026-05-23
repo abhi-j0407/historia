@@ -2,11 +2,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { eachDayInRange } from '@/core/dates';
-import { buildIntensityScale } from '@/core/intensity';
 import type { DayKey } from '@/core/types';
 
 import { Heatmap } from './Heatmap';
-import { computeGeometry } from './heatmap-geometry';
 
 function intensityDataForRange(
   start: DayKey,
@@ -125,17 +123,5 @@ describe('Heatmap', () => {
     expect(onCellHover).toHaveBeenLastCalledWith('2026-05-11');
     fireEvent.mouseLeave(target);
     expect(onCellHover).toHaveBeenLastCalledWith(null);
-  });
-
-  it('computes 365-day geometry and intensity scale within the P-002 budget', () => {
-    const start = '2025-05-23';
-    const end = '2026-05-22';
-    const data = intensityDataForRange(start, end, (_day, i) => (i % 17) + 1);
-    const days = eachDayInRange(start, end);
-    const t0 = performance.now();
-    computeGeometry({ start, end });
-    const nonZero = days.map((day) => data[day] ?? 0).filter((v) => v > 0);
-    buildIntensityScale(nonZero);
-    expect(performance.now() - t0).toBeLessThanOrEqual(16);
   });
 });

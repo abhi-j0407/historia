@@ -38,3 +38,13 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Zip
+        run: pnpm zip
+
+      - name: Upload zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: historia-${{ github.sha }}
+          path: .output/historia-*-chrome.zip
+          retention-days: 14

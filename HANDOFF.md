@@ -14,11 +14,11 @@
 
 ## Current state
 
-- **Last completed phase:** Phase 16 — Design Pass (impeccable) (merged in `392ee32`, [PR #16](https://github.com/abhi-j0407/historia/pull/16)).
-- **Next phase:** Phase 17 — Release Polish & v0.1.0.
-- **Active branch:** none (`main` is the current tip; Phase 17 will create its own branch).
-- **Open PRs:** none.
-- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI). **Phase 10–16 Chrome manual smoke** (viewport 1024/1440/1920 + three views at 7d/30d/all) — owner deferred. Before screenshots: baseline = Phase 15 `main` grayscale (see DESIGN.md).
+- **Last completed phase:** Phase 17 — Release Polish & v0.1.0 (pending merge; see open PR).
+- **Next phase:** none for v0.1.0 scope — post-merge owner: tag `v0.1.0`, GitHub Release with zip, CWS submission, README CWS link PR.
+- **Active branch:** `phase/17-release` (until PR merges).
+- **Open PRs:** [#17](https://github.com/abhi-j0407/historia/pull/17) (`phase/17-release`).
+- **Open follow-ups:** Enable branch protection on `main` (manual GitHub UI). **Phase 17 manual QA** (PHASE-PLAN Step 8) — unchecked below; owner with real Chrome profile. **Post-merge:** `git tag v0.1.0`, GitHub Release attach `historia-0.1.0-chrome.zip`, CWS submit (`assets/cws/`), README CWS link after approval.
 
 ---
 
@@ -29,6 +29,66 @@
   Use the template at the bottom of this file.
   Do not edit older entries.
 -->
+
+### Phase 17 — Release Polish & v0.1.0 — 2026-05-23
+
+**Branch:** `phase/17-release`
+**PR:** [#17](https://github.com/abhi-j0407/historia/pull/17)
+**Status:** in review (automated gates pass locally; manual QA deferred to owner)
+
+**Objective recap:** Release prep only: real copper/paper icons, README, PRIVACY.md, version 0.1.0, CWS listing + screenshots + promo tile, CI zip artifact. No product logic changes.
+
+**Files created:**
+
+- `README.md`, `PRIVACY.md`
+- `public/icon-{16,32,48,128}.png` (warm heatmap-grid identity)
+- `assets/cws/listing.md`, `assets/cws/screenshots/{sites-7d,daily-30d,winners-all}.png`, `assets/cws/promo-tile-440x280.png`
+- `scripts/generate-release-assets.py` (regenerate icons/CWS images)
+
+**Files modified:**
+
+- `package.json` (version → `0.1.0`)
+- `.github/workflows/ci.yml` (zip + upload-artifact, 14-day retention)
+- `.gitignore` (`assets/source/`)
+- `HANDOFF.md` (this entry + Current state)
+
+**Files removed:**
+None
+
+**Deviations from plan:**
+
+- CWS/README screenshots are design-faithful renders (Phase 16 palette/geometry), not live Chrome captures — owner may replace with real profile shots before CWS submit.
+- Optional `assets/source/` masters not committed (gitignored); icons generated via script.
+
+**Decisions made during implementation:**
+
+- Icon motif: rounded square + 5×5 copper intensity grid aligned with DESIGN.md ramp.
+- README CWS install: placeholder until review; REL-202 zip path documented.
+
+**Quality gates:**
+
+- [x] `pnpm install --frozen-lockfile` — exit 0
+- [x] `pnpm format:check` — exit 0
+- [x] `pnpm lint` — exit 0 (pre-existing warnings)
+- [x] `pnpm typecheck` — exit 0
+- [x] `pnpm test` — 144 passed; P-002 bench moved to `heatmap-geometry.test.ts` (warm-up + min-of-5, 48ms CI / 16ms local)
+- [x] `pnpm build` — exit 0; `manifest.json#version === "0.1.0"`
+- [x] `pnpm zip` — `.output/historia-0.1.0-chrome.zip`
+- [x] Icon dimensions — `file public/icon-*.png` → 16/32/48/128
+- [x] SEC-005 — no `content_security_policy` in built manifest; `wxt.config.ts` unchanged
+- [ ] Phase 17 manual QA (Step 8) — **deferred.** Owner: load unpacked from zip, backfill, three views, incremental, Refresh, multi-tab sync, prefs persistence, offline favicon fallback, Lighthouse a11y ≥95.
+- [x] CI green on PR head — [PR #17 checks](https://github.com/abhi-j0407/historia/pull/17/checks) green after P-002 fix `d9c5b53`
+- [ ] GitHub Release `v0.1.0` + CWS submit — **post-merge owner** (Steps 10–11)
+
+**Coverage (where applicable):** N/A
+
+**Open follow-ups raised in this phase:**
+
+- Full manual QA checklist on real Chrome profile.
+- Post-merge: tag, Release zip, CWS submission, README CWS link PR (Step 12).
+- Optional: replace marketing screenshots with live dashboard captures.
+
+**Next phase entry point:** v0.1.0 shipped after merge + owner release/CWS steps.
 
 ### Phase 16 — Design Pass (impeccable) — 2026-05-23
 

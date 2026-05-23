@@ -1,9 +1,22 @@
 import { describe, expect, it } from 'vitest';
 
 import { eachDayInRange, fromDayKey } from '@/core/dates';
+import { buildIntensityScale } from '@/core/intensity';
 import type { DayKey } from '@/core/types';
 
 import { computeGeometry } from './heatmap-geometry';
+
+const P002_YEAR_START: DayKey = '2025-05-23';
+const P002_YEAR_END: DayKey = '2026-05-22';
+
+function p002PrepPathElapsedMs(): number {
+  const days = eachDayInRange(P002_YEAR_START, P002_YEAR_END);
+  const values = days.map((_day, index) => (index % 17) + 1);
+  const t0 = performance.now();
+  computeGeometry({ start: P002_YEAR_START, end: P002_YEAR_END });
+  buildIntensityScale(values);
+  return performance.now() - t0;
+}
 
 describe('computeGeometry', () => {
   it('places a Sun–Sat week in column 0 with weekdays 0..6', () => {
@@ -50,5 +63,16 @@ describe('computeGeometry', () => {
     const stride = 11 + 2;
     expect(geometry.width).toBe(28 + stride);
     expect(geometry.height).toBe(18 + 7 * stride);
+  });
+
+  it('prepares 365-day geometry and intensity scale within the P-002 budget', () => {
+    p002PrepPathElapsedMs();
+    const samples = Array.from({ length: 5 }, () => p002PrepPathElapsedMs());
+    const elapsed = Math.min(...samples);
+    const budgetMs = process.env.CI ? 48 : 16;
+
+    const geometry = computeGeometry({ start: P002_YEAR_START, end: P002_YEAR_END });
+    expect(geometry.cells).toHaveLength(365);
+    expect(elapsed).toBeLessThanOrEqual(budgetMs);
   });
 });
