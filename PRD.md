@@ -12,23 +12,26 @@
 This PRD is the canonical source of truth for v1. Phase plans, design specs, and implementation PRs reference these IDs.
 
 ### 0.1 ID schemes
-| Prefix | Meaning |
-|---|---|
-| `D-###` | Data model / type contract |
-| `FR-###` | Functional requirement (what the product does) |
-| `B-###` | Behavioral rule (filter, aggregation, tie-break) |
-| `UX-###` | UI specification (layout, interaction, copy) |
-| `HM-###` | Heatmap renderer contract |
-| `SW-###` | Service worker / background behavior |
-| `ST-###` | Storage schema / cache rules |
-| `P-###` | Performance / reliability target |
-| `E-###` | Error handling rule |
-| `T-###` | Testing requirement |
-| `REL-###` | Build, distribution, release rule |
-| `SEC-###` | Privacy / security rule |
+
+| Prefix    | Meaning                                          |
+| --------- | ------------------------------------------------ |
+| `D-###`   | Data model / type contract                       |
+| `FR-###`  | Functional requirement (what the product does)   |
+| `B-###`   | Behavioral rule (filter, aggregation, tie-break) |
+| `UX-###`  | UI specification (layout, interaction, copy)     |
+| `HM-###`  | Heatmap renderer contract                        |
+| `SW-###`  | Service worker / background behavior             |
+| `ST-###`  | Storage schema / cache rules                     |
+| `P-###`   | Performance / reliability target                 |
+| `E-###`   | Error handling rule                              |
+| `T-###`   | Testing requirement                              |
+| `REL-###` | Build, distribution, release rule                |
+| `SEC-###` | Privacy / security rule                          |
 
 ### 0.2 Section block conventions
+
 Each requirement uses one or more of:
+
 - **Rule:** the normative statement (MUST / SHOULD / MAY per RFC 2119)
 - **Invariant:** a property that must hold at all times
 - **Acceptance:** how we verify it's met (testable)
@@ -42,9 +45,11 @@ If a phase plan, design doc, or PR contradicts this document, this document wins
 ## 1. Vision & Scope
 
 ### 1.1 Vision
+
 A personal-use Chrome extension that turns a user's local browsing history into GitHub-style activity heatmaps and per-site stats. Spotify-Wrapped-inspired but URL-level only; no content interpretation.
 
 ### 1.2 In scope (v1)
+
 - Manifest V3 Chrome extension (works on all Chromium variants automatically)
 - Full-page dashboard opens in a new tab when the toolbar icon is clicked
 - Three views: per-site heatmap (with site switcher), overall daily heatmap, daily winners calendar
@@ -52,59 +57,61 @@ A personal-use Chrome extension that turns a user's local browsing history into 
 - Aggregates cached in `chrome.storage.local` with auto-refresh on new visits
 
 ### 1.3 Out of scope — deferred (post-v1)
-| ID | Item | Note |
-|---|---|---|
-| OOS-D-01 | User accounts | No auth, no sync |
+
+| ID       | Item                                               | Note                             |
+| -------- | -------------------------------------------------- | -------------------------------- |
+| OOS-D-01 | User accounts                                      | No auth, no sync                 |
 | OOS-D-02 | Extended history beyond Chrome's ~90-day retention | Would require accounts + backend |
-| OOS-D-03 | Dark theme | Light only for v1 |
-| OOS-D-04 | Per-domain custom subdomain rules | Apex-domain rollup only |
-| OOS-D-05 | Multi-user / public launch posture | Personal/portfolio only |
-| OOS-D-06 | Firefox / Safari support | Chromium only |
+| OOS-D-03 | Dark theme                                         | Light only for v1                |
+| OOS-D-04 | Per-domain custom subdomain rules                  | Apex-domain rollup only          |
+| OOS-D-05 | Multi-user / public launch posture                 | Personal/portfolio only          |
+| OOS-D-06 | Firefox / Safari support                           | Chromium only                    |
 
 ### 1.4 Out of scope — discarded (do not revisit without explicit user request)
-| ID | Item | Why |
-|---|---|---|
-| OOS-X-01 | Web app on Vercel | File upload friction defeats the goal |
-| OOS-X-02 | LLM domain categorization | Not analyzing content |
-| OOS-X-03 | YouTube Data API enrichment | Not analyzing content |
-| OOS-X-04 | Shallalist / hardcoded category maps | Not categorizing |
-| OOS-X-05 | DuckDB-WASM | Overkill for URL-level stats |
-| OOS-X-06 | Python backend | No backend in v1 |
-| OOS-X-07 | Popup / sidepanel / new-tab override | Full-page dashboard chosen |
+
+| ID       | Item                                   | Why                                           |
+| -------- | -------------------------------------- | --------------------------------------------- |
+| OOS-X-01 | Web app on Vercel                      | File upload friction defeats the goal         |
+| OOS-X-02 | LLM domain categorization              | Not analyzing content                         |
+| OOS-X-03 | YouTube Data API enrichment            | Not analyzing content                         |
+| OOS-X-04 | Shallalist / hardcoded category maps   | Not categorizing                              |
+| OOS-X-05 | DuckDB-WASM                            | Overkill for URL-level stats                  |
+| OOS-X-06 | Python backend                         | No backend in v1                              |
+| OOS-X-07 | Popup / sidepanel / new-tab override   | Full-page dashboard chosen                    |
 | OOS-X-08 | `chrome.history.search`-only ingestion | Loses per-day accuracy; see [SW-002](#sw-002) |
 
 ---
 
 ## 2. Glossary
 
-| Term | Definition |
-|---|---|
-| **Apex domain** | The registrable domain per the Public Suffix List. `mail.google.com` → `google.com`. `user.github.io` → `user.github.io` (since `github.io` is itself a PSL entry). |
-| **Visit** | A single hit to a URL with a timestamp, as returned by `chrome.history.getVisits()`. |
-| **Day** | A calendar day in the user's local timezone, encoded as `YYYY-MM-DD`. |
-| **Winner** | For a given day, the apex with the highest visit count (after filtering), with ties broken per [B-005](#b-005). |
-| **Aggregate** | The derived dataset cached in `chrome.storage.local`. See [D-005](#d-005) and [ST-001](#st-001). |
-| **Backfill** | The initial pass through `chrome.history` on first install (or after cache invalidation). |
-| **Incremental update** | A re-aggregation triggered by new `onVisited` events; processes only the delta since `lastAggregatedAt`. |
+| Term                   | Definition                                                                                                                                                          |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Apex domain**        | The registrable domain per the Public Suffix List. `mail.google.com` → `google.com`. `user.github.io` → `user.github.io` (since `github.io` is itself a PSL entry). |
+| **Visit**              | A single hit to a URL with a timestamp, as returned by `chrome.history.getVisits()`.                                                                                |
+| **Day**                | A calendar day in the user's local timezone, encoded as `YYYY-MM-DD`.                                                                                               |
+| **Winner**             | For a given day, the apex with the highest visit count (after filtering), with ties broken per [B-005](#b-005).                                                     |
+| **Aggregate**          | The derived dataset cached in `chrome.storage.local`. See [D-005](#d-005) and [ST-001](#st-001).                                                                    |
+| **Backfill**           | The initial pass through `chrome.history` on first install (or after cache invalidation).                                                                           |
+| **Incremental update** | A re-aggregation triggered by new `onVisited` events; processes only the delta since `lastAggregatedAt`.                                                            |
 
 ---
 
 ## 3. Tech Stack (locked)
 
-| Area | Choice | Pinned version family |
-|---|---|---|
-| Extension framework | WXT + `@wxt-dev/module-react` | `wxt@^0.20` |
-| Frontend | React + TypeScript (strict) | `react@^18`, `typescript@^5.4` |
-| Styling | Tailwind CSS v4 via `@tailwindcss/vite` | `tailwindcss@^4`, `@tailwindcss/vite@^4` |
-| Component primitives | shadcn/ui (Radix under the hood) | latest at scaffold time |
-| Class merging | `clsx` + `tailwind-merge` (via shadcn `cn` helper) | latest at scaffold time |
-| Domain parsing | `tldts` | `tldts@^7` |
-| Date utilities | `date-fns` | `date-fns@^4` |
-| Icons | `lucide-react` | latest at scaffold time |
-| Testing | Vitest + `WxtVitest()` + `@testing-library/react` | `vitest@^2` |
-| Linting | ESLint 9 flat config | `eslint@^9` |
-| Formatting | Prettier + `prettier-plugin-tailwindcss` | latest |
-| Package manager | pnpm | `pnpm@^9` |
+| Area                 | Choice                                             | Pinned version family                    |
+| -------------------- | -------------------------------------------------- | ---------------------------------------- |
+| Extension framework  | WXT + `@wxt-dev/module-react`                      | `wxt@^0.20`                              |
+| Frontend             | React + TypeScript (strict)                        | `react@^18`, `typescript@^5.4`           |
+| Styling              | Tailwind CSS v4 via `@tailwindcss/vite`            | `tailwindcss@^4`, `@tailwindcss/vite@^4` |
+| Component primitives | shadcn/ui (Radix under the hood)                   | latest at scaffold time                  |
+| Class merging        | `clsx` + `tailwind-merge` (via shadcn `cn` helper) | latest at scaffold time                  |
+| Domain parsing       | `tldts`                                            | `tldts@^7`                               |
+| Date utilities       | `date-fns`                                         | `date-fns@^4`                            |
+| Icons                | `lucide-react`                                     | latest at scaffold time                  |
+| Testing              | Vitest + `WxtVitest()` + `@testing-library/react`  | `vitest@^2`                              |
+| Linting              | ESLint 9 flat config                               | `eslint@^9`                              |
+| Formatting           | Prettier + `prettier-plugin-tailwindcss`           | latest                                   |
+| Package manager      | pnpm                                               | `pnpm@^9`                                |
 
 **Rule REL-001 — Locked stack.** Do not introduce additional runtime dependencies without an explicit amendment to this section. Dev dependencies for tooling are permitted when they don't ship to the user.
 
@@ -190,6 +197,7 @@ historia/
 **Rule FR-M-01.** Manifest V3 only.
 
 **Rule FR-M-02 — Permissions.**
+
 - `history` — required for read access
 - `storage` — required for caching
 - `alarms` — required for debounced re-aggregation
@@ -211,14 +219,16 @@ historia/
 
 <a id="d-001"></a>
 **D-001 — `Visit` (normalized internal type).**
+
 ```ts
 interface Visit {
-  url: string;             // full URL as returned by Chrome
-  apexDomain: string;      // tldts.getDomain(url), e.g. "google.com"
-  title: string;           // empty string if unavailable
-  visitedAt: number;       // unix epoch ms (UTC)
+  url: string; // full URL as returned by Chrome
+  apexDomain: string; // tldts.getDomain(url), e.g. "google.com"
+  title: string; // empty string if unavailable
+  visitedAt: number; // unix epoch ms (UTC)
 }
 ```
+
 **Invariant.** `apexDomain` is lowercase. URLs that pass [B-001 ... B-004](#b-001) MUST also have a non-empty `apexDomain`; if `tldts` returns `null`, the URL is filtered.
 
 <a id="d-002"></a>
@@ -226,6 +236,7 @@ interface Visit {
 
 <a id="d-003"></a>
 **D-003 — `SiteRank`.**
+
 ```ts
 interface SiteRank {
   apexDomain: string;
@@ -236,6 +247,7 @@ interface SiteRank {
 
 <a id="d-004"></a>
 **D-004 — `DailyWinner`.**
+
 ```ts
 interface DailyWinner {
   apexDomain: string;
@@ -245,27 +257,30 @@ interface DailyWinner {
 
 <a id="d-005"></a>
 **D-005 — `Aggregate` (cached payload).**
+
 ```ts
 interface Aggregate {
-  version: 1;                                      // bump on schema change
-  computedAt: number;                              // unix epoch ms
-  lastAggregatedAt: number;                        // cutoff used for incremental updates
+  version: 1; // bump on schema change
+  computedAt: number; // unix epoch ms
+  lastAggregatedAt: number; // cutoff used for incremental updates
   dateRange: { earliest: DayKey; latest: DayKey };
   totalVisitsPerDay: Record<DayKey, number>;
   visitsPerSitePerDay: Record<string, Record<DayKey, number>>; // apex -> day -> count
   dailyWinner: Record<DayKey, DailyWinner>;
-  topSites: SiteRank[];                            // sorted desc by totalVisits
+  topSites: SiteRank[]; // sorted desc by totalVisits
 }
 ```
+
 **Invariant.** Every `DayKey` that appears anywhere is within `[dateRange.earliest, dateRange.latest]` inclusive. Days with zero visits are omitted from maps (sparse storage).
 
 <a id="d-006"></a>
 **D-006 — `BackfillProgress` (transient, message-passed; not persisted).**
+
 ```ts
 interface BackfillProgress {
   phase: 'idle' | 'enumerating' | 'fetching-visits' | 'aggregating' | 'done' | 'error';
-  processed: number;        // URLs processed
-  total: number;            // total URLs to process (0 until enumeration finishes)
+  processed: number; // URLs processed
+  total: number; // total URLs to process (0 until enumeration finishes)
   startedAt: number;
 }
 ```
@@ -301,7 +316,7 @@ interface BackfillProgress {
 
 **Invariant FR-F-01.** Filter rules MUST live in a single file (`src/core/filters.ts`) and be data-driven (an array of `(url) => boolean` predicates or a config table). Tests cover one positive + one negative example per rule.
 
-**Out of scope.** Filtering out homepages of search engines (we only filter search *result* pages).
+**Out of scope.** Filtering out homepages of search engines (we only filter search _result_ pages).
 
 ### 7.2 Aggregation
 
@@ -330,6 +345,7 @@ interface BackfillProgress {
 
 <a id="sw-003"></a>
 **SW-003 — Backfill orchestrator.**
+
 1. On `chrome.runtime.onInstalled` (`reason === 'install'`), schedule a backfill.
 2. Backfill phases:
    - **Enumerate:** call `chrome.history.search({ text: '', maxResults: 0, startTime: 0 })` once. (Some Chrome versions treat `maxResults: 0` as "no limit"; if not, paginate using `endTime` until empty.)
@@ -344,10 +360,11 @@ interface BackfillProgress {
 
 <a id="sw-004"></a>
 **SW-004 — Incremental updates via debounce.**
+
 - `chrome.history.onVisited` fires for every new visit.
 - The listener does NOT process the visit synchronously. It calls `chrome.alarms.create('recompute', { delayInMinutes: 0.5 })` (30s). Creating an alarm with the same name resets the timer — natural debounce.
 - `chrome.alarms.onAlarm` listener for `name === 'recompute'` runs incremental aggregation: read existing `Aggregate`, fetch only URLs with `lastVisitTime > lastAggregatedAt`, update maps, persist.
-**Why.** `setTimeout` does not survive worker idle shutdown. `chrome.alarms` does. 30s is the minimum allowed alarm period and matches the worker's idle timer.
+  **Why.** `setTimeout` does not survive worker idle shutdown. `chrome.alarms` does. 30s is the minimum allowed alarm period and matches the worker's idle timer.
 
 <a id="sw-005"></a>
 **SW-005 — Manual refresh.** Dashboard sends a `{ type: 'force-refresh' }` runtime message. The service worker treats this as if cache were absent: re-runs the full backfill.
@@ -364,6 +381,7 @@ interface BackfillProgress {
 
 <a id="st-002"></a>
 **ST-002 — UI prefs key.** Separate key `ui.v1`:
+
 ```ts
 interface UIPrefs {
   version: 1;
@@ -390,6 +408,7 @@ interface UIPrefs {
 
 <a id="ux-s-01"></a>
 **UX-S-01 — Layout regions.** Single column layout, max-width container.
+
 - Header: product name, last-updated timestamp, manual refresh button.
 - Toolbar: view switcher (3 tabs) + date-range select (right-aligned).
 - Content: active view.
@@ -397,6 +416,7 @@ interface UIPrefs {
 
 <a id="ux-s-02"></a>
 **UX-S-02 — Date-range selector.** Options: `7d`, `30d`, `90d`, `All`. Default: `All`. Single select (shadcn `Select`).
+
 - `7d` = last 7 days ending today (inclusive).
 - `30d` = last 30 days ending today (inclusive).
 - `90d` = last 90 days ending today (inclusive).
@@ -404,6 +424,7 @@ interface UIPrefs {
 
 <a id="ux-s-03"></a>
 **UX-S-03 — View switcher.** Three options, shadcn `Tabs`:
+
 - "Sites" → Per-site view ([UX-PS-01](#ux-ps-01))
 - "Daily" → Overall daily view ([UX-OV-01](#ux-ov-01))
 - "Winners" → Daily winners view ([UX-W-01](#ux-w-01))
@@ -416,6 +437,7 @@ interface UIPrefs {
 
 <a id="ux-s-06"></a>
 **UX-S-06 — Progressive backfill UI.**
+
 - During `fetching-visits` phase, the heatmap skeleton is visible. As the worker writes new partial aggregates to `chrome.storage.local` per [SW-003a](#sw-003a), the dashboard's `chrome.storage.onChanged` listener triggers a re-read and re-render.
 - A persistent progress strip near the header shows `processed / total` URLs with a thin progress bar, driven by `BackfillProgress` messages ([D-006](#d-006)).
 - Once `phase === 'done'`, the progress strip animates out.
@@ -424,6 +446,7 @@ interface UIPrefs {
 
 <a id="ux-ps-01"></a>
 **UX-PS-01 — Components.**
+
 - Site switcher: chip row of top 10 sites by visit count, each chip shows favicon (via `chrome.runtime.getURL` or Google favicon proxy — TBD design phase), apex domain, total visit count. The currently selected chip is visually emphasized.
 - "Show more" button at end of chip row expands a popover/sheet (shadcn) listing all remaining sites sorted by [B-007](#b-007).
 - Heatmap: intensity mode ([HM-002](#hm-002)) for the selected site over the active date range.
@@ -436,6 +459,7 @@ interface UIPrefs {
 
 <a id="ux-ov-01"></a>
 **UX-OV-01 — Components.**
+
 - Heatmap: intensity mode for `totalVisitsPerDay` over the active date range.
 - Stats card: total visits, active days, busiest day (date + count), average visits per active day, average per calendar day.
 
@@ -443,6 +467,7 @@ interface UIPrefs {
 
 <a id="ux-w-01"></a>
 **UX-W-01 — Components.**
+
 - Heatmap: categorical mode ([HM-004](#hm-004)) for `dailyWinner` over the active date range.
 - Legend: 10 swatches for top 10 sites + 1 swatch for "Other". Each swatch shows the curated color + apex domain + how many days that site "won".
 - Tooltip: date, winner apex, winner visit count, runner-up apex + count.
@@ -459,13 +484,16 @@ interface UIPrefs {
 
 ```ts
 type HeatmapMode =
-  | { kind: 'intensity'; data: Record<DayKey, number>; }
-  | { kind: 'categorical'; data: Record<DayKey, { apex: string; visits: number; }>;
-      colorOf: (apex: string) => string; };
+  | { kind: 'intensity'; data: Record<DayKey, number> }
+  | {
+      kind: 'categorical';
+      data: Record<DayKey, { apex: string; visits: number }>;
+      colorOf: (apex: string) => string;
+    };
 
 interface HeatmapProps {
   mode: HeatmapMode;
-  range: { start: DayKey; end: DayKey; };
+  range: { start: DayKey; end: DayKey };
   onCellHover?: (day: DayKey | null) => void;
   renderTooltip?: (day: DayKey) => React.ReactNode;
 }
@@ -473,12 +501,14 @@ interface HeatmapProps {
 
 <a id="hm-002"></a>
 **HM-002 — Intensity mode.**
+
 - 5 buckets (including the "0" bucket for empty days).
 - Bucket boundaries computed by [HM-003](#hm-003).
 - Color ramp: 5 swatches from low to high intensity (palette values delivered in design phase).
 
 <a id="hm-003"></a>
 **HM-003 — Intensity bucketing.**
+
 - Take the set of non-zero day values in the rendered range.
 - Compute quantiles at p20, p40, p60, p80.
 - Buckets: `[0, 0]`, `(0, p20]`, `(p20, p40]`, `(p40, p60]`, `(p60, p80]`, `(p80, ∞)`. Yields the 5 visible color levels (the `[0,0]` bucket renders as the empty cell color).
@@ -489,6 +519,7 @@ interface HeatmapProps {
 
 <a id="hm-005"></a>
 **HM-005 — Grid geometry.**
+
 - Columns = weeks. Rows = days of week (Sun → Sat).
 - Cell size 12×12 px with 2 px gap (GitHub default). May be tuned in design phase but defaults to these.
 - Month labels rendered above the grid for week columns where the month changes within that column.
@@ -496,6 +527,7 @@ interface HeatmapProps {
 
 <a id="hm-006"></a>
 **HM-006 — Tooltip & a11y.**
+
 - Each cell is a `<rect>` with `<title>` for native browser tooltip fallback.
 - A floating custom tooltip (shadcn `Tooltip`) is shown on hover/focus using `onCellHover` + `renderTooltip`.
 - Cells receive `tabindex={0}` and keyboard hover via arrow keys is **out of scope for v1** (native tab focus is sufficient).
@@ -525,6 +557,7 @@ interface HeatmapProps {
 
 <a id="p-003"></a>
 **P-003 — Storage write frequency.**
+
 - **Backfill:** ≤ 100 writes total. Writes are throttled by both volume and time — a write fires only when ≥ 200 new URLs have been processed since the last write **or** ≥ 1000 ms have elapsed since the last write (whichever comes first). The final aggregation always emits one write regardless of throttle state.
 - **Incremental update:** Exactly one write per debounced cycle.
 - **Reason for batched writes during backfill:** progressive UI ([UX-S-06](#ux-s-06)) requires the dashboard to see partial aggregates as they form. We make storage the single source of truth ([SW-003a](#sw-003a)), so the dashboard subscribes to `chrome.storage.onChanged` rather than receiving runtime messages.
@@ -612,12 +645,13 @@ interface HeatmapProps {
 
 <a id="rel-102"></a>
 **REL-102 — CI pipeline (GitHub Actions).** A single workflow `.github/workflows/ci.yml` runs on every PR + push to `main`:
+
 - `pnpm install --frozen-lockfile`
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm test`
 - `pnpm build`
-PR is blocked on any failure.
+  PR is blocked on any failure.
 
 <a id="rel-103"></a>
 **REL-103 — Versioning.** SemVer starting at `0.1.0`. `package.json#version` is the source; WXT propagates it to the manifest. No automated release tooling for v1.
@@ -627,6 +661,7 @@ PR is blocked on any failure.
 
 <a id="rel-201"></a>
 **REL-201 — CWS submission gate.** Before first CWS submission:
+
 - Real (not placeholder) icons in 16/32/48/128 ✓ design phase deliverable
 - Screenshots for CWS listing ✓ design phase
 - `PRIVACY.md` published and linked ✓
@@ -640,14 +675,14 @@ PR is blocked on any failure.
 
 ## 18. Documentation Deliverables
 
-| File | Purpose | Phase |
-|---|---|---|
-| `PRD.md` | This document | Pre-impl ✓ |
-| `README.md` | Install (both paths), dev setup, screenshots, design philosophy | Polish phase |
-| `PRIVACY.md` | Privacy policy linked from CWS | Before first CWS submit |
-| `LICENSE` | MIT | Project setup phase |
-| `DESIGN.md` (or equivalent) | Visual identity + tokens output by `impeccable` | Design phase |
-| Inline JSDoc | Public exports in `src/core/` only. Skip what-comments. Why-comments only when non-obvious. | Per phase |
+| File                        | Purpose                                                                                     | Phase                   |
+| --------------------------- | ------------------------------------------------------------------------------------------- | ----------------------- |
+| `PRD.md`                    | This document                                                                               | Pre-impl ✓              |
+| `README.md`                 | Install (both paths), dev setup, screenshots, design philosophy                             | Polish phase            |
+| `PRIVACY.md`                | Privacy policy linked from CWS                                                              | Before first CWS submit |
+| `LICENSE`                   | MIT                                                                                         | Project setup phase     |
+| `DESIGN.md` (or equivalent) | Visual identity + tokens output by `impeccable`                                             | Design phase            |
+| Inline JSDoc                | Public exports in `src/core/` only. Skip what-comments. Why-comments only when non-obvious. | Per phase               |
 
 ---
 
@@ -681,11 +716,13 @@ PR is blocked on any failure.
 ## 20. Amendment Process
 
 Any change to this document is an amendment.
+
 - **Editorial changes** (typos, clarifications that don't change behavior): direct edit.
 - **Behavioral changes** (adding/removing rules, altering acceptance criteria): edit + bump the version in the header + note the change in a `## Changelog` section at the bottom.
 - **Scope changes** (in/out of scope items): require explicit user approval before edit.
 
 ## Changelog
+
 - `0.2` (2026-05-22) — Post-review revisions:
   - Dropped `unlimitedStorage` permission ([FR-M-02](#5-manifest--permissions)); kept a reference note for future use.
   - Locked Google favicon proxy ([SEC-002](#sec-002)) with letter-tile fallback.

@@ -3,6 +3,7 @@
 **Purpose.** How to run the phase plan with two roles (coordinator + implementer), keeping the repo as the source of truth for state.
 
 **Companion documents:**
+
 - [PRD.md](./PRD.md) — what we are building.
 - [PHASE-PLAN.md](./PHASE-PLAN.md) — the locked 18-phase sequence (Phase 0 + 1..17).
 - [HANDOFF.md](./HANDOFF.md) — ledger of completed phases.
@@ -48,7 +49,7 @@ A brand-new chat opened for each phase. Knows nothing except what's in the repo 
 For each phase from 0 to 17:
 
 1. **Coordinator session — kick off.**
-   You ask: *"What's next?"* Coordinator reads HANDOFF.md, identifies the next phase, generates an implementer prompt using the template in §4 below.
+   You ask: _"What's next?"_ Coordinator reads HANDOFF.md, identifies the next phase, generates an implementer prompt using the template in §4 below.
 
 2. **Open a fresh chat for the implementer.**
    Paste the implementer prompt. The implementer reads the repo, asks any clarifying questions upfront, then implements. It produces a feature branch, a PR, and a HANDOFF.md entry inside that branch.
@@ -56,7 +57,7 @@ For each phase from 0 to 17:
 3. **Implementer returns to you with a PR link** (and a one-line status: `complete` or `blocked — needs input`).
 
 4. **Back to coordinator session — review.**
-   You paste: *"Phase N is done. PR: <link>. Review."* Coordinator:
+   You paste: _"Phase N is done. PR: <link>. Review."_ Coordinator:
    - Checks out the branch locally (or reads via `gh pr diff`).
    - Re-runs `pnpm lint && pnpm typecheck && pnpm test && pnpm build`.
    - Walks the phase's Success criteria + Review checklist from PHASE-PLAN.md.
@@ -108,6 +109,7 @@ Every implementer prompt MUST instruct the implementer that, as its **final acti
 **Hard pre-condition: the PR must already exist before the auto-prompt is generated.** The implementer MUST open the PR via the GitHub API (using the PAT embedded in the local `origin` remote URL — never echoed) BEFORE printing the auto-generated review block. If the API call returns anything other than HTTP 201, the implementer must STOP and return a `blocked — needs input` status with the API response body, NOT print a `/compare/...` URL or "PR: pending" placeholder. A `/compare/` URL is not a PR and is unacceptable in the auto-prompt or in HANDOFF.md.
 
 The implementer fills these slots:
+
 - `<N>` — the phase number it just implemented.
 - `<link>` — the **fully-qualified PR URL** of the form `https://github.com/abhi-j0407/historia/pull/<number>` returned by the GitHub API as `html_url`. Never a `/compare/` URL, never `pending`, never a placeholder.
 - `phase/<NN>-<short-slug>` — the branch it pushed.
@@ -122,7 +124,7 @@ This rule is the cheapest way to keep the coordinator–implementer cycle fricti
 
 ## 4. Implementer chat — per-phase prompt template
 
-Each time you start a new phase, you ask the coordinator: *"Generate the implementer prompt for Phase N."* The coordinator produces a filled-in version of the template below. You open a **fresh chat**, paste it, and let the implementer work.
+Each time you start a new phase, you ask the coordinator: _"Generate the implementer prompt for Phase N."_ The coordinator produces a filled-in version of the template below. You open a **fresh chat**, paste it, and let the implementer work.
 
 ```
 You are implementing ONE phase of the historia project. You do not need to know about other phases.
@@ -236,15 +238,18 @@ Commit with message: "docs: mark Phase <N> complete in status tracker".
 ## 7. Handling blockers and change requests
 
 **Implementer reports a blocker.**
+
 - The implementer chat stops and asks a question. You answer in that chat.
 - If the answer changes the plan, edit PHASE-PLAN.md on `main` first (small docs commit), then have the implementer re-read it.
 - If the blocker is a PRD ambiguity, follow the PRD amendment process (PRD §20).
 
 **Coordinator returns change requests.**
+
 - Paste the change-request list into the same implementer chat. The implementer fixes, pushes new commits to the same branch, and the coordinator re-reviews.
 - If the implementer chat has gone stale (context too far gone, or you've been away for a day), open a fresh implementer chat using the prompt template in §4 plus the explicit change-request list.
 
 **Implementer can't finish a phase in one session.**
+
 - The implementer commits whatever is complete to the phase branch, updates HANDOFF.md with `Status: partial` and a clear "what's left" list, and pushes.
 - A fresh implementer chat resumes from that state.
 
