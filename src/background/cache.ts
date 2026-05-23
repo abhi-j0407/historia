@@ -2,7 +2,7 @@
  * chrome.storage.local facade for aggregate and UI prefs (ST-001..ST-005, SW-003a).
  */
 
-import { type Aggregate,AGGREGATE_VERSION } from '@/core/types';
+import { type Aggregate, AGGREGATE_VERSION } from '@/core/types';
 
 /** ST-001 — Cache key for the D-005 aggregate payload. */
 export const AGGREGATE_KEY = 'aggregate.v1' as const;
